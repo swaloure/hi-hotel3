@@ -1,0 +1,329 @@
+export interface Room {
+  id: string;
+  type: 'standard' | 'superior' | 'deluxe' | 'suite';
+  name: {
+    ru: string;
+    kz: string;
+    en: string;
+  };
+  description: {
+    ru: string;
+    kz: string;
+    en: string;
+  };
+  area: number;
+  maxGuests: number;
+  bedType: {
+    ru: string;
+    kz: string;
+    en: string;
+  };
+  amenities: string[];
+  price: number;
+  images: string[];
+}
+
+export interface Hotel {
+  id: string;
+  city: 'almaty' | 'astana';
+  name: string;
+  bnovoId: string;
+  address: {
+    ru: string;
+    kz: string;
+    en: string;
+  };
+  phone: string;
+  email: string;
+  whatsapp: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  heroImage: string;
+  galleryImages: string[];
+  rooms: Room[];
+}
+
+export const hotels: Hotel[] = [
+  {
+    id: 'almaty',
+    city: 'almaty',
+    name: 'Hi Hotel Almaty',
+    bnovoId: 'BNOVO_ALMATY_ID',
+    address: {
+      ru: 'г. Алматы, ул. Абая 52, 050000',
+      kz: 'Алматы қ., Абай к-сі 52, 050000',
+      en: '52 Abay Street, Almaty 050000',
+    },
+    phone: '+7 (727) 123-45-67',
+    email: 'almaty@hihotel.kz',
+    whatsapp: '+77271234567',
+    coordinates: {
+      lat: 43.238949,
+      lng: 76.945465,
+    },
+    heroImage: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80',
+      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&q=80',
+      'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1200&q=80',
+    ],
+    rooms: [
+      {
+        id: 'almaty-standard-1',
+        type: 'standard',
+        name: {
+          ru: 'Стандарт',
+          kz: 'Стандарт',
+          en: 'Standard',
+        },
+        description: {
+          ru: 'Уютный номер с современным интерьером, идеально подходит для деловых поездок или короткого отдыха.',
+          kz: 'Заманауи интерьері бар жайлы бөлме, іссапарлар немесе қысқа демалыс үшін өте қолайлы.',
+          en: 'Cozy room with modern interior, perfect for business trips or short stays.',
+        },
+        area: 22,
+        maxGuests: 2,
+        bedType: {
+          ru: 'Двуспальная кровать',
+          kz: 'Қос адамдық төсек',
+          en: 'Double bed',
+        },
+        amenities: ['wifi', 'ac', 'tv', 'safe', 'hairdryer'],
+        price: 25000,
+        images: [
+          'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
+          'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
+          'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80',
+        ],
+      },
+      {
+        id: 'almaty-superior-1',
+        type: 'superior',
+        name: {
+          ru: 'Супериор',
+          kz: 'Супериор',
+          en: 'Superior',
+        },
+        description: {
+          ru: 'Просторный номер повышенной комфортности с панорамным видом на город и горы.',
+          kz: 'Қала мен тауларға панорамалық көрінісі бар жоғары жайлылығы бар кең бөлме.',
+          en: 'Spacious room with enhanced comfort and panoramic views of the city and mountains.',
+        },
+        area: 30,
+        maxGuests: 2,
+        bedType: {
+          ru: 'Королевская кровать',
+          kz: 'Патшалық төсек',
+          en: 'King size bed',
+        },
+        amenities: ['wifi', 'ac', 'tv', 'minibar', 'safe', 'hairdryer', 'bathrobe'],
+        price: 35000,
+        images: [
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
+          'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80',
+          'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
+        ],
+      },
+      {
+        id: 'almaty-deluxe-1',
+        type: 'deluxe',
+        name: {
+          ru: 'Делюкс',
+          kz: 'Делюкс',
+          en: 'Deluxe',
+        },
+        description: {
+          ru: 'Роскошный номер с отдельной гостиной зоной и премиальными удобствами для взыскательных гостей.',
+          kz: 'Талғампаз қонақтар үшін жеке қонақ бөлмесі және премиум қолайлылықтары бар сәнді бөлме.',
+          en: 'Luxurious room with separate living area and premium amenities for discerning guests.',
+        },
+        area: 42,
+        maxGuests: 3,
+        bedType: {
+          ru: 'Королевская кровать + диван',
+          kz: 'Патшалық төсек + диван',
+          en: 'King size bed + sofa',
+        },
+        amenities: ['wifi', 'ac', 'tv', 'minibar', 'safe', 'hairdryer', 'bathrobe', 'breakfast', 'roomService'],
+        price: 50000,
+        images: [
+          'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80',
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
+          'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
+        ],
+      },
+      {
+        id: 'almaty-suite-1',
+        type: 'suite',
+        name: {
+          ru: 'Люкс',
+          kz: 'Люкс',
+          en: 'Suite',
+        },
+        description: {
+          ru: 'Эксклюзивный двухкомнатный люкс с панорамными окнами и индивидуальным дизайном интерьера.',
+          kz: 'Панорамалық терезелері және жеке интерьер дизайны бар эксклюзивті екі бөлмелі люкс.',
+          en: 'Exclusive two-room suite with panoramic windows and custom interior design.',
+        },
+        area: 55,
+        maxGuests: 4,
+        bedType: {
+          ru: 'Королевская кровать + раскладной диван',
+          kz: 'Патшалық төсек + жиналмалы диван',
+          en: 'King size bed + sofa bed',
+        },
+        amenities: ['wifi', 'ac', 'tv', 'minibar', 'safe', 'hairdryer', 'bathrobe', 'breakfast', 'roomService', 'parking'],
+        price: 75000,
+        images: [
+          'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
+          'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
+        ],
+      },
+    ],
+  },
+  {
+    id: 'astana',
+    city: 'astana',
+    name: 'Hi Hotel Astana',
+    bnovoId: 'BNOVO_ASTANA_ID',
+    address: {
+      ru: 'г. Астана, пр. Мангилик Ел 28, 010000',
+      kz: 'Астана қ., Мәңгілік Ел д-лы 28, 010000',
+      en: '28 Mangilik El Avenue, Astana 010000',
+    },
+    phone: '+7 (717) 234-56-78',
+    email: 'astana@hihotel.kz',
+    whatsapp: '+77172345678',
+    coordinates: {
+      lat: 51.128422,
+      lng: 71.430544,
+    },
+    heroImage: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1920&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200&q=80',
+      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1200&q=80',
+      'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1200&q=80',
+    ],
+    rooms: [
+      {
+        id: 'astana-standard-1',
+        type: 'standard',
+        name: {
+          ru: 'Стандарт',
+          kz: 'Стандарт',
+          en: 'Standard',
+        },
+        description: {
+          ru: 'Комфортабельный номер в современном стиле с видом на столицу.',
+          kz: 'Астанаға көрінісі бар заманауи стильдегі жайлы бөлме.',
+          en: 'Comfortable room in modern style with views of the capital.',
+        },
+        area: 24,
+        maxGuests: 2,
+        bedType: {
+          ru: 'Двуспальная кровать',
+          kz: 'Қос адамдық төсек',
+          en: 'Double bed',
+        },
+        amenities: ['wifi', 'ac', 'tv', 'safe', 'hairdryer'],
+        price: 28000,
+        images: [
+          'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80',
+          'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
+          'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
+        ],
+      },
+      {
+        id: 'astana-superior-1',
+        type: 'superior',
+        name: {
+          ru: 'Супериор',
+          kz: 'Супериор',
+          en: 'Superior',
+        },
+        description: {
+          ru: 'Улучшенный номер с видом на Байтерек и левый берег столицы.',
+          kz: 'Бәйтерек пен астананың сол жағалауына көрінісі бар жақсартылған бөлме.',
+          en: 'Enhanced room with views of Baiterek and the left bank of the capital.',
+        },
+        area: 32,
+        maxGuests: 2,
+        bedType: {
+          ru: 'Королевская кровать',
+          kz: 'Патшалық төсек',
+          en: 'King size bed',
+        },
+        amenities: ['wifi', 'ac', 'tv', 'minibar', 'safe', 'hairdryer', 'bathrobe'],
+        price: 38000,
+        images: [
+          'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80',
+          'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80',
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
+        ],
+      },
+      {
+        id: 'astana-deluxe-1',
+        type: 'deluxe',
+        name: {
+          ru: 'Делюкс',
+          kz: 'Делюкс',
+          en: 'Deluxe',
+        },
+        description: {
+          ru: 'Премиальный номер с просторной гостиной и эксклюзивными удобствами.',
+          kz: 'Кең қонақ бөлмесі және эксклюзивті қолайлылықтары бар премиум бөлме.',
+          en: 'Premium room with spacious living area and exclusive amenities.',
+        },
+        area: 45,
+        maxGuests: 3,
+        bedType: {
+          ru: 'Королевская кровать + диван',
+          kz: 'Патшалық төсек + диван',
+          en: 'King size bed + sofa',
+        },
+        amenities: ['wifi', 'ac', 'tv', 'minibar', 'safe', 'hairdryer', 'bathrobe', 'breakfast', 'roomService'],
+        price: 55000,
+        images: [
+          'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&q=80',
+          'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80',
+          'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
+        ],
+      },
+      {
+        id: 'astana-suite-1',
+        type: 'suite',
+        name: {
+          ru: 'Люкс',
+          kz: 'Люкс',
+          en: 'Suite',
+        },
+        description: {
+          ru: 'Роскошный двухкомнатный люкс с панорамным видом на Нур-Султан.',
+          kz: 'Нұр-Сұлтанға панорамалық көрінісі бар сәнді екі бөлмелі люкс.',
+          en: 'Luxurious two-room suite with panoramic views of the capital.',
+        },
+        area: 60,
+        maxGuests: 4,
+        bedType: {
+          ru: 'Королевская кровать + раскладной диван',
+          kz: 'Патшалық төсек + жиналмалы диван',
+          en: 'King size bed + sofa bed',
+        },
+        amenities: ['wifi', 'ac', 'tv', 'minibar', 'safe', 'hairdryer', 'bathrobe', 'breakfast', 'roomService', 'parking'],
+        price: 85000,
+        images: [
+          'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
+          'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80',
+          'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80',
+        ],
+      },
+    ],
+  },
+];
+
+export const getHotelByCity = (city: 'almaty' | 'astana'): Hotel | undefined => {
+  return hotels.find((h) => h.city === city);
+};
