@@ -1,0 +1,3 @@
+:HL["/hi-hotel3/_next/static/chunks/09d._~9a.9p39.css","style"]
+:HL["/hi-hotel3/_next/static/chunks/138u1rr9-vfo2.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"JyXRDShySTH70LnQdKgY-"}

@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
-const isGithubActions = process.env.GITHUB_ACTIONS === 'true'
-const repository = process.env.GITHUB_REPOSITORY?.split('/')[1] ?? ''
+const isProduction = process.env.NODE_ENV === 'production'
+const repository =
+  process.env.GITHUB_REPOSITORY?.split('/')[1] ??
+  process.env.PAGES_REPOSITORY ??
+  'hi-hotel3'
 const isUserOrOrgPagesRepo = repository.toLowerCase().endsWith('.github.io')
-const basePath = isGithubActions && repository && !isUserOrOrgPagesRepo ? `/${repository}` : ''
+const basePath = isProduction && repository && !isUserOrOrgPagesRepo ? `/${repository}` : ''
 
 const nextConfig = {
   output: 'export',
