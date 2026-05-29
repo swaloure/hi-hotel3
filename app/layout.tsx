@@ -40,6 +40,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
+        url: 'logofinal.svg',
+        type: 'image/svg+xml',
+      },
+      {
         url: 'icon-light-32x32.png',
         media: '(prefers-color-scheme: light)',
       },

@@ -1,9 +1,9 @@
 1:"$Sreact.fragment"
-2:I[47257,["/hi-hotel3/_next/static/chunks/0fg6jt~hf41w9.js","/hi-hotel3/_next/static/chunks/0d3shmwh5_nmn.js","/hi-hotel3/_next/static/chunks/0uj1.cfri_5ak.js"],"ClientPageRoot"]
-3:I[30876,["/hi-hotel3/_next/static/chunks/0fg6jt~hf41w9.js","/hi-hotel3/_next/static/chunks/0d3shmwh5_nmn.js","/hi-hotel3/_next/static/chunks/0uj1.cfri_5ak.js","/hi-hotel3/_next/static/chunks/100tyxrt-aqq_.js","/hi-hotel3/_next/static/chunks/0qeqw0os~ljo6.js","/hi-hotel3/_next/static/chunks/0pyqqzdlu_na5.js"],"default"]
-6:I[97367,["/hi-hotel3/_next/static/chunks/0fg6jt~hf41w9.js","/hi-hotel3/_next/static/chunks/0d3shmwh5_nmn.js","/hi-hotel3/_next/static/chunks/0uj1.cfri_5ak.js"],"OutletBoundary"]
+2:I[47257,["/hi-hotel3/_next/static/chunks/0lb4676496hfv.js","/hi-hotel3/_next/static/chunks/0d3shmwh5_nmn.js","/hi-hotel3/_next/static/chunks/08g8iv-qx5udw.js"],"ClientPageRoot"]
+3:I[30876,["/hi-hotel3/_next/static/chunks/0lb4676496hfv.js","/hi-hotel3/_next/static/chunks/0d3shmwh5_nmn.js","/hi-hotel3/_next/static/chunks/08g8iv-qx5udw.js","/hi-hotel3/_next/static/chunks/100tyxrt-aqq_.js","/hi-hotel3/_next/static/chunks/0se8msog~u-35.js","/hi-hotel3/_next/static/chunks/0i3rvsagvtvio.js"],"default"]
+6:I[97367,["/hi-hotel3/_next/static/chunks/0lb4676496hfv.js","/hi-hotel3/_next/static/chunks/0d3shmwh5_nmn.js","/hi-hotel3/_next/static/chunks/08g8iv-qx5udw.js"],"OutletBoundary"]
 7:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/hi-hotel3/_next/static/chunks/100tyxrt-aqq_.js","async":true}],["$","script","script-1",{"src":"/hi-hotel3/_next/static/chunks/0qeqw0os~ljo6.js","async":true}],["$","script","script-2",{"src":"/hi-hotel3/_next/static/chunks/0pyqqzdlu_na5.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"JyXRDShySTH70LnQdKgY-"}
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/hi-hotel3/_next/static/chunks/100tyxrt-aqq_.js","async":true}],["$","script","script-1",{"src":"/hi-hotel3/_next/static/chunks/0se8msog~u-35.js","async":true}],["$","script","script-2",{"src":"/hi-hotel3/_next/static/chunks/0i3rvsagvtvio.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"0hOgVgS4JpoUB1-UYfG0b"}
 4:{}
 5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
 8:null

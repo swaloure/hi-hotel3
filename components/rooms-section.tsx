@@ -127,6 +127,9 @@ interface RoomCardProps {
 function RoomCard({ room, lang, onViewGallery }: RoomCardProps) {
   const { t } = useTranslation();
   const [currentImage, setCurrentImage] = useState(0);
+  const [showAllAmenities, setShowAllAmenities] = useState(false);
+  const hiddenAmenitiesCount = Math.max(room.amenities.length - 5, 0);
+  const displayedAmenities = showAllAmenities ? room.amenities : room.amenities.slice(0, 5);
 
   return (
     <div className="bg-card rounded-2xl overflow-hidden shadow-lg border border-border/50 hover:shadow-xl transition-shadow duration-500">
@@ -211,7 +214,7 @@ function RoomCard({ room, lang, onViewGallery }: RoomCardProps) {
 
         {/* Amenities */}
         <div className="flex flex-wrap gap-2 mb-6">
-          {room.amenities.slice(0, 5).map((amenity) => {
+          {displayedAmenities.map((amenity) => {
             const Icon = amenityIcons[amenity] || Sparkles;
             return (
               <span
@@ -223,10 +226,14 @@ function RoomCard({ room, lang, onViewGallery }: RoomCardProps) {
               </span>
             );
           })}
-          {room.amenities.length > 5 && (
-            <span className="inline-flex items-center text-xs text-muted-foreground bg-secondary rounded-full px-3 py-1.5">
-              +{room.amenities.length - 5}
-            </span>
+          {!showAllAmenities && hiddenAmenitiesCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowAllAmenities(true)}
+              className="inline-flex items-center text-xs text-muted-foreground bg-secondary rounded-full px-3 py-1.5 hover:bg-secondary/80 transition-colors"
+            >
+              +{hiddenAmenitiesCount}
+            </button>
           )}
         </div>
 
@@ -274,73 +281,149 @@ function GalleryModal({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 bg-black/95 flex flex-col"
+      onClick={onClose}
+      className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 md:p-6">
-        <div>
-          <h3 className="text-white text-xl font-light">{room.name[lang]}</h3>
-          <p className="text-white/60 text-sm">{currentIndex + 1} / {room.images.length}</p>
-        </div>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative mx-auto flex h-[68vh] w-[92vw] max-h-[620px] max-w-[980px] flex-row overflow-hidden rounded-2xl border border-border/60 bg-card shadow-2xl"
+      >
         <button
           onClick={onClose}
-          className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+          aria-label={t('common.close')}
+          className="absolute right-4 top-4 z-40 p-1.5 text-black transition-colors hover:text-black/70"
         >
-          <X className="w-5 h-5" />
+          <X className="h-6 w-6 stroke-[2.5]" />
         </button>
-      </div>
 
-      {/* Main Image */}
-      <div className="flex-1 relative flex items-center justify-center px-4">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={currentIndex}
-            src={room.images[currentIndex]}
-            alt={room.name[lang]}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
-            className="max-h-[70vh] max-w-full object-contain rounded-lg"
-          />
-        </AnimatePresence>
+        {/* Gallery */}
+        <div className="relative flex h-full w-[58%] min-h-0 items-center justify-center bg-black/90 p-3 pb-24 md:p-4 md:pb-24">
+          <div className="absolute left-4 top-4 rounded-full bg-black/50 px-3 py-1 text-xs text-white/85">
+            {currentIndex + 1} / {room.images.length}
+          </div>
 
-        {/* Navigation Arrows */}
-        <button
-          onClick={onPrev}
-          className="absolute left-4 md:left-8 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <button
-          onClick={onNext}
-          className="absolute right-4 md:right-8 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
-      </div>
-
-      {/* Thumbnails */}
-      <div className="p-4 md:p-6">
-        <div className="flex justify-center gap-2">
-          {room.images.map((img, idx) => (
-            <button
-              key={idx}
-              onClick={() => onSelectIndex(idx)}
-              className={cn(
-                'w-16 h-12 md:w-20 md:h-14 rounded-lg overflow-hidden transition-all',
-                idx === currentIndex 
-                  ? 'ring-2 ring-accent opacity-100' 
-                  : 'opacity-50 hover:opacity-80'
-              )}
-            >
-              <img
-                src={img}
-                alt={`${room.name[lang]} ${idx + 1}`}
-                className="w-full h-full object-cover"
+          <div className="relative flex h-full min-h-0 w-full items-center justify-center overflow-hidden rounded-xl bg-black/80 p-2 md:p-3">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={currentIndex}
+                src={room.images[currentIndex]}
+                alt={room.name[lang]}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                className="max-h-full max-w-full object-contain"
               />
+            </AnimatePresence>
+
+            {/* Navigation Arrows */}
+            <button
+              type="button"
+              onClick={onPrev}
+              className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition-colors hover:bg-black/75 md:left-4 md:h-12 md:w-12"
+            >
+              <ChevronLeft className="h-6 w-6" />
             </button>
-          ))}
+            <button
+              type="button"
+              onClick={onNext}
+              className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition-colors hover:bg-black/75 md:right-4 md:h-12 md:w-12"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+          </div>
+
+          {/* Thumbnails */}
+          <div className="absolute inset-x-4 bottom-4 z-20">
+            <div className="mx-auto max-w-[460px] rounded-xl bg-black/40 p-2 backdrop-blur-sm">
+              <div className="flex items-center justify-center gap-2 overflow-x-auto">
+                {room.images.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => onSelectIndex(idx)}
+                    className={cn(
+                      'h-14 w-20 shrink-0 rounded-lg overflow-hidden transition-all',
+                      idx === currentIndex
+                        ? 'ring-2 ring-accent opacity-100'
+                        : 'opacity-60 hover:opacity-90'
+                    )}
+                  >
+                    <img
+                      src={img}
+                      alt={`${room.name[lang]} ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Full Room Details */}
+        <div className="h-full w-[42%] border-l border-border/60 bg-background">
+          <div className="h-full overflow-y-auto p-4 md:p-5">
+            <h3 className="text-2xl font-light text-foreground">
+              {room.name[lang]}
+            </h3>
+
+            <div className="mt-5 rounded-xl bg-secondary/60 p-4 border border-border/50">
+              <div className="flex items-baseline justify-between gap-3">
+                <span className="text-sm text-muted-foreground">{t('rooms.from')}</span>
+                <span className="text-xl font-medium text-foreground">
+                  {room.price.toLocaleString()} ₸
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">{t('rooms.perNight')}</p>
+
+              <div className="mt-4 grid gap-2 text-sm text-foreground">
+                <div className="flex items-center gap-2">
+                  <Bed className="w-4 h-4 text-accent" />
+                  <span>{room.bedType[lang]}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Expand className="w-4 h-4 text-accent" />
+                  <span>
+                    {room.area} {t('rooms.sqm')}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-accent" />
+                  <span>
+                    {room.maxGuests} {t('rooms.guests')}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+              {room.description[lang]}
+            </p>
+
+            <div className="mt-6">
+              <h4 className="text-sm font-medium text-foreground mb-3">
+                {t('rooms.amenities')}
+              </h4>
+              <div className="grid gap-2">
+                {room.amenities.map((amenity) => {
+                  const Icon = amenityIcons[amenity] || Sparkles;
+                  return (
+                    <div
+                      key={amenity}
+                      className="inline-flex items-center gap-2 text-sm text-foreground/90 rounded-lg bg-card border border-border/60 px-3 py-2"
+                    >
+                      <Icon className="w-4 h-4 text-accent" />
+                      <span>{t(`amenities.${amenity}`)}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <Button className="mt-6 w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
+              {t('rooms.book')}
+            </Button>
+          </div>
         </div>
       </div>
     </motion.div>

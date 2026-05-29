@@ -2,6 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Instagram, 
   Facebook,
@@ -11,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 interface FooterProps {
-  city: 'almaty' | 'astana';
+  city: 'almaty' | 'astana' | 'home';
 }
 
 const socialLinks = [
@@ -22,14 +23,41 @@ const socialLinks = [
 const currentYear = new Date().getFullYear();
 
 export function Footer({ city }: FooterProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isHome = city === 'home';
+  const normalized = i18n.language.toLowerCase();
+  const lang: 'ru' | 'kz' | 'en' = normalized.startsWith('en')
+    ? 'en'
+    : normalized.startsWith('kz') || normalized.startsWith('kk')
+      ? 'kz'
+      : 'ru';
 
-  const navLinks = [
-    { href: `/${city}`, label: t('nav.home') },
-    { href: `/${city}#rooms`, label: t('nav.rooms') },
-    { href: `/${city}#about`, label: t('nav.about') },
-    { href: `/${city}#contacts`, label: t('nav.contacts') },
-  ];
+  const homeLabels = {
+    cities: {
+      ru: 'Города',
+      kz: 'Қалалар',
+      en: 'Cities',
+    },
+    format: {
+      ru: 'Формат',
+      kz: 'Формат',
+      en: 'Format',
+    },
+  };
+
+  const navLinks = isHome
+    ? [
+        { href: '/#home', label: t('nav.home') },
+        { href: '/#cities', label: homeLabels.cities[lang] },
+        { href: '/#about', label: t('nav.about') },
+        { href: '/#format', label: homeLabels.format[lang] },
+      ]
+    : [
+        { href: `/${city}`, label: t('nav.home') },
+        { href: `/${city}#rooms`, label: t('nav.rooms') },
+        { href: `/${city}#about`, label: t('nav.about') },
+        { href: `/${city}#contacts`, label: t('nav.contacts') },
+      ];
 
   return (
     <footer className="bg-primary text-primary-foreground">
@@ -38,8 +66,14 @@ export function Footer({ city }: FooterProps) {
         <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" className="inline-block">
-              <h3 className="text-2xl font-light tracking-tight">Hi Hotel</h3>
+            <Link href="/" className="inline-block" aria-label="Hi Hotel">
+              <Image
+                src="/logofinal.svg"
+                alt="Hi Hotel"
+                width={52}
+                height={60}
+                className="h-14 w-auto"
+              />
             </Link>
             <p className="mt-4 text-primary-foreground/70 text-sm leading-relaxed">
               {t('about.description').substring(0, 120)}...

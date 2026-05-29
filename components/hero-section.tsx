@@ -17,6 +17,13 @@ export function HeroSection({ city }: HeroSectionProps) {
   const hotel = getHotelByCity(city);
 
   if (!hotel) return null;
+  const isAlmaty = city === 'almaty';
+  const heroBackgroundImage =
+    city === 'astana'
+      ? '/cities/astana-embankment.jpg'
+      : city === 'almaty'
+        ? '/cities/almaty-cityscape.jpg'
+        : hotel.heroImage;
 
   return (
     <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
@@ -29,24 +36,23 @@ export function HeroSection({ city }: HeroSectionProps) {
       >
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${hotel.heroImage})` }}
+          style={{ backgroundImage: `url(${heroBackgroundImage})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
+        <div
+          className={`absolute inset-0 bg-gradient-to-b ${
+            isAlmaty
+              ? 'from-black/45 via-black/30 to-black/65'
+              : 'from-black/40 via-black/20 to-black/60'
+          }`}
+        />
+        {isAlmaty && (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(255,223,179,0.28),transparent_45%)]" />
+        )}
       </motion.div>
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="text-center text-white">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <span className="inline-block text-sm uppercase tracking-[0.3em] text-white/70 mb-4">
-              {t(`cities.${city}`)}
-            </span>
-          </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -91,7 +97,7 @@ export function HeroSection({ city }: HeroSectionProps) {
               asChild
               variant="outline"
               size="lg"
-              className="border-white/50 text-white hover:bg-white/10 rounded-full px-8 text-base bg-transparent"
+              className="border-white/50 bg-transparent text-white hover:border-white/50 hover:bg-transparent hover:text-white rounded-full px-8 text-base"
             >
               <Link href={`#rooms`}>
                 {t('hero.explore')}

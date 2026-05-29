@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -16,13 +17,22 @@ interface ContactSectionProps {
   city: 'almaty' | 'astana';
 }
 
+type MapProvider = 'yandex' | 'dgis' | 'google';
+
 export function ContactSection({ city }: ContactSectionProps) {
   const { t, i18n } = useTranslation();
   const hotel = getHotelByCity(city);
+  const [selectedMap, setSelectedMap] = useState<MapProvider>('yandex');
 
   if (!hotel) return null;
 
-  const lang = i18n.language as 'ru' | 'kz' | 'en';
+  const normalized = i18n.language.toLowerCase();
+  const lang: 'ru' | 'kz' | 'en' = normalized.startsWith('en')
+    ? 'en'
+    : normalized.startsWith('kz') || normalized.startsWith('kk')
+      ? 'kz'
+      : 'ru';
+  const { lat, lng } = hotel.coordinates;
 
   const contactItems = [
     {
@@ -50,6 +60,30 @@ export function ContactSection({ city }: ContactSectionProps) {
       href: undefined,
     },
   ];
+
+  const mapProviders: Record<MapProvider, { label: string; src: string; href: string }> = {
+    yandex: {
+      label: 'Яндекс',
+      src: `https://yandex.com/map-widget/v1/?ll=${lng}%2C${lat}&z=16&pt=${lng},${lat},pm2rdm&lang=ru_RU`,
+      href: `https://yandex.com/maps/?ll=${lng}%2C${lat}&z=16&pt=${lng},${lat},pm2rdm`,
+    },
+    dgis: {
+      label: '2ГИС',
+      src: `https://widgets.2gis.com/widget?type=map&lon=${lng}&lat=${lat}&zoom=16`,
+      href: `https://2gis.kz/search/${lat},${lng}`,
+    },
+    google: {
+      label: 'Google Maps',
+      src: `https://maps.google.com/?q=${lat},${lng}&z=16&output=embed`,
+      href: `https://maps.google.com/?q=${lat},${lng}`,
+    },
+  };
+
+  const mapUi = {
+    ru: { label: 'Карта', choose: 'Выберите карту' },
+    kz: { label: 'Карта', choose: 'Картаны таңдаңыз' },
+    en: { label: 'Map', choose: 'Choose a map' },
+  };
 
   return (
     <section id="contacts" className="py-24 lg:py-32 bg-secondary/30">
@@ -149,7 +183,7 @@ export function ContactSection({ city }: ContactSectionProps) {
             </div>
           </motion.div>
 
-          {/* Map Placeholder */}
+          {/* Map */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -157,44 +191,49 @@ export function ContactSection({ city }: ContactSectionProps) {
             transition={{ duration: 0.8 }}
             className="h-[400px] lg:h-full min-h-[400px]"
           >
-            <div className="w-full h-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden relative">
-              {/* Map Placeholder UI */}
-              <div className="absolute inset-0 bg-secondary/50">
-                <div 
-                  className="w-full h-full"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                  }}
-                />
-              </div>
-              
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
-                <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mb-4">
-                  <MapPin className="w-8 h-8 text-accent" />
+            <div className="w-full h-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden flex flex-col">
+              <div className="flex flex-col gap-3 border-b border-border/60 bg-background/70 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
+                <div>
+                  <p className="text-sm font-medium text-foreground">{mapUi[lang].label}</p>
+                  <p className="text-xs text-muted-foreground">{mapUi[lang].choose}</p>
                 </div>
-                <h3 className="text-lg font-medium text-foreground mb-2">
-                  Google Maps / Yandex Maps
-                </h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Map Integration Placeholder
-                </p>
-                <p className="text-xs text-muted-foreground font-mono">
-                  {hotel.coordinates.lat.toFixed(6)}, {hotel.coordinates.lng.toFixed(6)}
-                </p>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="mt-4 rounded-full"
-                >
-                  <a
-                    href={`https://maps.google.com/?q=${hotel.coordinates.lat},${hotel.coordinates.lng}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {t('common.viewAll')}
-                  </a>
-                </Button>
+                <div className="flex items-center gap-2">
+                  <div className="inline-flex rounded-full bg-secondary p-1">
+                    {(['yandex', 'dgis', 'google'] as MapProvider[]).map((provider) => (
+                      <button
+                        key={provider}
+                        type="button"
+                        onClick={() => setSelectedMap(provider)}
+                        className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                          selectedMap === provider
+                            ? 'bg-accent text-accent-foreground'
+                            : 'text-muted-foreground hover:text-foreground'
+                        }`}
+                      >
+                        {mapProviders[provider].label}
+                      </button>
+                    ))}
+                  </div>
+                  <Button asChild variant="outline" size="sm" className="rounded-full">
+                    <a
+                      href={mapProviders[selectedMap].href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t('common.viewAll')}
+                    </a>
+                  </Button>
+                </div>
+              </div>
+              <div className="relative flex-1">
+                <iframe
+                  key={`${city}-${selectedMap}`}
+                  src={mapProviders[selectedMap].src}
+                  title={`${mapProviders[selectedMap].label} ${hotel.name}`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0 h-full w-full border-0"
+                />
               </div>
             </div>
           </motion.div>

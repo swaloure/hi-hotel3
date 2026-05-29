@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { 
   Menu, 
   X, 
@@ -29,7 +30,7 @@ const languages = [
 ];
 
 interface HeaderProps {
-  city: 'almaty' | 'astana';
+  city: 'almaty' | 'astana' | 'home';
 }
 
 export function Header({ city }: HeaderProps) {
@@ -37,25 +38,58 @@ export function Header({ city }: HeaderProps) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  const hotel = getHotelByCity(city);
+  const isHome = city === 'home';
+  const hotel = isHome ? undefined : getHotelByCity(city);
+  const normalized = i18n.language.toLowerCase();
+  const lang: 'ru' | 'kz' | 'en' = normalized.startsWith('en')
+    ? 'en'
+    : normalized.startsWith('kz') || normalized.startsWith('kk')
+      ? 'kz'
+      : 'ru';
+
+  const homeLabels = {
+    city: {
+      ru: 'Город',
+      kz: 'Қала',
+      en: 'City',
+    },
+    cities: {
+      ru: 'Города',
+      kz: 'Қалалар',
+      en: 'Cities',
+    },
+    format: {
+      ru: 'Формат',
+      kz: 'Формат',
+      en: 'Format',
+    },
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { href: `/${city}`, label: t('nav.home') },
-    { href: `/${city}#rooms`, label: t('nav.rooms') },
-    { href: `/${city}#about`, label: t('nav.about') },
-    { href: `/${city}#contacts`, label: t('nav.contacts') },
-  ];
+  const navItems = isHome
+    ? [
+        { href: '/#home', label: t('nav.home') },
+        { href: '/#cities', label: homeLabels.cities[lang] },
+        { href: '/#about', label: t('nav.about') },
+        { href: '/#format', label: homeLabels.format[lang] },
+      ]
+    : [
+        { href: `/${city}`, label: t('nav.home') },
+        { href: `/${city}#rooms`, label: t('nav.rooms') },
+        { href: `/${city}#about`, label: t('nav.about') },
+        { href: `/${city}#contacts`, label: t('nav.contacts') },
+      ];
 
   const otherCity = city === 'almaty' ? 'astana' : 'almaty';
+  const desktopLogoSrc = isScrolled ? '/logofinal.svg' : '/logowhite.svg';
 
   return (
     <>
@@ -71,12 +105,16 @@ export function Header({ city }: HeaderProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3">
-              <span className={`text-2xl font-light tracking-tight transition-colors ${
-                isScrolled ? 'text-foreground' : 'text-white'
-              }`}>
-                Hi Hotel
-              </span>
+            <Link href="/" className="flex items-center">
+              <Image
+                src={desktopLogoSrc}
+                alt="Hi Hotel"
+                width={60}
+                height={60}
+                unoptimized
+                className="mt-1 h-[60px] w-[60px] object-contain transition-transform"
+                priority
+              />
             </Link>
 
             {/* Desktop Nav */}
@@ -105,16 +143,31 @@ export function Header({ city }: HeaderProps) {
                     className={`gap-2 ${isScrolled ? 'text-foreground' : 'text-white hover:bg-white/10'}`}
                   >
                     <MapPin className="w-4 h-4" />
-                    {t(`cities.${city}`)}
+                    {isHome ? homeLabels.city[lang] : t(`cities.${city}`)}
                     <ChevronDown className="w-3 h-3" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
-                    <Link href={`/${otherCity}`} className="cursor-pointer">
-                      {t(`cities.${otherCity}`)}
-                    </Link>
-                  </DropdownMenuItem>
+                  {isHome ? (
+                    <>
+                      <DropdownMenuItem asChild>
+                        <Link href="/almaty" className="cursor-pointer">
+                          {t('cities.almaty')}
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link href="/astana" className="cursor-pointer">
+                          {t('cities.astana')}
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  ) : (
+                    <DropdownMenuItem asChild>
+                      <Link href={`/${otherCity}`} className="cursor-pointer">
+                        {t(`cities.${otherCity}`)}
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -163,7 +216,7 @@ export function Header({ city }: HeaderProps) {
                 asChild
                 className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-6"
               >
-                <Link href={`/${city}#booking`}>
+                <Link href={isHome ? '/almaty#booking' : `/${city}#booking`}>
                   {t('nav.book')}
                 </Link>
               </Button>
@@ -203,7 +256,14 @@ export function Header({ city }: HeaderProps) {
             >
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-6 border-b border-border">
-                  <span className="text-xl font-light">Hi Hotel</span>
+                  <Image
+                    src="/logofinal.svg"
+                    alt="Hi Hotel"
+                    width={60}
+                    height={60}
+                    unoptimized
+                    className="mt-1 h-[60px] w-[60px] object-contain"
+                  />
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="p-2"
@@ -229,15 +289,36 @@ export function Header({ city }: HeaderProps) {
                   </ul>
 
                   <div className="mt-10 pt-10 border-t border-border space-y-6">
-                    {/* City Switch */}
-                    <Link
-                      href={`/${otherCity}`}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <MapPin className="w-5 h-5" />
-                      <span>{t(`cities.${otherCity}`)}</span>
-                    </Link>
+                  {/* City Switch */}
+                    {isHome ? (
+                      <div className="space-y-3">
+                        <Link
+                          href="/almaty"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <MapPin className="w-5 h-5" />
+                          <span>{t('cities.almaty')}</span>
+                        </Link>
+                        <Link
+                          href="/astana"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <MapPin className="w-5 h-5" />
+                          <span>{t('cities.astana')}</span>
+                        </Link>
+                      </div>
+                    ) : (
+                      <Link
+                        href={`/${otherCity}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <MapPin className="w-5 h-5" />
+                        <span>{t(`cities.${otherCity}`)}</span>
+                      </Link>
+                    )}
 
                     {/* Languages */}
                     <div className="flex gap-4">
@@ -275,7 +356,7 @@ export function Header({ city }: HeaderProps) {
                     className="w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-full"
                   >
                     <Link 
-                      href={`/${city}#booking`}
+                      href={isHome ? '/almaty#booking' : `/${city}#booking`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {t('nav.book')}
