@@ -282,11 +282,11 @@ function GalleryModal({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
-      className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
+      className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative mx-auto flex h-[68vh] w-[92vw] max-h-[620px] max-w-[980px] flex-row overflow-hidden rounded-2xl border border-border/60 bg-card shadow-2xl"
+        className="relative mx-auto flex h-[72vh] w-[94vw] max-h-[760px] max-w-[1220px] flex-row overflow-hidden rounded-2xl border border-border/60 bg-card shadow-2xl"
       >
         <button
           onClick={onClose}
@@ -297,12 +297,12 @@ function GalleryModal({
         </button>
 
         {/* Gallery */}
-        <div className="relative flex h-full w-[58%] min-h-0 items-center justify-center bg-black/90 p-3 pb-24 md:p-4 md:pb-24">
+        <div className="relative grid h-full w-[52%] min-h-0 grid-rows-[minmax(0,1fr)_76px] bg-background p-3 md:p-4">
           <div className="absolute left-4 top-4 rounded-full bg-black/50 px-3 py-1 text-xs text-white/85">
             {currentIndex + 1} / {room.images.length}
           </div>
 
-          <div className="relative flex h-full min-h-0 w-full items-center justify-center overflow-hidden rounded-xl bg-black/80 p-2 md:p-3">
+          <div className="relative row-start-1 h-full min-h-0 w-full overflow-hidden rounded-xl">
             <AnimatePresence mode="wait">
               <motion.img
                 key={currentIndex}
@@ -312,7 +312,7 @@ function GalleryModal({
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.3 }}
-                className="max-h-full max-w-full object-contain"
+                className="h-full w-full object-cover"
               />
             </AnimatePresence>
 
@@ -334,34 +334,33 @@ function GalleryModal({
           </div>
 
           {/* Thumbnails */}
-          <div className="absolute inset-x-4 bottom-4 z-20">
-            <div className="mx-auto max-w-[460px] rounded-xl bg-black/40 p-2 backdrop-blur-sm">
-              <div className="flex items-center justify-center gap-2 overflow-x-auto">
-                {room.images.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => onSelectIndex(idx)}
-                    className={cn(
-                      'h-14 w-20 shrink-0 rounded-lg overflow-hidden transition-all',
-                      idx === currentIndex
-                        ? 'ring-2 ring-accent opacity-100'
-                        : 'opacity-60 hover:opacity-90'
-                    )}
-                  >
-                    <img
-                      src={img}
-                      alt={`${room.name[lang]} ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
+          <div className="row-start-2 z-20 flex h-[76px] items-end justify-center pt-3">
+            <div className="flex items-center justify-center gap-2 overflow-x-auto px-1">
+              {room.images.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => onSelectIndex(idx)}
+                  className={cn(
+                    'h-14 w-20 shrink-0 overflow-hidden rounded-lg transition-all',
+                    idx === currentIndex
+                      ? 'opacity-100 ring-2 ring-accent'
+                      : 'opacity-70 hover:opacity-95'
+                  )}
+                >
+                  <img
+                    src={img}
+                    alt={`${room.name[lang]} ${idx + 1}`}
+                    className="h-full w-full object-cover"
+                  />
+                </button>
+              ))}
             </div>
-          </div>
+              </div>
+          
         </div>
 
         {/* Full Room Details */}
-        <div className="h-full w-[42%] border-l border-border/60 bg-background">
+        <div className="h-full w-[48%] border-l border-border/60 bg-background">
           <div className="h-full overflow-y-auto p-4 md:p-5">
             <h3 className="text-2xl font-light text-foreground">
               {room.name[lang]}
