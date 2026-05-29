@@ -22,6 +22,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { getHotelByCity } from '@/lib/data/hotels';
+import { withBasePath } from '@/lib/asset-path';
 
 const languages = [
   { code: 'ru', label: 'RU', name: 'Русский' },
@@ -89,7 +90,9 @@ export function Header({ city }: HeaderProps) {
       ];
 
   const otherCity = city === 'almaty' ? 'astana' : 'almaty';
-  const desktopLogoSrc = isScrolled ? '/logofinal.svg' : '/logowhite.svg';
+  const desktopLogoSrc = isScrolled
+    ? withBasePath('/logofinal.svg')
+    : withBasePath('/logowhite.svg');
 
   return (
     <>
@@ -257,7 +260,7 @@ export function Header({ city }: HeaderProps) {
               <div className="flex flex-col h-full">
                 <div className="flex items-center justify-between p-6 border-b border-border">
                   <Image
-                    src="/logofinal.svg"
+                    src={withBasePath('/logofinal.svg')}
                     alt="Hi Hotel"
                     width={60}
                     height={60}

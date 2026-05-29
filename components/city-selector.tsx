@@ -15,6 +15,7 @@ import {
   UsersRound,
   Wifi,
 } from 'lucide-react';
+import { withBasePath } from '@/lib/asset-path';
 
 type Lang = 'ru' | 'kz' | 'en';
 type LocalizedText = Record<Lang, string>;
@@ -273,7 +274,7 @@ export function CitySelector() {
         >
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: 'url(/cities/almaty-hero.jpg)' }}
+            style={{ backgroundImage: `url(${withBasePath('/cities/almaty-hero.jpg')})` }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/30 to-black/65" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(255,223,179,0.28),transparent_45%)]" />
@@ -288,7 +289,7 @@ export function CitySelector() {
               className="w-fit rounded-xl bg-black/25 p-2 backdrop-blur-sm"
             >
               <Image
-                src="/logofinal.svg"
+                src={withBasePath('/logofinal.svg')}
                 alt="Hi Hotel"
                 width={56}
                 height={64}
@@ -379,7 +380,7 @@ export function CitySelector() {
                   <article className="relative h-[460px] overflow-hidden rounded-3xl border border-border/60 shadow-xl">
                     <div
                       className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105"
-                      style={{ backgroundImage: `url(${city.image})` }}
+                      style={{ backgroundImage: `url(${withBasePath(city.image)})` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 p-7 text-white md:p-9">

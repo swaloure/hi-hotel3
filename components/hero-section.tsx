@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 import { getHotelByCity } from '@/lib/data/hotels';
 import { BookingWidget } from './booking-widget';
+import { withBasePath } from '@/lib/asset-path';
 
 interface HeroSectionProps {
   city: 'almaty' | 'astana';
@@ -36,7 +37,7 @@ export function HeroSection({ city }: HeroSectionProps) {
       >
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroBackgroundImage})` }}
+          style={{ backgroundImage: `url(${withBasePath(heroBackgroundImage)})` }}
         />
         <div
           className={`absolute inset-0 bg-gradient-to-b ${

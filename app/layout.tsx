@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Providers } from '@/components/providers'
+import { withBasePath } from '@/lib/asset-path'
 import './globals.css'
 
 const geist = Geist({ 
@@ -40,23 +41,23 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: 'logofinal.svg',
+        url: withBasePath('/logofinal.svg'),
         type: 'image/svg+xml',
       },
       {
-        url: 'icon-light-32x32.png',
+        url: withBasePath('/icon-light-32x32.png'),
         media: '(prefers-color-scheme: light)',
       },
       {
-        url: 'icon-dark-32x32.png',
+        url: withBasePath('/icon-dark-32x32.png'),
         media: '(prefers-color-scheme: dark)',
       },
       {
-        url: 'icon.svg',
+        url: withBasePath('/icon.svg'),
         type: 'image/svg+xml',
       },
     ],
-    apple: 'apple-icon.png',
+    apple: withBasePath('/apple-icon.png'),
   },
 }
 

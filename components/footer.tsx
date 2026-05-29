@@ -3,13 +3,14 @@
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
+import {
   Instagram, 
   Facebook,
   FileText,
   Download
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { withBasePath } from '@/lib/asset-path';
 
 interface FooterProps {
   city: 'almaty' | 'astana' | 'home';
@@ -68,7 +69,7 @@ export function Footer({ city }: FooterProps) {
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block" aria-label="Hi Hotel">
               <Image
-                src="/logofinal.svg"
+                src={withBasePath('/logofinal.svg')}
                 alt="Hi Hotel"
                 width={52}
                 height={60}
