@@ -219,7 +219,7 @@ export function Header({ city }: HeaderProps) {
                 asChild
                 className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-6"
               >
-                <Link href={isHome ? '/almaty#booking' : `/${city}#booking`}>
+                <Link href="/booking">
                   {t('nav.book')}
                 </Link>
               </Button>
@@ -359,7 +359,7 @@ export function Header({ city }: HeaderProps) {
                     className="w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-full"
                   >
                     <Link 
-                      href={isHome ? '/almaty#booking' : `/${city}#booking`}
+                      href="/booking"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {t('nav.book')}

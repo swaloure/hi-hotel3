@@ -39,24 +39,11 @@ export const metadata: Metadata = {
     description: 'Премиальные мини-отели с комфортными номерами',
   },
   icons: {
-    icon: [
-      {
-        url: withBasePath('/logofinal.svg'),
-        type: 'image/svg+xml',
-      },
-      {
-        url: withBasePath('/icon-light-32x32.png'),
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: withBasePath('/icon-dark-32x32.png'),
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: withBasePath('/icon.svg'),
-        type: 'image/svg+xml',
-      },
-    ],
+    icon: {
+      url: withBasePath('/logofinal.svg'),
+      type: 'image/svg+xml',
+    },
+    shortcut: withBasePath('/logofinal.svg'),
     apple: withBasePath('/apple-icon.png'),
   },
 }

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import Link from 'next/link';
 import { 
   Wifi, 
   Wind, 
@@ -239,8 +240,10 @@ function RoomCard({ room, lang, onViewGallery }: RoomCardProps) {
 
         {/* Actions */}
         <div className="flex gap-3">
-          <Button className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
-            {t('rooms.book')}
+          <Button asChild className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
+            <Link href="/booking">
+              {t('rooms.book')}
+            </Link>
           </Button>
           <Button 
             variant="outline" 
@@ -419,8 +422,10 @@ function GalleryModal({
               </div>
             </div>
 
-            <Button className="mt-6 w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
-              {t('rooms.book')}
+            <Button asChild className="mt-6 w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
+              <Link href="/booking">
+                {t('rooms.book')}
+              </Link>
             </Button>
           </div>
         </div>

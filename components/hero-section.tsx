@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 import { getHotelByCity } from '@/lib/data/hotels';
-import { BookingWidget } from './booking-widget';
 import { withBasePath } from '@/lib/asset-path';
 
 interface HeroSectionProps {
@@ -90,7 +89,7 @@ export function HeroSection({ city }: HeroSectionProps) {
               size="lg"
               className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-8 text-base"
             >
-              <Link href={`#booking`}>
+              <Link href="/booking">
                 {t('hero.cta')}
               </Link>
             </Button>
@@ -107,15 +106,6 @@ export function HeroSection({ city }: HeroSectionProps) {
           </motion.div>
         </div>
 
-        {/* Booking Widget */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.3 }}
-          className="mt-16 hidden lg:block"
-        >
-          <BookingWidget city={city} variant="hero" />
-        </motion.div>
       </div>
 
       {/* Scroll Indicator */}
