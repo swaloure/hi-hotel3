@@ -138,12 +138,16 @@ export function Header({ city }: HeaderProps) {
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-4">
               {/* City Switcher */}
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    className={`gap-2 ${isScrolled ? 'text-foreground' : 'text-white hover:bg-white/10'}`}
+                    className={`gap-2 ${
+                      isScrolled
+                        ? 'text-foreground'
+                        : 'text-white hover:bg-white/10 hover:text-white data-[state=open]:bg-white/10 data-[state=open]:text-white'
+                    }`}
                   >
                     <MapPin className="w-4 h-4" />
                     {isHome ? homeLabels.city[lang] : t(`cities.${city}`)}
@@ -175,12 +179,16 @@ export function Header({ city }: HeaderProps) {
               </DropdownMenu>
 
               {/* Language Switcher */}
-              <DropdownMenu>
+              <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    className={`gap-2 ${isScrolled ? 'text-foreground' : 'text-white hover:bg-white/10'}`}
+                    className={`gap-2 ${
+                      isScrolled
+                        ? 'text-foreground'
+                        : 'text-white hover:bg-white/10 hover:text-white data-[state=open]:bg-white/10 data-[state=open]:text-white'
+                    }`}
                   >
                     <Globe className="w-4 h-4" />
                     {languages.find(l => l.code === i18n.language)?.label || 'RU'}

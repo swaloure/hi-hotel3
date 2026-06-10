@@ -7,9 +7,7 @@ import {
   Instagram, 
   Facebook,
   FileText,
-  Download
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { withBasePath } from '@/lib/asset-path';
 
 interface FooterProps {
@@ -146,23 +144,24 @@ export function Footer({ city }: FooterProps) {
             </h4>
             <ul className="space-y-3">
               <li>
-                <button className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm group">
+                <button
+                  type="button"
+                  className="flex cursor-default items-center gap-2 text-primary-foreground/70 transition-colors text-sm"
+                >
                   <FileText className="w-4 h-4" />
                   {t('footer.privacy')}
-                  <Download className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
               </li>
               <li>
-                <button className="flex items-center gap-2 text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm group">
+                <button
+                  type="button"
+                  className="flex cursor-default items-center gap-2 text-primary-foreground/70 transition-colors text-sm"
+                >
                   <FileText className="w-4 h-4" />
                   {t('footer.offer')}
-                  <Download className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
               </li>
             </ul>
-            <p className="text-xs text-primary-foreground/50 mt-4">
-              {t('footer.download')} (PDF Placeholder)
-            </p>
           </div>
         </div>
 

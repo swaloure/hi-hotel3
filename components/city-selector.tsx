@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import Image from 'next/image';
 import {
   ArrowUpRight,
   BriefcaseBusiness,
@@ -282,27 +281,11 @@ export function CitySelector() {
 
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-end px-4 pb-16 pt-36 sm:px-6 md:pb-24 lg:px-8">
           <div className="max-w-3xl text-white">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="w-fit rounded-xl bg-black/25 p-2 backdrop-blur-sm"
-            >
-              <Image
-                src={withBasePath('/logofinal.svg')}
-                alt="Hi Hotel"
-                width={56}
-                height={64}
-                className="h-14 w-auto"
-                priority
-              />
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-5 text-4xl leading-tight font-light text-balance md:text-6xl lg:text-7xl"
+              className="text-4xl leading-tight font-light text-balance md:text-6xl lg:text-7xl"
             >
               {pick(homeCopy.heroTitle, lang)}
             </motion.h1>
@@ -336,9 +319,9 @@ export function CitySelector() {
               </Link>
               <button
                 type="button"
-                className="inline-flex cursor-default items-center rounded-full border border-[#25D366]/70 bg-[#25D366]/25 px-7 py-3 text-sm font-medium text-white"
+                className="inline-flex cursor-default items-center rounded-full border border-white/55 px-7 py-3 text-sm font-medium text-white transition hover:bg-white/10"
               >
-                <MessageCircle className="w-4 h-4 mr-2" />
+                <MessageCircle className="w-4 h-4 mr-2 text-white" />
                 {pick(homeCopy.contactCta, lang)}
               </button>
             </motion.div>
