@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, BadgeCheck, Clock3, CreditCard, MapPin, Palette, ShieldCheck } from 'lucide-react';
 import { Header } from '@/components/header';
@@ -17,13 +18,16 @@ const copy = {
       'Проверьте доступные даты, сравните номера Алматы и Астаны и оформите бронь через защищенный модуль Bnovo.',
     back: 'К отелям',
     panelTitle: 'Бронирование через Bnovo',
-    panelText: 'Модуль может загружаться несколько секунд. Если видите номера двух городов, выберите нужную локацию внутри формы.',
+    panelText: 'Выберите город выше: Bnovo загрузит только комнаты выбранной локации.',
+    chooseCity: 'Выберите город для бронирования',
     official: 'Официальные цены',
     secure: 'Защищенная форма',
     instant: 'Быстрая проверка дат',
     payment: 'Оплата по условиям тарифа',
     almaty: 'Алматы: проспект Достык 162к6',
     astana: 'Астана: Мангилик Ел 29/1',
+    almatyCity: 'Алматы',
+    astanaCity: 'Астана',
     styleNote: 'Цвета внутри формы настраиваются в Bnovo-конфигураторе. Страница уже оформлена под фирменный графит и золото Hi Hotel.',
   },
   kz: {
@@ -33,13 +37,16 @@ const copy = {
       'Бос күндерді тексеріп, Алматы мен Астана нөмірлерін салыстырып, Bnovo қорғалған модулі арқылы брондаңыз.',
     back: 'Қонақ үйлерге',
     panelTitle: 'Bnovo арқылы брондау',
-    panelText: 'Модуль бірнеше секунд жүктелуі мүмкін. Екі қала нөмірлері көрінсе, форма ішінде қажетті локацияны таңдаңыз.',
+    panelText: 'Жоғарыдан қаланы таңдаңыз: Bnovo тек таңдалған локация бөлмелерін жүктейді.',
+    chooseCity: 'Брондау үшін қаланы таңдаңыз',
     official: 'Ресми бағалар',
     secure: 'Қорғалған форма',
     instant: 'Күндерді жылдам тексеру',
     payment: 'Төлем тариф шарты бойынша',
     almaty: 'Алматы: Достық даңғылы 162к6',
     astana: 'Астана: Мәңгілік Ел 29/1',
+    almatyCity: 'Алматы',
+    astanaCity: 'Астана',
     styleNote: 'Форма ішіндегі түстер Bnovo конфигураторында реттеледі. Бет Hi Hotel графит және алтын түстеріне бейімделді.',
   },
   en: {
@@ -49,13 +56,16 @@ const copy = {
       'Check available dates, compare Almaty and Astana rooms, and book through the secure Bnovo module.',
     back: 'Back to hotels',
     panelTitle: 'Booking through Bnovo',
-    panelText: 'The module may take a few seconds to load. If rooms from both cities appear, choose the needed location inside the form.',
+    panelText: 'Choose a city above: Bnovo will load only the rooms for that location.',
+    chooseCity: 'Choose a city to book',
     official: 'Official rates',
     secure: 'Secure form',
     instant: 'Fast date check',
     payment: 'Payment by rate terms',
     almaty: 'Almaty: 162k6 Dostyk Avenue',
     astana: 'Astana: 29/1 Mangilik El',
+    almatyCity: 'Almaty',
+    astanaCity: 'Astana',
     styleNote: 'Colors inside the form are configured in Bnovo. This page is styled with Hi Hotel graphite and gold.',
   },
 };
@@ -69,6 +79,7 @@ const benefits = [
 
 export default function BookingPage() {
   const { i18n } = useTranslation();
+  const [selectedCity, setSelectedCity] = useState<'almaty' | 'astana'>('almaty');
   const normalized = i18n.language.toLowerCase();
   const lang: keyof typeof copy = normalized.startsWith('en')
     ? 'en'
@@ -113,14 +124,23 @@ export default function BookingPage() {
             </p>
 
             <div className="mt-8 grid max-w-xl gap-3 sm:grid-cols-2">
-              {[text.almaty, text.astana].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-center gap-3 rounded-2xl border border-white/12 bg-white/10 px-4 py-3 text-sm text-primary-foreground/85 backdrop-blur"
+              {[
+                { city: 'almaty' as const, label: text.almaty },
+                { city: 'astana' as const, label: text.astana },
+              ].map((item) => (
+                <button
+                  key={item.city}
+                  type="button"
+                  onClick={() => setSelectedCity(item.city)}
+                  className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm backdrop-blur transition ${
+                    selectedCity === item.city
+                      ? 'border-accent/70 bg-accent/20 text-primary-foreground'
+                      : 'border-white/12 bg-white/10 text-primary-foreground/85 hover:border-white/25 hover:bg-white/15'
+                  }`}
                 >
                   <MapPin className="h-4 w-4 shrink-0 text-accent" />
-                  <span>{item}</span>
-                </div>
+                  <span>{item.label}</span>
+                </button>
               ))}
             </div>
           </div>
@@ -148,8 +168,34 @@ export default function BookingPage() {
                 </p>
               </div>
 
+              <div className="mb-5 rounded-2xl border border-border bg-card p-3">
+                <p className="mb-3 px-1 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                  {text.chooseCity}
+                </p>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {[
+                    { city: 'almaty' as const, label: text.almatyCity },
+                    { city: 'astana' as const, label: text.astanaCity },
+                  ].map((item) => (
+                    <button
+                      key={item.city}
+                      type="button"
+                      onClick={() => setSelectedCity(item.city)}
+                      className={`rounded-xl px-4 py-3 text-sm font-medium transition ${
+                        selectedCity === item.city
+                          ? 'bg-primary text-primary-foreground shadow-sm'
+                          : 'bg-secondary text-foreground hover:bg-accent/20'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <BookingWidget
-                city="almaty"
+                key={selectedCity}
+                city={selectedCity}
                 variant="standalone"
                 className="border-0 bg-transparent p-0 shadow-none"
               />

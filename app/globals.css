@@ -116,15 +116,21 @@
 
 /* Bnovo is rendered inside an iframe, so we style the frame and the page around it. */
 .booking-shell iframe,
-.booking-shell [id^="booking_iframe_"] > iframe {
+.booking-shell [id^="booking_iframe_"] > iframe,
+.booking-shell [id^="_bn_widget_"] iframe {
   width: 100% !important;
   border: 0 !important;
   border-radius: 22px !important;
   background: white !important;
 }
 
-.booking-shell [id^="booking_iframe_"] {
+.booking-shell [id^="booking_iframe_"],
+.booking-shell [id^="_bn_widget_"] {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.booking-shell [id^="_bn_widget_"] > div {
+  max-width: 100% !important;
 }
 
 /* Smooth scrollbar */
