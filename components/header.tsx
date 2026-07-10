@@ -15,6 +15,7 @@ import {
   MapPin
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SmoothLink } from '@/components/smooth-link';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -228,9 +229,9 @@ export function Header({ city }: HeaderProps) {
                 asChild
                 className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-6"
               >
-                <Link href={bookingHref}>
+                <SmoothLink href={bookingHref}>
                   {t('nav.book')}
-                </Link>
+                </SmoothLink>
               </Button>
             </div>
 
@@ -367,12 +368,12 @@ export function Header({ city }: HeaderProps) {
                     asChild 
                     className="w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-full"
                   >
-                    <Link 
+                    <SmoothLink 
                       href={bookingHref}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {t('nav.book')}
-                    </Link>
+                    </SmoothLink>
                   </Button>
                 </div>
               </div>
