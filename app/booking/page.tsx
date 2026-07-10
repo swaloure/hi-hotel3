@@ -7,9 +7,9 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 
 const copy = {
-  ru: { title: 'Выберите отель', subtitle: 'Для бронирования выберите город.', almaty: 'Hi Hotel Almaty', astana: 'Hi Hotel Astana' },
-  kz: { title: 'Қонақ үйді таңдаңыз', subtitle: 'Брондау үшін қаланы таңдаңыз.', almaty: 'Hi Hotel Almaty', astana: 'Hi Hotel Astana' },
-  en: { title: 'Choose a hotel', subtitle: 'Choose a city to book your stay.', almaty: 'Hi Hotel Almaty', astana: 'Hi Hotel Astana' },
+  ru: { title: 'Выберите город', subtitle: 'Для бронирования выберите город.', almaty: 'Алматы', astana: 'Астана' },
+  kz: { title: 'Қаланы таңдаңыз', subtitle: 'Брондау үшін қаланы таңдаңыз.', almaty: 'Алматы', astana: 'Астана' },
+  en: { title: 'Choose a city', subtitle: 'Choose a city to book your stay.', almaty: 'Almaty', astana: 'Astana' },
 };
 
 export default function BookingPage() {
