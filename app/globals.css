@@ -98,6 +98,17 @@
   }
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+  body {
+    overflow-x: clip;
+  }
+}
+
+@media (max-width: 639px) {
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 

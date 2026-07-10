@@ -86,7 +86,7 @@ export function ContactSection({ city }: ContactSectionProps) {
   };
 
   return (
-    <section id="contacts" className="py-24 lg:py-32 bg-secondary/30">
+    <section id="contacts" className="bg-secondary/30 py-16 sm:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -94,7 +94,7 @@ export function ContactSection({ city }: ContactSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="mb-10 text-center sm:mb-16"
         >
           <span className="text-sm uppercase tracking-[0.2em] text-accent font-medium">
             Hi Hotel {t(`cities.${city}`)}
@@ -108,15 +108,15 @@ export function ContactSection({ city }: ContactSectionProps) {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
           {/* Contact Info */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="bg-card rounded-2xl p-8 shadow-lg border border-border/50">
+            <div className="rounded-2xl border border-border/50 bg-card p-5 shadow-lg sm:p-8">
               <div className="space-y-6">
                 {contactItems.map((item, index) => (
                   <motion.div
@@ -185,11 +185,11 @@ export function ContactSection({ city }: ContactSectionProps) {
 
           {/* Map */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="h-[400px] lg:h-full min-h-[400px]"
+            className="h-[360px] min-h-[360px] sm:h-[400px] sm:min-h-[400px] lg:h-full"
           >
             <div className="w-full h-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden flex flex-col">
               <div className="flex flex-col gap-3 border-b border-border/60 bg-background/70 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
@@ -197,8 +197,8 @@ export function ContactSection({ city }: ContactSectionProps) {
                   <p className="text-sm font-medium text-foreground">{mapUi[lang].label}</p>
                   <p className="text-xs text-muted-foreground">{mapUi[lang].choose}</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="inline-flex rounded-full bg-secondary p-1">
+                <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:flex-nowrap">
+                  <div className="inline-flex max-w-full overflow-x-auto rounded-full bg-secondary p-1">
                     {(['yandex', 'dgis', 'google'] as MapProvider[]).map((provider) => (
                       <button
                         key={provider}
@@ -214,7 +214,7 @@ export function ContactSection({ city }: ContactSectionProps) {
                       </button>
                     ))}
                   </div>
-                  <Button asChild variant="outline" size="sm" className="rounded-full">
+                  <Button asChild variant="outline" size="sm" className="w-full rounded-full sm:w-auto">
                     <a
                       href={mapProviders[selectedMap].href}
                       target="_blank"

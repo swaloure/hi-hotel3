@@ -79,13 +79,13 @@ export function AboutSection({ city }: AboutSectionProps) {
       };
 
   return (
-    <section id="about" className="py-24 lg:py-32 bg-secondary/30">
+    <section id="about" className="bg-secondary/30 py-16 sm:py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Images */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="relative"
@@ -114,8 +114,8 @@ export function AboutSection({ city }: AboutSectionProps) {
 
           {/* Content */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="lg:pl-8"
@@ -127,7 +127,7 @@ export function AboutSection({ city }: AboutSectionProps) {
               {t('about.title')}
             </h2>
             <div className="w-16 h-[2px] bg-accent mb-8" />
-            <p className="text-muted-foreground text-lg leading-relaxed mb-10">
+            <p className="mb-8 text-base leading-relaxed text-muted-foreground sm:mb-10 sm:text-lg">
               {t('about.description')}
             </p>
 
@@ -161,7 +161,7 @@ export function AboutSection({ city }: AboutSectionProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="relative mt-10 overflow-hidden rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/10 via-card to-card p-6 shadow-md"
+              className="relative mt-8 overflow-hidden rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/10 via-card to-card p-5 shadow-md sm:mt-10 sm:p-6"
             >
               <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-accent/15 blur-2xl" />
               <div className="absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-accent/10 blur-3xl" />

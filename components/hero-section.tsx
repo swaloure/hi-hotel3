@@ -26,7 +26,7 @@ export function HeroSection({ city }: HeroSectionProps) {
         : hotel.heroImage;
 
   return (
-    <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+    <section className="relative flex min-h-[640px] items-center justify-center overflow-hidden sm:min-h-[700px] sm:h-screen">
       {/* Background Image with Parallax */}
       <motion.div
         initial={{ scale: 1.1 }}
@@ -57,7 +57,7 @@ export function HeroSection({ city }: HeroSectionProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tight mb-6"
+            className="mb-5 text-4xl font-light tracking-tight sm:mb-6 sm:text-5xl md:text-7xl lg:text-8xl"
           >
             {hotel.name}
           </motion.h1>
@@ -73,7 +73,7 @@ export function HeroSection({ city }: HeroSectionProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.9 }}
-            className="text-xl md:text-2xl font-light text-white/80 max-w-2xl mx-auto mb-10 text-balance"
+            className="mx-auto mb-8 max-w-2xl text-lg font-light text-balance text-white/80 sm:mb-10 sm:text-xl md:text-2xl"
           >
             {t('hero.subtitle')}
           </motion.p>
@@ -82,14 +82,14 @@ export function HeroSection({ city }: HeroSectionProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.1 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4"
           >
             <Button
               asChild
               size="lg"
-              className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-8 text-base"
+              className="w-full rounded-full bg-accent px-8 text-base text-accent-foreground hover:bg-accent/90 sm:w-auto"
             >
-              <Link href="/booking">
+              <Link href={`/booking/${city}`}>
                 {t('hero.cta')}
               </Link>
             </Button>
@@ -97,7 +97,7 @@ export function HeroSection({ city }: HeroSectionProps) {
               asChild
               variant="outline"
               size="lg"
-              className="border-white/50 bg-transparent text-white hover:border-white/50 hover:bg-transparent hover:text-white rounded-full px-8 text-base"
+              className="w-full rounded-full border-white/50 bg-transparent px-8 text-base text-white hover:border-white/50 hover:bg-transparent hover:text-white sm:w-auto"
             >
               <Link href={`#rooms`}>
                 {t('hero.explore')}
@@ -113,7 +113,7 @@ export function HeroSection({ city }: HeroSectionProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-5 left-1/2 -translate-x-1/2 sm:bottom-8"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}

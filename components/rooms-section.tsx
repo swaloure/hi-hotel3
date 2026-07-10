@@ -54,7 +54,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
 
   return (
     <>
-      <section id="rooms" className="py-24 lg:py-32 bg-background">
+      <section id="rooms" className="bg-background py-16 sm:py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <motion.div
@@ -62,7 +62,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="mb-10 text-center sm:mb-16"
           >
             <span className="text-sm uppercase tracking-[0.2em] text-accent font-medium">
               Hi Hotel {t(`cities.${city}`)}
@@ -77,7 +77,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
           </motion.div>
 
           {/* Rooms Grid */}
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid gap-5 sm:gap-8 md:grid-cols-2">
             {hotel.rooms.map((room, index) => (
               <motion.div
                 key={room.id}
@@ -89,6 +89,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
               >
                 <RoomCard 
                   room={room} 
+                  city={city}
                   lang={lang}
                   onViewGallery={() => {
                     setSelectedRoom(room);
@@ -106,6 +107,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
         {selectedRoom && (
           <GalleryModal
             room={selectedRoom}
+            city={city}
             lang={lang}
             currentIndex={galleryIndex}
             onClose={() => setSelectedRoom(null)}
@@ -121,11 +123,12 @@ export function RoomsSection({ city }: RoomsSectionProps) {
 
 interface RoomCardProps {
   room: Room;
+  city: 'almaty' | 'astana';
   lang: 'ru' | 'kz' | 'en';
   onViewGallery: () => void;
 }
 
-function RoomCard({ room, lang, onViewGallery }: RoomCardProps) {
+function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
   const { t } = useTranslation();
   const [currentImage, setCurrentImage] = useState(0);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
@@ -241,7 +244,7 @@ function RoomCard({ room, lang, onViewGallery }: RoomCardProps) {
         {/* Actions */}
         <div className="flex gap-3">
           <Button asChild className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
-            <Link href="/booking">
+            <Link href={`/booking/${city}`}>
               {t('rooms.book')}
             </Link>
           </Button>
@@ -260,6 +263,7 @@ function RoomCard({ room, lang, onViewGallery }: RoomCardProps) {
 
 interface GalleryModalProps {
   room: Room;
+  city: 'almaty' | 'astana';
   lang: 'ru' | 'kz' | 'en';
   currentIndex: number;
   onClose: () => void;
@@ -270,6 +274,7 @@ interface GalleryModalProps {
 
 function GalleryModal({ 
   room, 
+  city,
   lang, 
   currentIndex, 
   onClose, 
@@ -289,7 +294,7 @@ function GalleryModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative mx-auto flex h-[72vh] w-[94vw] max-h-[760px] max-w-[1220px] flex-row overflow-hidden rounded-2xl border border-border/60 bg-card shadow-2xl"
+        className="relative mx-auto flex h-[88vh] w-[94vw] max-h-[760px] max-w-[1220px] flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-2xl md:h-[72vh] md:flex-row"
       >
         <button
           onClick={onClose}
@@ -300,7 +305,7 @@ function GalleryModal({
         </button>
 
         {/* Gallery */}
-        <div className="relative grid h-full w-[52%] min-h-0 grid-rows-[minmax(0,1fr)_76px] bg-background p-3 md:p-4">
+        <div className="relative grid h-[48%] w-full min-h-0 grid-rows-[minmax(0,1fr)_64px] bg-background p-3 md:h-full md:w-[52%] md:grid-rows-[minmax(0,1fr)_76px] md:p-4">
           <div className="absolute left-4 top-4 rounded-full bg-black/50 px-3 py-1 text-xs text-white/85">
             {currentIndex + 1} / {room.images.length}
           </div>
@@ -337,7 +342,7 @@ function GalleryModal({
           </div>
 
           {/* Thumbnails */}
-          <div className="row-start-2 z-20 flex h-[76px] items-end justify-center pt-3">
+          <div className="row-start-2 z-20 flex h-16 items-end justify-center pt-2 md:h-[76px] md:pt-3">
             <div className="flex items-center justify-center gap-2 overflow-x-auto px-1">
               {room.images.map((img, idx) => (
                 <button
@@ -363,9 +368,9 @@ function GalleryModal({
         </div>
 
         {/* Full Room Details */}
-        <div className="h-full w-[48%] border-l border-border/60 bg-background">
+        <div className="h-[52%] w-full border-t border-border/60 bg-background md:h-full md:w-[48%] md:border-l md:border-t-0">
           <div className="h-full overflow-y-auto p-4 md:p-5">
-            <h3 className="text-2xl font-light text-foreground">
+            <h3 className="text-xl font-light text-foreground sm:text-2xl">
               {room.name[lang]}
             </h3>
 
@@ -423,7 +428,7 @@ function GalleryModal({
             </div>
 
             <Button asChild className="mt-6 w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
-              <Link href="/booking">
+              <Link href={`/booking/${city}`}>
                 {t('rooms.book')}
               </Link>
             </Button>

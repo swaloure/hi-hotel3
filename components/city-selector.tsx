@@ -264,7 +264,7 @@ export function CitySelector() {
 
   return (
     <>
-      <section id="home" className="relative min-h-screen overflow-hidden">
+      <section id="home" className="relative min-h-[640px] overflow-hidden sm:min-h-screen">
         <motion.div
           initial={{ scale: 1.06 }}
           animate={{ scale: 1 }}
@@ -279,13 +279,13 @@ export function CitySelector() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(255,223,179,0.28),transparent_45%)]" />
         </motion.div>
 
-        <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-end px-4 pb-16 pt-36 sm:px-6 md:pb-24 lg:px-8">
+        <div className="relative z-10 mx-auto flex min-h-[640px] w-full max-w-7xl items-end px-4 pb-12 pt-28 sm:min-h-screen sm:px-6 sm:pb-16 sm:pt-36 md:pb-24 lg:px-8">
           <div className="max-w-3xl text-white">
             <motion.h1
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl leading-tight font-light text-balance md:text-6xl lg:text-7xl"
+              className="text-4xl font-light leading-tight text-balance sm:text-5xl md:text-6xl lg:text-7xl"
             >
               {pick(homeCopy.heroTitle, lang)}
             </motion.h1>
@@ -303,23 +303,23 @@ export function CitySelector() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-10 flex flex-wrap gap-4"
+              className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4"
             >
               <Link
                 href="#cities"
-                className="inline-flex items-center rounded-full bg-accent px-7 py-3 text-sm font-medium text-accent-foreground transition hover:bg-accent/90"
+                className="inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-7 py-3 text-sm font-medium text-accent-foreground transition hover:bg-accent/90"
               >
                 {pick(homeCopy.chooseCityCta, lang)}
               </Link>
               <Link
                 href="/#about"
-                className="inline-flex items-center rounded-full border border-white/55 px-7 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/55 px-7 py-3 text-sm font-medium text-white transition hover:bg-white/10"
               >
                 {pick(homeCopy.aboutHotelCta, lang)}
               </Link>
               <button
                 type="button"
-                className="inline-flex cursor-default items-center rounded-full border border-white/55 px-7 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+                className="inline-flex min-h-11 cursor-default items-center justify-center rounded-full border border-white/55 px-7 py-3 text-sm font-medium text-white transition hover:bg-white/10"
               >
                 <MessageCircle className="w-4 h-4 mr-2 text-white" />
                 {pick(homeCopy.contactCta, lang)}
@@ -329,7 +329,7 @@ export function CitySelector() {
         </div>
       </section>
 
-      <section id="cities" className="py-24 lg:py-32">
+      <section id="cities" className="py-16 sm:py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -350,7 +350,7 @@ export function CitySelector() {
             </p>
           </motion.div>
 
-          <div className="mt-12 grid gap-8 md:grid-cols-2">
+          <div className="mt-10 grid gap-5 sm:mt-12 sm:gap-8 md:grid-cols-2">
             {cityCards.map((city, index) => (
               <motion.div
                 key={city.id}
@@ -360,13 +360,13 @@ export function CitySelector() {
                 transition={{ duration: 0.7, delay: index * 0.12 }}
               >
                 <Link href={`/${city.id}`} className="group block">
-                  <article className="relative h-[460px] overflow-hidden rounded-3xl border border-border/60 shadow-xl">
+                  <article className="relative h-[360px] overflow-hidden rounded-3xl border border-border/60 shadow-xl sm:h-[460px]">
                     <div
                       className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105"
                       style={{ backgroundImage: `url(${withBasePath(city.image)})` }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-7 text-white md:p-9">
+                    <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-7 md:p-9">
                       <div className="flex items-center justify-between gap-4">
                         <h3 className="text-3xl font-light md:text-4xl">{pick(city.title, lang)}</h3>
                         <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-white/10 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:bg-white group-hover:text-foreground">
@@ -383,15 +383,15 @@ export function CitySelector() {
         </div>
       </section>
 
-      <section id="about" className="py-24 bg-secondary/30 lg:py-32">
+      <section id="about" className="bg-secondary/30 py-16 sm:py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 md:grid-cols-[1.2fr_1fr]">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="rounded-3xl border border-border/60 bg-card p-8 shadow-lg md:p-12"
+              className="rounded-3xl border border-border/60 bg-card p-5 shadow-lg sm:p-8 md:p-12"
             >
               <span className="text-sm uppercase tracking-[0.2em] text-accent font-medium">
                 {pick(homeCopy.aboutEyebrow, lang)}
@@ -423,8 +423,8 @@ export function CitySelector() {
               {advantages.map((item, index) => (
                 <motion.article
                   key={item.title.en}
-                  initial={{ opacity: 0, x: 30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm"
@@ -443,7 +443,7 @@ export function CitySelector() {
         </div>
       </section>
 
-      <section id="format" className="py-24 lg:py-32">
+      <section id="format" className="py-16 sm:py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}

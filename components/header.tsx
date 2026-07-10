@@ -90,6 +90,7 @@ export function Header({ city }: HeaderProps) {
       ];
 
   const otherCity = city === 'almaty' ? 'astana' : 'almaty';
+  const bookingHref = isHome ? '/booking' : `/booking/${city}`;
   const desktopLogoSrc = isScrolled
     ? withBasePath('/logofinal.svg')
     : withBasePath('/logowhite.svg');
@@ -106,7 +107,7 @@ export function Header({ city }: HeaderProps) {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex h-[72px] items-center justify-between sm:h-20">
             {/* Logo */}
             <Link href="/" className="flex items-center">
               <Image
@@ -115,7 +116,7 @@ export function Header({ city }: HeaderProps) {
                 width={60}
                 height={60}
                 unoptimized
-                className="mt-1 h-[60px] w-[60px] object-contain transition-transform"
+                className="mt-1 h-[52px] w-[52px] object-contain transition-transform sm:h-[60px] sm:w-[60px]"
                 priority
               />
             </Link>
@@ -227,7 +228,7 @@ export function Header({ city }: HeaderProps) {
                 asChild
                 className="bg-accent hover:bg-accent/90 text-accent-foreground rounded-full px-6"
               >
-                <Link href="/booking">
+                <Link href={bookingHref}>
                   {t('nav.book')}
                 </Link>
               </Button>
@@ -236,7 +237,7 @@ export function Header({ city }: HeaderProps) {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className={`lg:hidden p-2 transition-colors ${
+              className={`lg:hidden flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
                 isScrolled ? 'text-foreground' : 'text-white'
               }`}
               aria-label="Open menu"
@@ -263,17 +264,17 @@ export function Header({ city }: HeaderProps) {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-80 bg-background z-50 lg:hidden shadow-2xl"
+              className="fixed bottom-0 right-0 top-0 z-50 w-[min(20rem,88vw)] bg-background shadow-2xl lg:hidden"
             >
               <div className="flex flex-col h-full">
-                <div className="flex items-center justify-between p-6 border-b border-border">
+                <div className="flex items-center justify-between border-b border-border p-5 sm:p-6">
                   <Image
                     src={withBasePath('/logofinal.svg')}
                     alt="Hi Hotel"
                     width={60}
                     height={60}
                     unoptimized
-                    className="mt-1 h-[60px] w-[60px] object-contain"
+                    className="mt-1 h-[52px] w-[52px] object-contain sm:h-[60px] sm:w-[60px]"
                   />
                   <button
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -284,7 +285,7 @@ export function Header({ city }: HeaderProps) {
                   </button>
                 </div>
 
-                <nav className="flex-1 py-8 px-6">
+                <nav className="flex-1 overflow-y-auto px-5 py-6 sm:px-6 sm:py-8">
                   <ul className="space-y-6">
                     {navItems.map((item) => (
                       <li key={item.href}>
@@ -361,13 +362,13 @@ export function Header({ city }: HeaderProps) {
                   </div>
                 </nav>
 
-                <div className="p-6 border-t border-border">
+                <div className="border-t border-border p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] sm:p-6">
                   <Button 
                     asChild 
                     className="w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-full"
                   >
                     <Link 
-                      href="/booking"
+                      href={bookingHref}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {t('nav.book')}
