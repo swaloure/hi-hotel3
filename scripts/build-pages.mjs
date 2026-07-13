@@ -11,6 +11,7 @@ const repository =
   process.env.PAGES_REPOSITORY ??
   process.env.GITHUB_REPOSITORY?.split('/')[1] ??
   'hi-hotel3'
+const customDomain = process.env.PAGES_CUSTOM_DOMAIN ?? 'maza.kz'
 
 const exitCode = await new Promise((resolve, reject) => {
   const child = spawn(process.execPath, [nextBin, 'build'], {
@@ -18,6 +19,7 @@ const exitCode = await new Promise((resolve, reject) => {
     env: {
       ...process.env,
       PAGES_REPOSITORY: repository,
+      PAGES_CUSTOM_DOMAIN: customDomain,
     },
     stdio: 'inherit',
   })
@@ -30,6 +32,9 @@ if (exitCode !== 0) {
   process.exit(exitCode)
 }
 
-process.env.EXPECTED_BASE_PATH = repository.toLowerCase().endsWith('.github.io') ? '' : `/${repository}`
+process.env.PAGES_CUSTOM_DOMAIN = customDomain
+process.env.EXPECTED_BASE_PATH = customDomain || repository.toLowerCase().endsWith('.github.io')
+  ? ''
+  : `/${repository}`
 await import('./verify-export.mjs')
 await import('./sync-pages.mjs')

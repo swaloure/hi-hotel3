@@ -1,9 +1,10 @@
 /** @type {import('next').NextConfig} */
 const isProduction = process.env.NODE_ENV === 'production'
 const repository = process.env.PAGES_REPOSITORY ?? process.env.GITHUB_REPOSITORY?.split('/')[1] ?? ''
+const customDomain = process.env.PAGES_CUSTOM_DOMAIN ?? ''
 const isUserOrOrgPagesRepo = repository.toLowerCase().endsWith('.github.io')
 const isGitHubPagesBuild = process.env.GITHUB_ACTIONS === 'true' || Boolean(process.env.PAGES_REPOSITORY)
-const basePath = isProduction && isGitHubPagesBuild && repository && !isUserOrOrgPagesRepo
+const basePath = isProduction && isGitHubPagesBuild && repository && !isUserOrOrgPagesRepo && !customDomain
   ? `/${repository}`
   : ''
 
