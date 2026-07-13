@@ -89,7 +89,7 @@ export function AboutSection({ city }: AboutSectionProps) {
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-foreground">{copy.nearby[lang]}</p>
-                  <p className="text-xs text-muted-foreground">Hi Hotel {t(`cities.${city}`)}</p>
+                  <p className="text-xs text-muted-foreground">MAZA {t(`cities.${city}`)}</p>
                 </div>
               </div>
               <div className="mt-4 grid gap-2">

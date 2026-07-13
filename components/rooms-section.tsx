@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 import {
   ArrowLeft,
   ArrowRight,
@@ -65,12 +66,12 @@ export function RoomsSection({ city }: RoomsSectionProps) {
   const lang = resolveLanguage(i18n.language);
 
   const closeGallery = useCallback(() => setSelectedRoom(null), []);
-  const showPreviousImage = useCallback(() => {
+  const showPreviousImage = () => {
     setGalleryIndex((index) => selectedRoom ? (index - 1 + selectedRoom.images.length) % selectedRoom.images.length : 0);
-  }, [selectedRoom]);
-  const showNextImage = useCallback(() => {
+  };
+  const showNextImage = () => {
     setGalleryIndex((index) => selectedRoom ? (index + 1) % selectedRoom.images.length : 0);
-  }, [selectedRoom]);
+  };
 
   if (!hotel) return null;
 
@@ -85,7 +86,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
             transition={{ duration: 0.65 }}
           >
             <SectionHeading
-              eyebrow={`Hi Hotel · ${t(`cities.${city}`)}`}
+              eyebrow={`MAZA · ${t(`cities.${city}`)}`}
               title={t('rooms.title')}
               description={t('rooms.subtitle')}
               align="center"
@@ -156,10 +157,13 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
     <article className="group overflow-hidden rounded-[26px] border border-border/80 bg-card transition duration-300 hover:-translate-y-1 hover:border-accent/35 hover:shadow-[0_24px_60px_rgba(28,30,34,0.1)]">
       <div className="relative aspect-[16/10] overflow-hidden bg-muted">
         {room.images.map((image, index) => (
-          <img
+          <Image
             key={image}
             src={image}
             alt={index === currentImage ? room.name[lang] : ''}
+            fill
+            unoptimized
+            sizes="(min-width: 1024px) 50vw, 100vw"
             className={cn(
               'absolute inset-0 h-full w-full object-cover transition duration-700',
               index === currentImage ? 'scale-100 opacity-100 group-hover:scale-[1.025]' : 'scale-105 opacity-0',
@@ -336,16 +340,23 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
 
         <div className="relative h-[46vh] min-h-[300px] bg-graphite lg:h-full lg:w-[62%]">
           <AnimatePresence mode="wait">
-            <motion.img
+            <motion.div
               key={room.images[currentIndex]}
-              src={room.images[currentIndex]}
-              alt={room.name[lang]}
               initial={{ opacity: 0.4 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0.3 }}
               transition={{ duration: 0.22 }}
-              className="h-full w-full object-cover"
-            />
+              className="absolute inset-0"
+            >
+              <Image
+                src={room.images[currentIndex]}
+                alt={room.name[lang]}
+                fill
+                unoptimized
+                sizes="(min-width: 1024px) 62vw, 100vw"
+                className="object-cover"
+              />
+            </motion.div>
           </AnimatePresence>
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10" />
           <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
@@ -361,7 +372,7 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
                   )}
                   aria-label={`${copy.gallery[lang]} ${index + 1}`}
                 >
-                  <img src={image} alt="" className="h-full w-full object-cover" />
+                  <Image src={image} alt="" fill unoptimized sizes="80px" className="object-cover" />
                 </button>
               ))}
             </div>

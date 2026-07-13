@@ -90,7 +90,7 @@ export function ContactSection({ city }: ContactSectionProps) {
           transition={{ duration: 0.65 }}
         >
           <SectionHeading
-            eyebrow={`Hi Hotel · ${t(`cities.${city}`)}`}
+            eyebrow={`MAZA · ${t(`cities.${city}`)}`}
             title={t('contacts.title')}
             description={t('contacts.subtitle')}
             align="center"

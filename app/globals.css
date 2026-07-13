@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Hi Hotel Premium Color Palette */
+  /* MAZA premium color palette */
   --background: oklch(0.982 0.006 82); /* warm porcelain */
   --foreground: oklch(0.225 0.012 255); /* deep graphite */
   --card: oklch(1 0 0);
@@ -26,7 +26,7 @@
   --ring: oklch(0.75 0.08 85);
   --radius: 0.875rem;
   
-  /* Custom Hi Hotel tokens */
+  /* Custom MAZA tokens */
   --gold: oklch(0.75 0.12 85);
   --gold-light: oklch(0.85 0.08 85);
   --beige: oklch(0.94 0.02 85);

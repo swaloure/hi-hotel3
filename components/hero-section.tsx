@@ -14,8 +14,8 @@ interface HeroSectionProps {
 
 const copy = {
   eyebrow: {
-    almaty: { ru: 'Hi Hotel · Алматы', kz: 'Hi Hotel · Алматы', en: 'Hi Hotel · Almaty' },
-    astana: { ru: 'Hi Hotel · Астана', kz: 'Hi Hotel · Астана', en: 'Hi Hotel · Astana' },
+    almaty: { ru: 'MAZA · Алматы', kz: 'MAZA · Алматы', en: 'MAZA · Almaty' },
+    astana: { ru: 'MAZA · Астана', kz: 'MAZA · Астана', en: 'MAZA · Astana' },
   },
   title: {
     almaty: {

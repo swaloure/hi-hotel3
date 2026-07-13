@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
@@ -45,10 +45,11 @@ export function Header({ city }: HeaderProps) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLElement>(null);
+  const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null);
   const isHome = city === 'home';
   const hotel = isHome ? undefined : getHotelByCity(city);
   const lang = resolveLanguage(i18n.language);
-  const otherCity = city === 'almaty' ? 'astana' : 'almaty';
   const bookingHref = isHome ? '/booking' : `/booking/${city}`;
 
   const navItems = isHome
@@ -57,6 +58,7 @@ export function Header({ city }: HeaderProps) {
         { href: '/#cities', label: labels.cities[lang] },
         { href: '/#about', label: t('nav.about') },
         { href: '/#format', label: labels.format[lang] },
+        { href: '/#contacts', label: t('nav.contacts') },
       ]
     : [
         { href: `/${city}`, label: t('nav.home') },
@@ -76,15 +78,47 @@ export function Header({ city }: HeaderProps) {
     if (!isMobileMenuOpen) return;
 
     const previousOverflow = document.body.style.overflow;
+    const triggerElement = mobileMenuTriggerRef.current;
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     document.body.style.overflow = 'hidden';
+
+    const focusableSelector =
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusTimer = window.requestAnimationFrame(() => {
+      mobileMenuRef.current?.querySelector<HTMLElement>(focusableSelector)?.focus();
+    });
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setIsMobileMenuOpen(false);
+      if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false);
+        return;
+      }
+
+      if (event.key !== 'Tab' || !mobileMenuRef.current) return;
+
+      const focusableElements = Array.from(
+        mobileMenuRef.current.querySelectorAll<HTMLElement>(focusableSelector),
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements.at(-1);
+
+      if (!firstElement || !lastElement) return;
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.body.style.overflow = previousOverflow;
+      window.cancelAnimationFrame(focusTimer);
       window.removeEventListener('keydown', handleKeyDown);
+      (previouslyFocused ?? triggerElement)?.focus();
     };
   }, [isMobileMenuOpen]);
 
@@ -103,10 +137,10 @@ export function Header({ city }: HeaderProps) {
           )}
         >
           <div className="flex h-16 items-center justify-between px-3 sm:h-[68px] sm:px-5 lg:px-6">
-            <Link href="/" className="flex shrink-0 items-center" aria-label="Hi Hotel">
+            <Link href="/" className="flex shrink-0 items-center" aria-label="MAZA">
               <Image
                 src={logoSrc}
-                alt="Hi Hotel"
+                alt="MAZA"
                 width={52}
                 height={52}
                 unoptimized
@@ -214,6 +248,7 @@ export function Header({ city }: HeaderProps) {
             </div>
 
             <button
+              ref={mobileMenuTriggerRef}
               type="button"
               onClick={() => setIsMobileMenuOpen(true)}
               className={cn(
@@ -240,20 +275,24 @@ export function Header({ city }: HeaderProps) {
               className="fixed inset-0 z-[60] cursor-default bg-black/55 backdrop-blur-sm lg:hidden"
               onClick={() => setIsMobileMenuOpen(false)}
               aria-label={labels.closeMenu[lang]}
+              tabIndex={-1}
             />
             <motion.aside
+              ref={mobileMenuRef}
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 32, stiffness: 320 }}
               className="fixed inset-y-0 right-0 z-[70] flex w-[min(22rem,92vw)] flex-col bg-background shadow-2xl lg:hidden"
               aria-label="Mobile navigation"
+              aria-modal="true"
+              role="dialog"
             >
               <div className="flex items-center justify-between border-b border-border px-5 py-4">
-                <Link href="/" onClick={() => setIsMobileMenuOpen(false)} aria-label="Hi Hotel">
+                <Link href="/" onClick={() => setIsMobileMenuOpen(false)} aria-label="MAZA">
                   <Image
                     src={withBasePath('/logofinal.svg')}
-                    alt="Hi Hotel"
+                    alt="MAZA"
                     width={48}
                     height={48}
                     unoptimized

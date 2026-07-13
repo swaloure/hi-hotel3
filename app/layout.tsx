@@ -21,21 +21,21 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Hi Hotel — Уютные мини-отели в Алматы и Астане',
-  description: 'Hi Hotel — сеть премиальных мини-отелей в Казахстане. Комфортные номера, центральное расположение, безупречный сервис в Алматы и Астане.',
+  title: 'MAZA — Уютные мини-отели в Алматы и Астане',
+  description: 'MAZA — сеть уютных городских отелей в Казахстане. Комфортные номера, удобное расположение и понятный сервис в Алматы и Астане.',
   keywords: ['отель', 'мини-отель', 'Алматы', 'Астана', 'бронирование', 'hotel', 'Kazakhstan'],
-  authors: [{ name: 'Hi Hotel' }],
+  authors: [{ name: 'MAZA' }],
   generator: 'v0.app',
   openGraph: {
-    title: 'Hi Hotel — Уютные мини-отели в Алматы и Астане',
+    title: 'MAZA — Уютные мини-отели в Алматы и Астане',
     description: 'Премиальные мини-отели с комфортными номерами и безупречным сервисом',
     type: 'website',
     locale: 'ru_KZ',
-    siteName: 'Hi Hotel',
+    siteName: 'MAZA',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Hi Hotel — Уютные мини-отели',
+    title: 'MAZA — Уютные мини-отели',
     description: 'Премиальные мини-отели с комфортными номерами',
   },
   icons: {
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
       type: 'image/svg+xml',
     },
     shortcut: withBasePath('/logofinal.svg'),
-    apple: withBasePath('/apple-icon.png'),
+    apple: withBasePath('/logofinal.svg'),
   },
 }
 

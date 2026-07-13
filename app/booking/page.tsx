@@ -41,7 +41,7 @@ export default function BookingPage() {
         <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_5%,rgba(201,168,108,0.18),transparent_32%)]" />
         <div className="absolute inset-x-0 top-0 -z-20 h-px bg-white/10" />
         <div className="mx-auto max-w-7xl">
-          <SectionHeading eyebrow={copy.eyebrow[lang]} title={copy.title[lang]} description={copy.subtitle[lang]} inverse />
+          <SectionHeading eyebrow={copy.eyebrow[lang]} title={copy.title[lang]} description={copy.subtitle[lang]} inverse as="h1" />
 
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:gap-7">
             {hotels.map((hotel) => {
@@ -73,7 +73,7 @@ export default function BookingPage() {
                     </div>
 
                     <div>
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/52">Hi Hotel</p>
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/52">MAZA</p>
                       <h2 className="mt-2 font-serif text-4xl font-medium tracking-[-0.035em] sm:text-5xl">
                         {hotel.address[lang].includes('Dost') || hotel.city === 'almaty' ? (lang === 'en' ? 'Almaty' : 'Алматы') : (lang === 'en' ? 'Astana' : 'Астана')}
                       </h2>

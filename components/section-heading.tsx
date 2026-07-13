@@ -6,6 +6,7 @@ interface SectionHeadingProps {
   description?: string;
   align?: 'left' | 'center';
   inverse?: boolean;
+  as?: 'h1' | 'h2';
   className?: string;
 }
 
@@ -15,6 +16,7 @@ export function SectionHeading({
   description,
   align = 'left',
   inverse = false,
+  as: Heading = 'h2',
   className,
 }: SectionHeadingProps) {
   return (
@@ -35,14 +37,14 @@ export function SectionHeading({
         <span className={cn('h-px w-8', inverse ? 'bg-white/35' : 'bg-accent/60')} />
         {eyebrow}
       </div>
-      <h2
+      <Heading
         className={cn(
           'mt-5 font-serif text-3xl font-medium leading-[1.04] tracking-[-0.035em] text-balance sm:text-4xl lg:text-5xl',
           inverse ? 'text-white' : 'text-foreground',
         )}
       >
         {title}
-      </h2>
+      </Heading>
       {description && (
         <p
           className={cn(

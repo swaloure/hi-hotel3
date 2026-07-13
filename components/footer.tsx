@@ -13,8 +13,8 @@ interface FooterProps {
 }
 
 const socialLinks = [
-  { icon: Instagram, href: 'https://instagram.com/hihotel.kz', label: 'Instagram' },
-  { icon: Facebook, href: 'https://facebook.com/hihotel.kz', label: 'Facebook' },
+  { icon: Instagram, href: 'https://instagram.com/maza.kz', label: 'Instagram' },
+  { icon: Facebook, href: 'https://facebook.com/maza.kz', label: 'Facebook' },
 ];
 
 const copy = {
@@ -51,6 +51,7 @@ export function Footer({ city }: FooterProps) {
         { href: '/#cities', label: copy.cities[lang] },
         { href: '/#about', label: t('nav.about') },
         { href: '/#format', label: copy.format[lang] },
+        { href: '/#contacts', label: t('nav.contacts') },
       ]
     : [
         { href: `/${city}`, label: t('nav.home') },
@@ -65,7 +66,7 @@ export function Footer({ city }: FooterProps) {
         <div className="border-b border-white/10 py-8 sm:py-10">
           <div className="flex flex-col gap-6 rounded-[26px] border border-white/10 bg-white/[0.045] p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:p-10">
             <div className="max-w-2xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">Hi Hotel</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">MAZA</p>
               <h2 className="mt-3 font-serif text-3xl font-medium leading-tight tracking-[-0.03em] text-balance sm:text-4xl">
                 {copy.bookingTitle[lang]}
               </h2>
@@ -83,8 +84,8 @@ export function Footer({ city }: FooterProps) {
 
         <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.35fr_0.75fr_0.75fr] lg:gap-16 lg:py-16">
           <div>
-            <Link href="/" className="inline-flex" aria-label="Hi Hotel">
-              <Image src={withBasePath('/logowhite.svg')} alt="Hi Hotel" width={56} height={56} unoptimized className="h-14 w-14 object-contain" />
+            <Link href="/" className="inline-flex" aria-label="MAZA">
+              <Image src={withBasePath('/logowhite.svg')} alt="MAZA" width={56} height={56} unoptimized className="h-14 w-14 object-contain" />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-7 text-white/52">{copy.description[lang]}</p>
             <div className="mt-6 flex gap-2">
@@ -130,8 +131,11 @@ export function Footer({ city }: FooterProps) {
         </div>
 
         <div className="flex flex-col gap-3 border-t border-white/10 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {currentYear} Hi Hotel. {t('footer.rights')}.</p>
-          <p>{t('footer.privacy')} · {t('footer.offer')}</p>
+          <p>© {currentYear} MAZA. {t('footer.rights')}.</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            <Link href="/privacy" className="transition hover:text-white">{t('footer.privacy')}</Link>
+            <Link href="/offer" className="transition hover:text-white">{t('footer.offer')}</Link>
+          </div>
         </div>
       </div>
     </footer>

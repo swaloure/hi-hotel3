@@ -104,7 +104,7 @@ export function BookingPageContent({ city }: { city: City }) {
                   <MapPin className="h-4 w-4" />
                 </span>
                 <div>
-                  <h3 className="text-base font-semibold text-foreground">Hi Hotel {t(`cities.${city}`)}</h3>
+                  <h3 className="text-base font-semibold text-foreground">MAZA {t(`cities.${city}`)}</h3>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">{hotel.address[lang]}</p>
                 </div>
               </div>

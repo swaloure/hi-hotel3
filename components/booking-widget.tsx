@@ -93,8 +93,14 @@ function loadBnovoScript() {
     return bnovoScriptPromise;
   }
 
+  let existingScript = document.querySelector<HTMLScriptElement>(`script[src="${BNOVO_SCRIPT_SRC}"]`);
+
+  if (existingScript?.dataset.loaded === 'true' && !window.Bnovo_Widget) {
+    existingScript.remove();
+    existingScript = null;
+  }
+
   bnovoScriptPromise = new Promise<void>((resolve, reject) => {
-    const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${BNOVO_SCRIPT_SRC}"]`);
 
     if (existingScript) {
       existingScript.addEventListener('load', () => resolve(), { once: true });
@@ -107,9 +113,15 @@ function loadBnovoScript() {
     const script = document.createElement('script');
     script.src = BNOVO_SCRIPT_SRC;
     script.async = true;
-    script.onload = () => resolve();
+    script.onload = () => {
+      script.dataset.loaded = 'true';
+      resolve();
+    };
     script.onerror = () => reject(new Error('Bnovo booking script failed to load'));
     document.body.appendChild(script);
+  }).catch((error) => {
+    bnovoScriptPromise = null;
+    throw error;
   });
 
   return bnovoScriptPromise;
@@ -165,18 +177,15 @@ function getBnovoConfig(city: BookingWidgetProps['city'], lang: string): BnovoWi
   };
 }
 
-function bnovoCreditMarkup(widgetId: string) {
-  return `
-    <a
-      href="https://bnovo.ru/"
-      id="${widgetId}_link"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="sr-only"
-    >
-      Bnovo
-    </a>
-  `;
+function resetBnovoContainer(container: HTMLElement, widgetId: string) {
+  const creditLink = document.createElement('a');
+  creditLink.href = 'https://bnovo.ru/';
+  creditLink.id = `${widgetId}_link`;
+  creditLink.target = '_blank';
+  creditLink.rel = 'noopener noreferrer';
+  creditLink.className = 'sr-only';
+  creditLink.textContent = 'Bnovo';
+  container.replaceChildren(creditLink);
 }
 
 export function BookingWidget({ city, variant = 'standalone', className }: BookingWidgetProps) {
@@ -207,11 +216,10 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
     const container = document.getElementById(widgetId);
 
     if (!container) return;
-    setStatus('loading');
     initializedRef.current = false;
 
     const initializeBnovo = () => {
-      container.innerHTML = bnovoCreditMarkup(widgetId);
+      resetBnovoContainer(container, widgetId);
 
       loadBnovoScript()
         .then(() => {
@@ -227,14 +235,18 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
         })
         .catch(() => {
           if (!isCancelled) {
-            container.innerHTML = '';
+            container.replaceChildren();
             setStatus('error');
           }
         });
     };
 
     const scheduleInitialization = () => {
-      timeoutId = setTimeout(initializeBnovo, isHero ? 800 : 100);
+      timeoutId = setTimeout(() => {
+        if (isCancelled) return;
+        setStatus('loading');
+        initializeBnovo();
+      }, isHero ? 800 : 100);
     };
 
     if ('IntersectionObserver' in window) {
@@ -256,7 +268,7 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
       isCancelled = true;
       observer?.disconnect();
       if (timeoutId) clearTimeout(timeoutId);
-      container.innerHTML = '';
+      container.replaceChildren();
       initializedRef.current = false;
     };
   }, [city, isHero, widgetId, widgetLang]);

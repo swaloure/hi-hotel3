@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +16,7 @@ import {
 } from 'lucide-react';
 import { withBasePath } from '@/lib/asset-path';
 import { HomeHero } from '@/components/home-hero';
+import { HomeContactSection } from '@/components/home-contact-section';
 import { SectionHeading } from '@/components/section-heading';
 
 type Lang = 'ru' | 'kz' | 'en';
@@ -203,9 +205,9 @@ const homeCopy = {
     en: 'Everything needed for a comfortable city stay',
   },
   aboutDescription: {
-    ru: 'Hi Hotel — это аккуратная городская гостиница. Мы делаем упор на чистоту, удобное расположение и понятный сервис.',
-    kz: 'Hi Hotel — ұқыпты қалалық қонақүй. Біз тазалыққа, ыңғайлы орналасуға және түсінікті сервиске мән береміз.',
-    en: 'Hi Hotel is a neat city hotel. We focus on cleanliness, convenient location, and clear service.',
+    ru: 'MAZA — это аккуратная городская гостиница. Мы делаем упор на чистоту, удобное расположение и понятный сервис.',
+    kz: 'MAZA — ұқыпты қалалық қонақүй. Біз тазалыққа, ыңғайлы орналасуға және түсінікті сервиске мән береміз.',
+    en: 'MAZA is a refined city hotel focused on cleanliness, convenient locations, and thoughtful service.',
   },
   chooseCta: {
     ru: 'Выбрать отель',
@@ -232,6 +234,7 @@ const homeCopy = {
 export function CitySelector() {
   const { i18n } = useTranslation();
   const lang = resolveLang(i18n.language);
+  const [selectedContactCity, setSelectedContactCity] = useState<'almaty' | 'astana'>('almaty');
 
   return (
     <>
@@ -376,6 +379,12 @@ export function CitySelector() {
           </div>
         </div>
       </section>
+
+      <HomeContactSection
+        lang={lang}
+        selectedCity={selectedContactCity}
+        onSelectCity={setSelectedContactCity}
+      />
     </>
   );
 }

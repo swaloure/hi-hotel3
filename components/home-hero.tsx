@@ -36,27 +36,27 @@ function pick(text: LocalizedText, lang: Lang): string {
 
 const slides = [
   {
-    image: '/cities/almaty-hero.jpg',
+    image: '/cities/almaty-hero.webp',
     label: { ru: 'Два города — один ритм', kz: 'Екі қала — бір ырғақ', en: 'Two cities — one rhythm' },
     position: 'center center',
   },
   {
-    image: '/cities/1.jpg',
+    image: '/cities/1.webp',
     label: { ru: 'Астана · Алматы', kz: 'Астана · Алматы', en: 'Astana · Almaty' },
     position: 'center center',
   },
   {
-    image: '/cities/2.jpg',
+    image: '/cities/2.webp',
     label: { ru: 'Столица и горы', kz: 'Елорда мен таулар', en: 'The capital and the mountains' },
     position: 'center center',
   },
   {
-    image: '/cities/3.jpg',
+    image: '/cities/3.webp',
     label: { ru: 'Выберите свой город', kz: 'Өз қалаңызды таңдаңыз', en: 'Choose your city' },
     position: 'center center',
   },
   {
-    image: '/cities/4.jpg',
+    image: '/cities/4.webp',
     label: { ru: 'Казахстан ближе', kz: 'Қазақстан жақынырақ', en: 'Kazakhstan, closer' },
     position: 'center center',
   },
@@ -69,9 +69,9 @@ const copy = {
     en: 'City hotels in Kazakhstan',
   },
   title: {
-    ru: 'Комфортный город начинается с Hi Hotel',
-    kz: 'Жайлы қала Hi Hotel-ден басталады',
-    en: 'A comfortable city starts with Hi Hotel',
+    ru: 'Комфортный город начинается с MAZA',
+    kz: 'Жайлы қала MAZA-дан басталады',
+    en: 'A comfortable city starts with MAZA',
   },
   description: {
     ru: 'Спокойные номера, удобные локации и всё необходимое для деловой поездки, короткого визита или неспешного отдыха.',
@@ -138,11 +138,12 @@ export function HomeHero() {
   useEffect(() => {
     if (!emblaApi) return;
 
-    onSelect();
+    const initialSelectionFrame = window.requestAnimationFrame(onSelect);
     emblaApi.on('select', onSelect);
     emblaApi.on('reInit', onSelect);
 
     return () => {
+      window.cancelAnimationFrame(initialSelectionFrame);
       emblaApi.off('select', onSelect);
       emblaApi.off('reInit', onSelect);
     };
@@ -201,7 +202,8 @@ export function HomeHero() {
                 src={withBasePath(slide.image)}
                 alt=""
                 fill
-                priority={index === 0}
+                  loading="eager"
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
                 sizes="100vw"
                 className="select-none object-cover"
                 style={{ objectPosition: slide.position }}
