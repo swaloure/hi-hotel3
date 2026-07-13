@@ -1,129 +1,143 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
+import { ArrowDown, ArrowUpRight, BedDouble, Clock3, MapPin } from 'lucide-react';
 import { SmoothLink } from '@/components/smooth-link';
-import { ChevronDown } from 'lucide-react';
 import { getHotelByCity } from '@/lib/data/hotels';
 import { withBasePath } from '@/lib/asset-path';
+import { resolveLanguage } from '@/lib/i18n/language';
 
 interface HeroSectionProps {
   city: 'almaty' | 'astana';
 }
 
+const copy = {
+  eyebrow: {
+    almaty: { ru: 'Hi Hotel · Алматы', kz: 'Hi Hotel · Алматы', en: 'Hi Hotel · Almaty' },
+    astana: { ru: 'Hi Hotel · Астана', kz: 'Hi Hotel · Астана', en: 'Hi Hotel · Astana' },
+  },
+  title: {
+    almaty: {
+      ru: 'Спокойный отдых у подножия гор',
+      kz: 'Тау бөктеріндегі тыныш демалыс',
+      en: 'A calm stay at the foot of the mountains',
+    },
+    astana: {
+      ru: 'Комфорт в ритме современной столицы',
+      kz: 'Заманауи астана ырғағындағы жайлылық',
+      en: 'Comfort in the rhythm of the modern capital',
+    },
+  },
+  description: {
+    almaty: {
+      ru: 'Удобная городская локация, продуманные номера и тёплый сервис для коротких поездок и длительного проживания.',
+      kz: 'Қысқа сапарлар мен ұзақ тұруға арналған ыңғайлы орын, ойластырылған нөмірлер және жылы сервис.',
+      en: 'A convenient city location, thoughtful rooms, and warm service for short trips and longer stays.',
+    },
+    astana: {
+      ru: 'Современные номера рядом с ключевыми точками левого берега — для работы, отдыха и знакомства с городом.',
+      kz: 'Сол жағалаудың негізгі орындарына жақын заманауи нөмірлер — жұмысқа, демалысқа және қаламен танысуға.',
+      en: 'Modern rooms near the key destinations of the left bank — for work, rest, and exploring the city.',
+    },
+  },
+  from: { ru: 'от', kz: 'бастап', en: 'from' },
+  night: { ru: 'за ночь', kz: 'бір түнге', en: 'per night' },
+  rooms: { ru: 'категории номеров', kz: 'нөмір санаты', en: 'room categories' },
+  service: { ru: 'поддержка гостей', kz: 'қонақтарды қолдау', en: 'guest support' },
+  location: { ru: 'расположение', kz: 'орналасуы', en: 'location' },
+  seeRooms: { ru: 'Посмотреть номера', kz: 'Нөмірлерді көру', en: 'Explore rooms' },
+} as const;
+
 export function HeroSection({ city }: HeroSectionProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const hotel = getHotelByCity(city);
+  const lang = resolveLanguage(i18n.language);
 
   if (!hotel) return null;
-  const isAlmaty = city === 'almaty';
-  const heroBackgroundImage =
-    city === 'astana'
-      ? '/cities/astana-embankment.jpg'
-      : city === 'almaty'
-        ? '/cities/almaty-cityscape.jpg'
-        : hotel.heroImage;
+
+  const heroImage = city === 'astana' ? '/cities/astana-embankment.jpg' : '/cities/almaty-cityscape.jpg';
+  const minimumPrice = Math.min(...hotel.rooms.map((room) => room.price)).toLocaleString('ru-RU');
 
   return (
-    <section className="relative flex min-h-[640px] items-center justify-center overflow-hidden sm:min-h-[700px] sm:h-screen">
-      {/* Background Image with Parallax */}
-      <motion.div
-        initial={{ scale: 1.1 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 1.5 }}
-        className="absolute inset-0"
-      >
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${withBasePath(heroBackgroundImage)})` }}
-        />
-        <div
-          className={`absolute inset-0 bg-gradient-to-b ${
-            isAlmaty
-              ? 'from-black/45 via-black/30 to-black/65'
-              : 'from-black/40 via-black/20 to-black/60'
-          }`}
-        />
-        {isAlmaty && (
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(255,223,179,0.28),transparent_45%)]" />
-        )}
-      </motion.div>
+    <section className="relative isolate flex min-h-[820px] h-[100svh] max-h-[940px] overflow-hidden bg-graphite text-white sm:min-h-[720px]">
+      <div
+        className="absolute inset-0 -z-30 bg-cover bg-center"
+        style={{ backgroundImage: `url(${withBasePath(heroImage)})` }}
+      />
+      <div className="absolute inset-0 -z-20 bg-gradient-to-r from-black/82 via-black/48 to-black/16" />
+      <div className="absolute inset-0 -z-20 bg-gradient-to-b from-black/32 via-transparent to-black/76" />
+      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_12%_45%,rgba(201,168,108,0.22),transparent_38%)]" />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="text-center text-white">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="mb-5 text-4xl font-light tracking-tight sm:mb-6 sm:text-5xl md:text-7xl lg:text-8xl"
-          >
-            {hotel.name}
-          </motion.h1>
+      <div className="mx-auto flex w-full max-w-7xl items-center px-4 pb-72 pt-32 sm:px-6 sm:pb-36 lg:px-8">
+        <div className="max-w-3xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/18 bg-black/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/78 backdrop-blur-md sm:text-xs">
+            <MapPin className="h-3.5 w-3.5 text-accent" />
+            {copy.eyebrow[city][lang]}
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, width: 0 }}
-            animate={{ opacity: 1, width: '5rem' }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="h-[2px] bg-accent mx-auto mb-6"
-          />
+          <h1 className="mt-6 max-w-3xl font-serif text-[clamp(3rem,7vw,6.6rem)] font-medium leading-[0.95] tracking-[-0.045em] text-balance">
+            {copy.title[city][lang]}
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="mx-auto mb-8 max-w-2xl text-lg font-light text-balance text-white/80 sm:mb-10 sm:text-xl md:text-2xl"
-          >
-            {t('hero.subtitle')}
-          </motion.p>
+          <p className="mt-6 max-w-2xl text-base leading-7 text-white/72 text-pretty sm:text-lg sm:leading-8">
+            {copy.description[city][lang]}
+          </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
-            className="flex flex-col justify-center gap-3 sm:flex-row sm:gap-4"
-          >
-            <Button
-              asChild
-              size="lg"
-              className="w-full rounded-full bg-accent px-8 text-base text-accent-foreground hover:bg-accent/90 sm:w-auto"
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <SmoothLink
+              href={`/booking/${city}`}
+              className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-sm font-semibold text-accent-foreground transition hover:-translate-y-0.5 hover:bg-gold-light"
             >
-              <SmoothLink href={`/booking/${city}`}>
-                {t('hero.cta')}
-              </SmoothLink>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="w-full rounded-full border-white/50 bg-transparent px-8 text-base text-white hover:border-white/50 hover:bg-transparent hover:text-white sm:w-auto"
+              {t('hero.cta')}
+              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </SmoothLink>
+            <Link
+              href="#rooms"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/28 bg-white/8 px-7 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white/14"
             >
-              <Link href={`#rooms`}>
-                {t('hero.explore')}
-              </Link>
-            </Button>
-          </motion.div>
+              {copy.seeRooms[lang]}
+              <ArrowDown className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
-
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.5 }}
-        className="absolute bottom-5 left-1/2 -translate-x-1/2 sm:bottom-8"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="text-white/50"
-        >
-          <ChevronDown className="w-8 h-8" />
-        </motion.div>
-      </motion.div>
+      <div className="absolute inset-x-0 bottom-0">
+        <div className="mx-auto w-full max-w-7xl px-4 pb-5 sm:px-6 sm:pb-7 lg:px-8 lg:pb-8">
+          <div className="grid overflow-hidden rounded-2xl border border-white/16 bg-black/25 backdrop-blur-xl sm:grid-cols-3 sm:rounded-3xl">
+            <div className="flex items-center gap-3 border-b border-white/12 px-5 py-4 sm:border-b-0 sm:border-r sm:px-6">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-accent">
+                <BedDouble className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="text-base font-semibold text-white">{hotel.rooms.length}</p>
+                <p className="text-xs text-white/55">{copy.rooms[lang]}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 border-b border-white/12 px-5 py-4 sm:border-b-0 sm:border-r sm:px-6">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-accent">
+                <Clock3 className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="text-base font-semibold text-white">24/7</p>
+                <p className="text-xs text-white/55">{copy.service[lang]}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 px-5 py-4 sm:px-6">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-accent">
+                <MapPin className="h-4 w-4" />
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-white">{hotel.address[lang]}</p>
+                <p className="text-xs text-white/55">
+                  {copy.from[lang]} {minimumPrice} ₸ · {copy.night[lang]}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

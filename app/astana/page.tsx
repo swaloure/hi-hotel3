@@ -12,8 +12,8 @@ export default function AstanaPage() {
     <main className="min-h-screen bg-background">
       <Header city="astana" />
       <HeroSection city="astana" />
-      <AboutSection city="astana" />
       <RoomsSection city="astana" />
+      <AboutSection city="astana" />
       <ContactSection city="astana" />
       <Footer city="astana" />
     </main>

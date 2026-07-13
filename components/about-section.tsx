@@ -1,8 +1,12 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Award, Clock } from 'lucide-react';
+import { Clock3, MapPin, Sparkles } from 'lucide-react';
+import { SectionHeading } from '@/components/section-heading';
+import { withBasePath } from '@/lib/asset-path';
+import { resolveLanguage } from '@/lib/i18n/language';
 
 interface AboutSectionProps {
   city: 'almaty' | 'astana';
@@ -10,189 +14,156 @@ interface AboutSectionProps {
 
 const features = [
   { key: 'feature1', icon: MapPin },
-  { key: 'feature2', icon: Award },
-  { key: 'feature3', icon: Clock },
-];
+  { key: 'feature2', icon: Sparkles },
+  { key: 'feature3', icon: Clock3 },
+] as const;
+
+const copy = {
+  nearby: { ru: 'Рядом с отелем', kz: 'Қонақүй маңында', en: 'Near the hotel' },
+  location: { ru: 'Локация', kz: 'Орналасуы', en: 'Location' },
+  realCity: {
+    ru: 'В центре городской жизни, но с атмосферой спокойного отдыха.',
+    kz: 'Қала өмірінің ортасында, бірақ тыныш демалыс атмосферасымен.',
+    en: 'At the center of city life, with the atmosphere of a calm retreat.',
+  },
+} as const;
+
+const cityVisuals = {
+  almaty: {
+    main: '/cities/almaty-downtown-park.jpg',
+    detail: '/cities/almaty-koktobe.jpg',
+    attractions: {
+      ru: ['Dostyk Plaza · 5 минут', 'Медеу · 30 минут', 'Кок-Тобе · рядом'],
+      kz: ['Dostyk Plaza · 5 минут', 'Медеу · 30 минут', 'Көк-Төбе · жақын'],
+      en: ['Dostyk Plaza · 5 min', 'Medeu · 30 min', 'Kok-Tobe · nearby'],
+    },
+  },
+  astana: {
+    main: '/cities/astana-riverside.jpg',
+    detail: '/cities/astana-trip-02.jpg',
+    attractions: {
+      ru: ['Ботанический сад · рядом', 'EXPO · 10 минут', 'Байтерек · 12 минут'],
+      kz: ['Ботаникалық бақ · жақын', 'EXPO · 10 минут', 'Бәйтерек · 12 минут'],
+      en: ['Botanical Garden · nearby', 'EXPO · 10 min', 'Baiterek · 12 min'],
+    },
+  },
+} as const;
 
 export function AboutSection({ city }: AboutSectionProps) {
   const { t, i18n } = useTranslation();
-  const normalized = i18n.language.toLowerCase();
-  const lang: 'ru' | 'kz' | 'en' = normalized.startsWith('en')
-    ? 'en'
-    : normalized.startsWith('kz') || normalized.startsWith('kk')
-      ? 'kz'
-      : 'ru';
-
-  const images = city === 'almaty' 
-    ? [
-        'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80',
-        'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&q=80',
-      ]
-    : [
-        'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=600&q=80',
-        'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=80',
-      ];
-
-  const nearbyAttractionsTitle = {
-    ru: 'Достопримечательности рядом',
-    kz: 'Жақын маңдағы көрікті орындар',
-    en: 'Nearby Attractions',
-  };
-
-  const nearbyAttractionsSubtitle = {
-    ru: 'Главные точки рядом с отелем',
-    kz: 'Қонақүй жанындағы негізгі орындар',
-    en: 'Top places near the hotel',
-  };
-
-  const nearbyAttractions = city === 'almaty'
-    ? {
-        ru: ['30 минут до Медеу', '5 минут до Dostyk Plaza'],
-        kz: ['Медеуге 30 минут', 'Dostyk Plaza-ға 5 минут'],
-        en: ['30 minutes to Medeu', '5 minutes to Dostyk Plaza'],
-      }
-    : {
-        ru: [
-          'Ботанический сад в пешей доступности',
-          'Линейный парк',
-          'EXPO',
-          'Акорда',
-          'Байтерек',
-          'Abu Dhabi Plaza',
-        ],
-        kz: [
-          'Ботаникалық бақ жаяу қашықтықта',
-          'Сызықтық парк',
-          'EXPO',
-          'Ақорда',
-          'Бәйтерек',
-          'Abu Dhabi Plaza',
-        ],
-        en: [
-          'Botanical Garden within walking distance',
-          'Linear Park',
-          'EXPO',
-          'Akorda',
-          'Baiterek',
-          'Abu Dhabi Plaza',
-        ],
-      };
+  const lang = resolveLanguage(i18n.language);
+  const visual = cityVisuals[city];
 
   return (
-    <section id="about" className="bg-secondary/30 py-16 sm:py-24 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-          {/* Images */}
+    <section id="about" className="overflow-hidden bg-secondary/45 py-20 sm:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.04fr_0.96fr] lg:gap-20">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative"
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.65 }}
+            className="relative pb-16 sm:pb-20"
           >
-            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
-              <img
-                src={images[0]}
-                alt="Hotel interior"
-                className="w-full h-full object-cover"
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-muted sm:aspect-[5/4] lg:aspect-[4/5]">
+              <Image
+                src={withBasePath(visual.main)}
+                alt={t(`cities.${city}`)}
+                fill
+                sizes="(max-width: 1024px) 100vw, 52vw"
+                className="object-cover"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/58">{copy.location[lang]}</p>
+                <p className="mt-2 max-w-md font-serif text-2xl leading-tight text-balance sm:text-3xl">
+                  {copy.realCity[lang]}
+                </p>
+              </div>
             </div>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="absolute -bottom-8 -right-8 w-2/3 aspect-[4/3] rounded-2xl overflow-hidden shadow-xl border-8 border-background hidden md:block"
-            >
-              <img
-                src={images[1]}
-                alt="Hotel room"
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
+
+            <div className="absolute -bottom-1 right-0 w-[78%] rounded-3xl border border-border/70 bg-background/95 p-4 shadow-[0_20px_55px_rgba(28,30,34,0.12)] backdrop-blur-xl sm:w-[70%] sm:p-5 lg:-right-8">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/12 text-accent">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">{copy.nearby[lang]}</p>
+                  <p className="text-xs text-muted-foreground">Hi Hotel {t(`cities.${city}`)}</p>
+                </div>
+              </div>
+              <div className="mt-4 grid gap-2">
+                {visual.attractions[lang].map((attraction) => (
+                  <div key={attraction} className="flex items-center gap-2 text-xs text-foreground/72 sm:text-sm">
+                    <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                    {attraction}
+                  </div>
+                ))}
+              </div>
+            </div>
           </motion.div>
 
-          {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="lg:pl-8"
-          >
-            <span className="text-sm uppercase tracking-[0.2em] text-accent font-medium">
-              {t('about.subtitle')}
-            </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-foreground mt-4 mb-6 text-balance">
-              {t('about.title')}
-            </h2>
-            <div className="w-16 h-[2px] bg-accent mb-8" />
-            <p className="mb-8 text-base leading-relaxed text-muted-foreground sm:mb-10 sm:text-lg">
-              {t('about.description')}
-            </p>
-
-            <div className="space-y-6">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.key}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                  className="flex gap-4"
-                >
-                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
-                    <feature.icon className="w-5 h-5 text-accent" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-foreground mb-1">
-                      {t(`about.${feature.key}`)}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {t(`about.${feature.key}Desc`)}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
+          <div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              className="relative mt-8 overflow-hidden rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/10 via-card to-card p-5 shadow-md sm:mt-10 sm:p-6"
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.65 }}
             >
-              <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-accent/15 blur-2xl" />
-              <div className="absolute -bottom-10 -left-10 h-28 w-28 rounded-full bg-accent/10 blur-3xl" />
-
-              <div className="relative flex items-center gap-3">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-foreground">
-                    {nearbyAttractionsTitle[lang]}
-                  </h3>
-                  <p className="text-xs text-muted-foreground">{nearbyAttractionsSubtitle[lang]}</p>
-                </div>
-              </div>
-
-              <ul className="relative mt-4 grid gap-2 sm:grid-cols-2">
-                {nearbyAttractions[lang].map((attraction) => (
-                  <li
-                    key={attraction}
-                    className="rounded-xl border border-border/60 bg-background/85 px-3 py-2 text-sm text-foreground/90 shadow-sm"
-                  >
-                    <span className="mr-2 text-accent">•</span>
-                    {attraction}
-                  </li>
-                ))}
-              </ul>
+              <SectionHeading
+                eyebrow={t('about.subtitle')}
+                title={t('about.title')}
+                description={t('about.description')}
+              />
             </motion.div>
-          </motion.div>
+
+            <div className="mt-9 divide-y divide-border border-y border-border">
+              {features.map((feature, index) => (
+                <motion.article
+                  key={feature.key}
+                  initial={{ opacity: 0, x: 16 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.5, delay: index * 0.08 }}
+                  className="grid grid-cols-[auto_1fr] gap-4 py-5 sm:gap-5 sm:py-6"
+                >
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full bg-background text-accent ring-1 ring-border">
+                    <feature.icon className="h-4.5 w-4.5" />
+                  </span>
+                  <div>
+                    <h3 className="text-base font-semibold text-foreground">{t(`about.${feature.key}`)}</h3>
+                    <p className="mt-1.5 text-sm leading-6 text-muted-foreground">{t(`about.${feature.key}Desc`)}</p>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+
+            <div className="mt-7 flex items-center gap-4 rounded-2xl border border-border bg-background p-3 pr-5">
+              <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-xl">
+                <Image src={withBasePath(visual.detail)} alt="" fill sizes="80px" className="object-cover" />
+              </div>
+              <p className="text-sm leading-6 text-muted-foreground">{hotelNote(city, lang)}</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
+}
+
+function hotelNote(city: AboutSectionProps['city'], lang: ReturnType<typeof resolveLanguage>) {
+  const notes = {
+    almaty: {
+      ru: 'Горы, зелёные улицы и всё необходимое для комфортной поездки — в удобном городском ритме.',
+      kz: 'Таулар, жасыл көшелер және жайлы сапарға қажеттінің бәрі — ыңғайлы қала ырғағында.',
+      en: 'Mountains, green streets, and everything needed for a comfortable stay — in an easy city rhythm.',
+    },
+    astana: {
+      ru: 'Современная архитектура, деловые маршруты и спокойный отдых после насыщенного дня.',
+      kz: 'Заманауи сәулет, іскерлік бағыттар және қарқынды күннен кейінгі тыныш демалыс.',
+      en: 'Modern architecture, convenient business routes, and a calm rest after a busy day.',
+    },
+  } as const;
+
+  return notes[city][lang];
 }

@@ -7,7 +7,6 @@ import {
   ArrowUpRight,
   BriefcaseBusiness,
   Compass,
-  MessageCircle,
   MoonStar,
   Sparkles,
   Trees,
@@ -15,6 +14,8 @@ import {
   Wifi,
 } from 'lucide-react';
 import { withBasePath } from '@/lib/asset-path';
+import { HomeHero } from '@/components/home-hero';
+import { SectionHeading } from '@/components/section-heading';
 
 type Lang = 'ru' | 'kz' | 'en';
 type LocalizedText = Record<Lang, string>;
@@ -176,31 +177,6 @@ const moodCards = [
 ] as const;
 
 const homeCopy = {
-  heroTitle: {
-    ru: 'Уютная городская гостиница в Алматы и Астане',
-    kz: 'Алматы мен Астанадағы жайлы қалалық қонақүй',
-    en: 'Cozy city hotel in Almaty and Astana',
-  },
-  heroDescription: {
-    ru: 'Формат ближе к квартире: спокойные номера, аккуратные общие зоны и всё нужное для комфортного проживания в городе.',
-    kz: 'Пәтерге жақын формат: тыныш нөмірлер, ұқыпты ортақ аймақтар және қалада жайлы тұруға қажеттінің бәрі.',
-    en: 'An apartment-like format: calm rooms, neat shared spaces, and everything needed for a comfortable city stay.',
-  },
-  chooseCityCta: {
-    ru: 'Выбрать город',
-    kz: 'Қаланы таңдау',
-    en: 'Choose a city',
-  },
-  aboutHotelCta: {
-    ru: 'О нашем отеле',
-    kz: 'Біздің қонақүй туралы',
-    en: 'About our hotel',
-  },
-  contactCta: {
-    ru: 'Связаться с нами',
-    kz: 'Бізбен байланысу',
-    en: 'Contact us',
-  },
   citiesEyebrow: {
     ru: 'Выберите город',
     kz: 'Қаланы таңдаңыз',
@@ -222,24 +198,19 @@ const homeCopy = {
     en: 'About us',
   },
   aboutTitle: {
-    ru: 'Спокойный формат без люкса и лишнего дизайна',
-    kz: 'Артық сән-салтанатсыз тыныш формат',
-    en: 'A calm format without extra luxury',
+    ru: 'Всё необходимое для комфортной городской поездки',
+    kz: 'Жайлы қалалық сапарға қажеттінің бәрі',
+    en: 'Everything needed for a comfortable city stay',
   },
   aboutDescription: {
     ru: 'Hi Hotel — это аккуратная городская гостиница. Мы делаем упор на чистоту, удобное расположение и понятный сервис.',
     kz: 'Hi Hotel — ұқыпты қалалық қонақүй. Біз тазалыққа, ыңғайлы орналасуға және түсінікті сервиске мән береміз.',
     en: 'Hi Hotel is a neat city hotel. We focus on cleanliness, convenient location, and clear service.',
   },
-  contactsCta: {
-    ru: 'Контакты',
-    kz: 'Байланыс',
-    en: 'Contacts',
-  },
-  roomsCta: {
-    ru: 'Номера',
-    kz: 'Нөмірлер',
-    en: 'Rooms',
+  chooseCta: {
+    ru: 'Выбрать отель',
+    kz: 'Қонақүйді таңдау',
+    en: 'Choose a hotel',
   },
   formatEyebrow: {
     ru: 'Формат проживания',
@@ -264,93 +235,26 @@ export function CitySelector() {
 
   return (
     <>
-      <section id="home" className="relative min-h-[640px] overflow-hidden sm:min-h-screen">
-        <motion.div
-          initial={{ scale: 1.06 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.2 }}
-          className="absolute inset-0"
-        >
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${withBasePath('/cities/almaty-hero.jpg')})` }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/30 to-black/65" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(255,223,179,0.28),transparent_45%)]" />
-        </motion.div>
+      <HomeHero />
 
-        <div className="relative z-10 mx-auto flex min-h-[640px] w-full max-w-7xl items-end px-4 pb-12 pt-28 sm:min-h-screen sm:px-6 sm:pb-16 sm:pt-36 md:pb-24 lg:px-8">
-          <div className="max-w-3xl text-white">
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl font-light leading-tight text-balance sm:text-5xl md:text-6xl lg:text-7xl"
-            >
-              {pick(homeCopy.heroTitle, lang)}
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 max-w-2xl text-base leading-relaxed text-white/85 md:text-xl"
-            >
-              {pick(homeCopy.heroDescription, lang)}
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4"
-            >
-              <Link
-                href="#cities"
-                className="inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-7 py-3 text-sm font-medium text-accent-foreground transition hover:bg-accent/90"
-              >
-                {pick(homeCopy.chooseCityCta, lang)}
-              </Link>
-              <Link
-                href="/#about"
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/55 px-7 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-              >
-                {pick(homeCopy.aboutHotelCta, lang)}
-              </Link>
-              <button
-                type="button"
-                className="inline-flex min-h-11 cursor-default items-center justify-center rounded-full border border-white/55 px-7 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-              >
-                <MessageCircle className="w-4 h-4 mr-2 text-white" />
-                {pick(homeCopy.contactCta, lang)}
-              </button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section id="cities" className="py-16 sm:py-24 lg:py-32">
+      <section id="cities" className="py-20 sm:py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="mx-auto max-w-3xl text-center"
+            className="mx-auto max-w-3xl"
           >
-            <span className="text-sm uppercase tracking-[0.22em] text-accent font-medium">
-              {pick(homeCopy.citiesEyebrow, lang)}
-            </span>
-            <h2 className="mt-4 text-3xl font-light text-foreground text-balance md:text-5xl">
-              {pick(homeCopy.citiesTitle, lang)}
-            </h2>
-            <div className="w-16 h-[2px] bg-accent mx-auto mt-6 mb-6" />
-            <p className="text-muted-foreground text-balance">
-              {pick(homeCopy.citiesDescription, lang)}
-            </p>
+            <SectionHeading
+              eyebrow={pick(homeCopy.citiesEyebrow, lang)}
+              title={pick(homeCopy.citiesTitle, lang)}
+              description={pick(homeCopy.citiesDescription, lang)}
+              align="center"
+            />
           </motion.div>
 
-          <div className="mt-10 grid gap-5 sm:mt-12 sm:gap-8 md:grid-cols-2">
+          <div className="mt-12 grid gap-5 sm:mt-14 md:grid-cols-2 md:gap-7">
             {cityCards.map((city, index) => (
               <motion.div
                 key={city.id}
@@ -360,16 +264,19 @@ export function CitySelector() {
                 transition={{ duration: 0.7, delay: index * 0.12 }}
               >
                 <Link href={`/${city.id}`} className="group block">
-                  <article className="relative h-[360px] overflow-hidden rounded-3xl border border-border/60 shadow-xl sm:h-[460px]">
+                  <article className="relative h-[390px] overflow-hidden rounded-[28px] border border-border/70 bg-muted sm:h-[500px]">
                     <div
-                      className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105"
+                      className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-[1.035]"
                       style={{ backgroundImage: `url(${withBasePath(city.image)})` }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-7 md:p-9">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/18 to-black/8" />
+                    <div className="absolute left-5 top-5 rounded-full border border-white/18 bg-black/18 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70 backdrop-blur-md sm:left-7 sm:top-7">
+                      0{index + 1}
+                    </div>
+                    <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-7 md:p-8">
                       <div className="flex items-center justify-between gap-4">
-                        <h3 className="text-3xl font-light md:text-4xl">{pick(city.title, lang)}</h3>
-                        <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-white/10 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:bg-white group-hover:text-foreground">
+                        <h3 className="font-serif text-4xl font-medium tracking-[-0.035em] md:text-5xl">{pick(city.title, lang)}</h3>
+                        <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-foreground transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:bg-accent">
                           <ArrowUpRight className="w-5 h-5" />
                         </span>
                       </div>
@@ -383,43 +290,28 @@ export function CitySelector() {
         </div>
       </section>
 
-      <section id="about" className="bg-secondary/30 py-16 sm:py-24 lg:py-32">
+      <section id="about" className="bg-secondary/45 py-20 sm:py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 md:grid-cols-[1.2fr_1fr]">
+          <div className="grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="rounded-3xl border border-border/60 bg-card p-5 shadow-lg sm:p-8 md:p-12"
+              className="self-start lg:sticky lg:top-28"
             >
-              <span className="text-sm uppercase tracking-[0.2em] text-accent font-medium">
-                {pick(homeCopy.aboutEyebrow, lang)}
-              </span>
-              <h2 className="mt-4 text-3xl font-light text-foreground text-balance md:text-5xl">
-                {pick(homeCopy.aboutTitle, lang)}
-              </h2>
-              <div className="w-16 h-[2px] bg-accent mt-6 mb-6" />
-              <p className="text-muted-foreground leading-relaxed md:text-lg">
-                {pick(homeCopy.aboutDescription, lang)}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  href="/almaty#contacts"
-                  className="inline-flex items-center rounded-full border border-border bg-background px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-foreground hover:bg-foreground hover:text-background"
-                >
-                  {pick(homeCopy.contactsCta, lang)}
-                </Link>
-                <Link
-                  href="/almaty#rooms"
-                  className="inline-flex items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
-                >
-                  {pick(homeCopy.roomsCta, lang)}
-                </Link>
-              </div>
+              <SectionHeading
+                eyebrow={pick(homeCopy.aboutEyebrow, lang)}
+                title={pick(homeCopy.aboutTitle, lang)}
+                description={pick(homeCopy.aboutDescription, lang)}
+              />
+              <Link href="#cities" className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90">
+                {pick(homeCopy.chooseCta, lang)}
+                <ArrowUpRight className="h-4 w-4" />
+              </Link>
             </motion.div>
 
-            <div className="grid gap-4">
+            <div className="grid gap-4 sm:grid-cols-2">
               {advantages.map((item, index) => (
                 <motion.article
                   key={item.title.en}
@@ -427,7 +319,7 @@ export function CitySelector() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm"
+                  className="rounded-[24px] border border-border/80 bg-background p-6 transition hover:-translate-y-0.5 hover:border-accent/35"
                 >
                   <div className="flex items-center gap-3">
                     <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 text-accent">
@@ -443,7 +335,7 @@ export function CitySelector() {
         </div>
       </section>
 
-      <section id="format" className="py-16 sm:py-24 lg:py-32">
+      <section id="format" className="py-20 sm:py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -452,19 +344,14 @@ export function CitySelector() {
             transition={{ duration: 0.7 }}
             className="max-w-3xl"
           >
-            <span className="text-sm uppercase tracking-[0.22em] text-accent font-medium">
-              {pick(homeCopy.formatEyebrow, lang)}
-            </span>
-            <h2 className="mt-4 text-3xl font-light text-foreground text-balance md:text-5xl">
-              {pick(homeCopy.formatTitle, lang)}
-            </h2>
-            <div className="w-16 h-[2px] bg-accent mt-6 mb-6" />
-            <p className="text-muted-foreground text-balance">
-              {pick(homeCopy.formatDescription, lang)}
-            </p>
+            <SectionHeading
+              eyebrow={pick(homeCopy.formatEyebrow, lang)}
+              title={pick(homeCopy.formatTitle, lang)}
+              description={pick(homeCopy.formatDescription, lang)}
+            />
           </motion.div>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="mt-12 grid gap-4 md:grid-cols-3">
             {moodCards.map((card, index) => (
               <motion.article
                 key={card.title.en}
@@ -472,10 +359,10 @@ export function CitySelector() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.12 }}
-                className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm"
+                className="group rounded-[24px] border border-border/80 bg-card p-6 transition duration-300 hover:-translate-y-1 hover:border-accent/35 hover:shadow-[0_20px_50px_rgba(28,30,34,0.08)]"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground transition group-hover:bg-accent group-hover:text-accent-foreground">
                     <card.icon className="w-5 h-5" />
                   </span>
                   <span className="rounded-full bg-secondary px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">

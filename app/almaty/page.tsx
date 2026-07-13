@@ -12,8 +12,8 @@ export default function AlmatyPage() {
     <main className="min-h-screen bg-background">
       <Header city="almaty" />
       <HeroSection city="almaty" />
-      <AboutSection city="almaty" />
       <RoomsSection city="almaty" />
+      <AboutSection city="almaty" />
       <ContactSection city="almaty" />
       <Footer city="almaty" />
     </main>

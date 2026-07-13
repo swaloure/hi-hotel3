@@ -2,177 +2,132 @@
 
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
-import { Check, MapPin } from 'lucide-react';
+import { ArrowLeft, Check, Clock3, MapPin, ShieldCheck } from 'lucide-react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { BookingWidget } from '@/components/booking-widget';
+import { getHotelByCity } from '@/lib/data/hotels';
 import { withBasePath } from '@/lib/asset-path';
+import { resolveLanguage } from '@/lib/i18n/language';
+import { cn } from '@/lib/utils';
 
 type City = 'almaty' | 'astana';
-type Lang = 'ru' | 'kz' | 'en';
 
-type BookingCopy = {
-  title: string;
-  subtitle: string;
-  chooseHotel: string;
-  bookingAt: Record<City, string>;
-  almaty: string;
-  almatyAddress: string;
-  astana: string;
-  astanaAddress: string;
-};
+const copy = {
+  eyebrow: { ru: 'Прямое бронирование', kz: 'Тікелей брондау', en: 'Direct booking' },
+  title: { ru: 'Забронируйте проживание', kz: 'Тұруды брондаңыз', en: 'Book your stay' },
+  subtitle: {
+    ru: 'Выберите даты, количество гостей и подходящий номер. Все доступные варианты появятся в форме ниже.',
+    kz: 'Күндерді, қонақтар санын және қолайлы нөмірді таңдаңыз. Барлық қолжетімді нұсқалар төмендегі формада көрсетіледі.',
+    en: 'Choose your dates, number of guests, and a suitable room. All available options will appear below.',
+  },
+  chooseCity: { ru: 'Город проживания', kz: 'Тұратын қала', en: 'Stay location' },
+  bookingAt: { ru: 'Бронирование в', kz: 'Брондау қаласы', en: 'Booking in' },
+  direct: { ru: 'Напрямую с отелем', kz: 'Қонақүймен тікелей', en: 'Direct with the hotel' },
+  support: { ru: 'Поддержка 24/7', kz: '24/7 қолдау', en: '24/7 support' },
+  secure: { ru: 'Безопасная форма', kz: 'Қауіпсіз форма', en: 'Secure form' },
+  back: { ru: 'Все города', kz: 'Барлық қалалар', en: 'All cities' },
+  steps: {
+    ru: ['Выберите даты', 'Укажите гостей', 'Выберите номер'],
+    kz: ['Күндерді таңдаңыз', 'Қонақтарды көрсетіңіз', 'Нөмірді таңдаңыз'],
+    en: ['Choose dates', 'Add guests', 'Select a room'],
+  },
+} as const;
 
-const copy: Record<Lang, BookingCopy> = {
-  ru: {
-    title: 'Бронирование',
-    subtitle: 'Выберите даты проживания и количество гостей.',
-    chooseHotel: 'Выберите город',
-    bookingAt: {
-      almaty: 'Бронирование в Алматы',
-      astana: 'Бронирование в Астане',
-    },
-    almaty: 'Алматы',
-    almatyAddress: 'проспект Достык 162к6',
-    astana: 'Астана',
-    astanaAddress: 'проспект Мәңгілік Ел 29/1',
-  },
-  kz: {
-    title: 'Брондау',
-    subtitle: 'Тұру күндері мен қонақтар санын таңдаңыз.',
-    chooseHotel: 'Қаланы таңдаңыз',
-    bookingAt: {
-      almaty: 'Алматыда брондау',
-      astana: 'Астанада брондау',
-    },
-    almaty: 'Алматы',
-    almatyAddress: 'Достық даңғылы 162к6',
-    astana: 'Астана',
-    astanaAddress: 'Мәңгілік Ел 29/1',
-  },
-  en: {
-    title: 'Book your stay',
-    subtitle: 'Choose your stay dates and number of guests.',
-    chooseHotel: 'Choose a city',
-    bookingAt: {
-      almaty: 'Booking in Almaty',
-      astana: 'Booking in Astana',
-    },
-    almaty: 'Almaty',
-    almatyAddress: '162k6 Dostyk Avenue',
-    astana: 'Astana',
-    astanaAddress: '29/1 Mangilik El Avenue',
-  },
-};
-
-function resolveLang(language: string): Lang {
-  const normalized = language.toLowerCase();
-  if (normalized.startsWith('en')) return 'en';
-  if (normalized.startsWith('kz') || normalized.startsWith('kk')) return 'kz';
-  return 'ru';
-}
+const heroImages = {
+  almaty: '/cities/almaty-cityscape.jpg',
+  astana: '/cities/astana-embankment.jpg',
+} as const;
 
 export function BookingPageContent({ city }: { city: City }) {
-  const { i18n } = useTranslation();
-  const text = copy[resolveLang(i18n.language)];
-  const heroImage = city === 'astana' ? '/cities/astana-embankment.jpg' : '/cities/almaty-cityscape.jpg';
-  const heroImagePosition = city === 'astana' ? 'center 35%' : 'center 35%';
-  const isAlmaty = city === 'almaty';
-  const cities = [
-    { id: 'almaty' as const, name: text.almaty, address: text.almatyAddress },
-    { id: 'astana' as const, name: text.astana, address: text.astanaAddress },
-  ];
+  const { t, i18n } = useTranslation();
+  const lang = resolveLanguage(i18n.language);
+  const hotel = getHotelByCity(city);
+
+  if (!hotel) return null;
 
   return (
     <main className="min-h-screen bg-background">
       <Header city={city} />
 
-      <section className="relative isolate overflow-hidden bg-primary pb-10 pt-24 text-primary-foreground sm:pb-12 sm:pt-28">
+      <section className="relative isolate overflow-hidden pb-14 pt-32 text-white sm:pb-16 sm:pt-36 lg:pb-20">
         <div
-          className="absolute inset-0 -z-20 bg-cover"
-          style={{
-            backgroundImage: `url(${withBasePath(heroImage)})`,
-            backgroundPosition: heroImagePosition,
-          }}
+          className="absolute inset-0 -z-30 bg-cover bg-center"
+          style={{ backgroundImage: `url(${withBasePath(heroImages[city])})` }}
         />
-        <div
-          className={`absolute inset-0 -z-10 bg-gradient-to-b ${
-            isAlmaty ? 'from-black/65 via-black/52 to-primary/90' : 'from-black/60 via-black/46 to-primary/88'
-          }`}
-        />
-        {isAlmaty && (
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_10%_20%,rgba(255,223,179,0.22),transparent_44%)]" />
-        )}
-
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-[34px] font-light leading-tight tracking-tight sm:text-5xl">
-            {text.title}
+        <div className="absolute inset-0 -z-20 bg-gradient-to-r from-black/82 via-black/55 to-black/26" />
+        <div className="absolute inset-0 -z-20 bg-gradient-to-b from-black/25 to-black/58" />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Link href="/booking" className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-white/62 transition hover:text-white">
+            <ArrowLeft className="h-4 w-4" />
+            {copy.back[lang]}
+          </Link>
+          <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{copy.eyebrow[lang]}</p>
+          <h1 className="mt-3 max-w-3xl font-serif text-4xl font-medium leading-[1.02] tracking-[-0.04em] text-balance sm:text-5xl lg:text-6xl">
+            {copy.title[lang]}
           </h1>
-          <p className="mt-3 max-w-3xl text-base leading-7 text-primary-foreground/68 sm:text-lg sm:leading-8 lg:max-w-none lg:whitespace-nowrap">
-            {text.subtitle}
-          </p>
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-white/68 sm:text-base">{copy.subtitle[lang]}</p>
         </div>
       </section>
 
-      <section className="pb-16 pt-10 sm:pb-24 sm:pt-12">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <p className="mb-4 text-sm font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            {text.chooseHotel}
-          </p>
-
-          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
-            {cities.map((hotel) => {
-              const isSelected = city === hotel.id;
-
-              return (
+      <section className="py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 border-b border-border pb-8 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{copy.chooseCity[lang]}</p>
+              <h2 className="mt-2 font-serif text-3xl font-medium tracking-[-0.03em] text-foreground">
+                {copy.bookingAt[lang]} {t(`cities.${city}`)}
+              </h2>
+            </div>
+            <div className="inline-flex w-full rounded-full bg-secondary p-1 sm:w-auto">
+              {(['almaty', 'astana'] as const).map((item) => (
                 <Link
-                  key={hotel.id}
-                  href={`/booking/${hotel.id}`}
-                  aria-current={isSelected ? 'page' : undefined}
-                  className={`group relative flex min-h-[104px] items-center rounded-[20px] border px-5 py-5 text-left transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-6 ${
-                    isSelected
-                      ? 'border-accent bg-accent/10'
-                      : 'border-border bg-card hover:-translate-y-0.5 hover:border-accent/45 hover:bg-secondary/45'
-                  }`}
-                >
-                  {isSelected && (
-                    <span className="absolute right-4 top-4 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-accent-foreground">
-                      <Check className="h-3.5 w-3.5" />
-                    </span>
+                  key={item}
+                  href={`/booking/${item}`}
+                  aria-current={city === item ? 'page' : undefined}
+                  className={cn(
+                    'flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition sm:flex-none',
+                    city === item ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
                   )}
-
-                  <span
-                    className={`mr-4 flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
-                      isSelected ? 'bg-accent/18 text-accent' : 'bg-secondary text-muted-foreground'
-                    }`}
-                  >
-                    <MapPin className="h-4 w-4" />
-                  </span>
-
-                  <span className="min-w-0">
-                    <span className="block text-[17px] font-medium leading-none text-foreground sm:text-lg">
-                      {hotel.name}
-                    </span>
-                    <span className="mt-2 block text-sm leading-5 text-muted-foreground">
-                      {hotel.address}
-                    </span>
-                  </span>
+                >
+                  {city === item && <Check className="h-3.5 w-3.5 text-accent" />}
+                  {t(`cities.${item}`)}
                 </Link>
-              );
-            })}
+              ))}
+            </div>
           </div>
 
-          <div className="mt-6 rounded-3xl border border-border bg-card p-3 shadow-sm sm:mt-8 sm:p-5">
-            <div className="flex items-center gap-2 px-2 pb-3 pt-1 sm:px-1">
-              <MapPin className="h-4 w-4 shrink-0 text-accent" />
-              <p className="text-sm leading-5 text-foreground">
-                <span className="font-medium">{text.bookingAt[city]}</span>
-              </p>
+          <div className="mt-8 grid items-start gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:gap-8">
+            <aside className="rounded-[26px] border border-border bg-secondary/45 p-6 sm:p-7 lg:sticky lg:top-28">
+              <div className="flex items-start gap-3">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-background text-accent ring-1 ring-border">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                <div>
+                  <h3 className="text-base font-semibold text-foreground">Hi Hotel {t(`cities.${city}`)}</h3>
+                  <p className="mt-1 text-sm leading-6 text-muted-foreground">{hotel.address[lang]}</p>
+                </div>
+              </div>
+
+              <ol className="mt-7 space-y-3 border-t border-border pt-6">
+                {copy.steps[lang].map((step, index) => (
+                  <li key={step} className="flex items-center gap-3 text-sm text-foreground/75">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-background text-[11px] font-semibold text-accent ring-1 ring-border">0{index + 1}</span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+
+              <div className="mt-7 grid gap-2.5 border-t border-border pt-6 text-xs text-muted-foreground">
+                <div className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-accent" />{copy.secure[lang]}</div>
+                <div className="flex items-center gap-2"><Check className="h-4 w-4 text-accent" />{copy.direct[lang]}</div>
+                <div className="flex items-center gap-2"><Clock3 className="h-4 w-4 text-accent" />{copy.support[lang]}</div>
+              </div>
+            </aside>
+
+            <div className="rounded-[28px] border border-border bg-card p-3 shadow-[0_20px_60px_rgba(28,30,34,0.07)] sm:p-5">
+              <BookingWidget city={city} variant="standalone" className="border-0 bg-transparent p-0 shadow-none" />
             </div>
-            <BookingWidget
-              city={city}
-              variant="standalone"
-              className="border-0 bg-transparent p-0 shadow-none"
-            />
           </div>
         </div>
       </section>

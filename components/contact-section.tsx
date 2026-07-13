@@ -3,15 +3,12 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock,
-  MessageCircle
-} from 'lucide-react';
+import { ArrowUpRight, Clock3, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SectionHeading } from '@/components/section-heading';
 import { getHotelByCity } from '@/lib/data/hotels';
+import { resolveLanguage } from '@/lib/i18n/language';
+import { cn } from '@/lib/utils';
 
 interface ContactSectionProps {
   city: 'almaty' | 'astana';
@@ -19,27 +16,50 @@ interface ContactSectionProps {
 
 type MapProvider = 'yandex' | 'dgis' | 'google';
 
+const copy = {
+  map: { ru: 'Карта и маршрут', kz: 'Карта және бағыт', en: 'Map and directions' },
+  openMap: { ru: 'Открыть карту', kz: 'Картаны ашу', en: 'Open map' },
+  routeHint: {
+    ru: 'Выберите привычный сервис и постройте маршрут до отеля.',
+    kz: 'Ыңғайлы сервисті таңдап, қонақүйге бағыт құрыңыз.',
+    en: 'Choose your preferred map service and build a route to the hotel.',
+  },
+  quickContact: { ru: 'Быстрая связь', kz: 'Жылдам байланыс', en: 'Quick contact' },
+} as const;
+
 export function ContactSection({ city }: ContactSectionProps) {
   const { t, i18n } = useTranslation();
   const hotel = getHotelByCity(city);
   const [selectedMap, setSelectedMap] = useState<MapProvider>('yandex');
+  const lang = resolveLanguage(i18n.language);
 
   if (!hotel) return null;
 
-  const normalized = i18n.language.toLowerCase();
-  const lang: 'ru' | 'kz' | 'en' = normalized.startsWith('en')
-    ? 'en'
-    : normalized.startsWith('kz') || normalized.startsWith('kk')
-      ? 'kz'
-      : 'ru';
   const { lat, lng } = hotel.coordinates;
+  const mapProviders: Record<MapProvider, { label: string; src: string; href: string }> = {
+    yandex: {
+      label: 'Яндекс',
+      src: `https://yandex.com/map-widget/v1/?ll=${lng}%2C${lat}&z=16&pt=${lng},${lat},pm2rdm&lang=ru_RU`,
+      href: `https://yandex.com/maps/?ll=${lng}%2C${lat}&z=16&pt=${lng},${lat},pm2rdm`,
+    },
+    dgis: {
+      label: '2ГИС',
+      src: `https://widgets.2gis.com/widget?type=map&lon=${lng}&lat=${lat}&zoom=16`,
+      href: `https://2gis.kz/search/${lat},${lng}`,
+    },
+    google: {
+      label: 'Google',
+      src: `https://maps.google.com/?q=${lat},${lng}&z=16&output=embed`,
+      href: `https://maps.google.com/?q=${lat},${lng}`,
+    },
+  };
 
   const contactItems = [
     {
       icon: MapPin,
       label: t('contacts.address'),
       value: hotel.address[lang],
-      href: `https://maps.google.com/?q=${hotel.coordinates.lat},${hotel.coordinates.lng}`,
+      href: mapProviders[selectedMap].href,
     },
     {
       icon: Phone,
@@ -54,187 +74,127 @@ export function ContactSection({ city }: ContactSectionProps) {
       href: `mailto:${hotel.email}`,
     },
     {
-      icon: Clock,
+      icon: Clock3,
       label: t('contacts.workingHours'),
       value: t('contacts.allDay'),
-      href: undefined,
     },
   ];
 
-  const mapProviders: Record<MapProvider, { label: string; src: string; href: string }> = {
-    yandex: {
-      label: 'Яндекс',
-      src: `https://yandex.com/map-widget/v1/?ll=${lng}%2C${lat}&z=16&pt=${lng},${lat},pm2rdm&lang=ru_RU`,
-      href: `https://yandex.com/maps/?ll=${lng}%2C${lat}&z=16&pt=${lng},${lat},pm2rdm`,
-    },
-    dgis: {
-      label: '2ГИС',
-      src: `https://widgets.2gis.com/widget?type=map&lon=${lng}&lat=${lat}&zoom=16`,
-      href: `https://2gis.kz/search/${lat},${lng}`,
-    },
-    google: {
-      label: 'Google Maps',
-      src: `https://maps.google.com/?q=${lat},${lng}&z=16&output=embed`,
-      href: `https://maps.google.com/?q=${lat},${lng}`,
-    },
-  };
-
-  const mapUi = {
-    ru: { label: 'Карта', choose: 'Выберите карту' },
-    kz: { label: 'Карта', choose: 'Картаны таңдаңыз' },
-    en: { label: 'Map', choose: 'Choose a map' },
-  };
-
   return (
-    <section id="contacts" className="bg-secondary/30 py-16 sm:py-24 lg:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
+    <section id="contacts" className="bg-secondary/45 py-20 sm:py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-10 text-center sm:mb-16"
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.65 }}
         >
-          <span className="text-sm uppercase tracking-[0.2em] text-accent font-medium">
-            Hi Hotel {t(`cities.${city}`)}
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-foreground mt-4 mb-4 text-balance">
-            {t('contacts.title')}
-          </h2>
-          <div className="w-16 h-[2px] bg-accent mx-auto mb-6" />
-          <p className="text-muted-foreground max-w-xl mx-auto text-balance">
-            {t('contacts.subtitle')}
-          </p>
+          <SectionHeading
+            eyebrow={`Hi Hotel · ${t(`cities.${city}`)}`}
+            title={t('contacts.title')}
+            description={t('contacts.subtitle')}
+            align="center"
+          />
         </motion.div>
 
-        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
-          {/* Contact Info */}
+        <div className="mt-12 grid gap-5 lg:grid-cols-[0.78fr_1.22fr] lg:gap-7">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col rounded-[26px] border border-border bg-card p-5 sm:p-7"
           >
-            <div className="rounded-2xl border border-border/50 bg-card p-5 shadow-lg sm:p-8">
-              <div className="space-y-6">
-                {contactItems.map((item, index) => (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                  >
-                    {item.href ? (
-                      <a 
-                        href={item.href}
-                        target={item.href.startsWith('http') ? '_blank' : undefined}
-                        rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className="flex items-start gap-4 group"
-                      >
-                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-                          <item.icon className="w-5 h-5 text-accent" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
-                          <p className="text-foreground group-hover:text-accent transition-colors">
-                            {item.value}
-                          </p>
-                        </div>
-                      </a>
-                    ) : (
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
-                          <item.icon className="w-5 h-5 text-accent" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
-                          <p className="text-foreground">{item.value}</p>
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{copy.quickContact[lang]}</p>
+            <div className="mt-5 divide-y divide-border">
+              {contactItems.map((item) => {
+                const content = (
+                  <>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary text-accent">
+                      <item.icon className="h-4 w-4" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-xs text-muted-foreground">{item.label}</span>
+                      <span className="mt-1 block break-words text-sm font-medium leading-5 text-foreground">{item.value}</span>
+                    </span>
+                    {item.href && <ArrowUpRight className="h-4 w-4 shrink-0 text-muted-foreground transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent" />}
+                  </>
+                );
 
-              {/* WhatsApp Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="mt-8 pt-8 border-t border-border"
-              >
-                <Button
-                  asChild
-                  className="w-full bg-[#25D366] hover:bg-[#25D366]/90 text-white rounded-xl"
-                >
+                return item.href ? (
                   <a
-                    href={`https://wa.me/${hotel.whatsapp.replace(/[^+\d]/g, '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    key={item.label}
+                    href={item.href}
+                    target={item.href.startsWith('http') ? '_blank' : undefined}
+                    rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className="group flex items-center gap-3 py-4"
                   >
-                    <MessageCircle className="w-5 h-5 mr-2" />
-                    {t('contacts.whatsapp')}
+                    {content}
                   </a>
-                </Button>
-              </motion.div>
+                ) : (
+                  <div key={item.label} className="flex items-center gap-3 py-4">{content}</div>
+                );
+              })}
+            </div>
+
+            <div className="mt-auto pt-6">
+              <Button asChild className="h-12 w-full rounded-full bg-[#1faf5b] text-white shadow-none hover:bg-[#18964d]">
+                <a href={`https://wa.me/${hotel.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  {t('contacts.whatsapp')}
+                </a>
+              </Button>
             </div>
           </motion.div>
 
-          {/* Map */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 22 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="h-[360px] min-h-[360px] sm:h-[400px] sm:min-h-[400px] lg:h-full"
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, delay: 0.08 }}
+            className="overflow-hidden rounded-[26px] border border-border bg-card"
           >
-            <div className="w-full h-full bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden flex flex-col">
-              <div className="flex flex-col gap-3 border-b border-border/60 bg-background/70 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
-                <div>
-                  <p className="text-sm font-medium text-foreground">{mapUi[lang].label}</p>
-                  <p className="text-xs text-muted-foreground">{mapUi[lang].choose}</p>
-                </div>
-                <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto sm:flex-nowrap">
-                  <div className="inline-flex max-w-full overflow-x-auto rounded-full bg-secondary p-1">
-                    {(['yandex', 'dgis', 'google'] as MapProvider[]).map((provider) => (
-                      <button
-                        key={provider}
-                        type="button"
-                        onClick={() => setSelectedMap(provider)}
-                        className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
-                          selectedMap === provider
-                            ? 'bg-accent text-accent-foreground'
-                            : 'text-muted-foreground hover:text-foreground'
-                        }`}
-                      >
-                        {mapProviders[provider].label}
-                      </button>
-                    ))}
-                  </div>
-                  <Button asChild variant="outline" size="sm" className="w-full rounded-full sm:w-auto">
-                    <a
-                      href={mapProviders[selectedMap].href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+            <div className="flex flex-col gap-4 border-b border-border p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
+              <div>
+                <h3 className="text-sm font-semibold text-foreground">{copy.map[lang]}</h3>
+                <p className="mt-1 text-xs text-muted-foreground">{copy.routeHint[lang]}</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="inline-flex rounded-full bg-secondary p-1">
+                  {(Object.keys(mapProviders) as MapProvider[]).map((provider) => (
+                    <button
+                      key={provider}
+                      type="button"
+                      onClick={() => setSelectedMap(provider)}
+                      className={cn(
+                        'rounded-full px-3 py-2 text-xs font-semibold transition',
+                        selectedMap === provider ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
+                      )}
                     >
-                      {t('common.viewAll')}
-                    </a>
-                  </Button>
+                      {mapProviders[provider].label}
+                    </button>
+                  ))}
                 </div>
+                <a
+                  href={mapProviders[selectedMap].href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-10 items-center gap-1.5 rounded-full border border-border px-4 text-xs font-semibold text-foreground transition hover:border-accent"
+                >
+                  {copy.openMap[lang]}
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </a>
               </div>
-              <div className="relative flex-1">
-                <iframe
-                  key={`${city}-${selectedMap}`}
-                  src={mapProviders[selectedMap].src}
-                  title={`${mapProviders[selectedMap].label} ${hotel.name}`}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="absolute inset-0 h-full w-full border-0"
-                />
-              </div>
+            </div>
+            <div className="relative h-[390px] bg-muted sm:h-[460px]">
+              <iframe
+                key={`${city}-${selectedMap}`}
+                src={mapProviders[selectedMap].src}
+                title={`${mapProviders[selectedMap].label} ${hotel.name}`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="absolute inset-0 h-full w-full border-0 grayscale-[18%]"
+              />
             </div>
           </motion.div>
         </div>

@@ -5,26 +5,26 @@
 
 :root {
   /* Hi Hotel Premium Color Palette */
-  --background: oklch(0.98 0.005 85); /* warm white */
-  --foreground: oklch(0.25 0.01 250); /* dark graphite */
+  --background: oklch(0.982 0.006 82); /* warm porcelain */
+  --foreground: oklch(0.225 0.012 255); /* deep graphite */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.25 0.01 250);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.25 0.01 250);
   --primary: oklch(0.25 0.01 250); /* dark graphite */
   --primary-foreground: oklch(0.98 0.005 85);
-  --secondary: oklch(0.94 0.015 85); /* soft beige */
+  --secondary: oklch(0.948 0.014 82); /* soft sand */
   --secondary-foreground: oklch(0.25 0.01 250);
   --muted: oklch(0.94 0.015 85);
-  --muted-foreground: oklch(0.5 0.01 250);
-  --accent: oklch(0.75 0.08 85); /* muted gold */
+  --muted-foreground: oklch(0.49 0.012 255);
+  --accent: oklch(0.72 0.095 82); /* muted brass */
   --accent-foreground: oklch(0.25 0.01 250);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.9 0.01 85);
+  --border: oklch(0.895 0.012 82);
   --input: oklch(0.92 0.01 85);
   --ring: oklch(0.75 0.08 85);
-  --radius: 1rem;
+  --radius: 0.875rem;
   
   /* Custom Hi Hotel tokens */
   --gold: oklch(0.75 0.12 85);
@@ -95,6 +95,7 @@
   }
   body {
     @apply bg-background text-foreground antialiased;
+    text-rendering: optimizeLegibility;
   }
   html {
     scroll-behavior: smooth;
@@ -102,6 +103,26 @@
   }
   body {
     overflow-x: clip;
+  }
+}
+
+::selection {
+  background: color-mix(in oklab, var(--accent) 32%, transparent);
+  color: var(--foreground);
+}
+
+:where(section[id]) {
+  scroll-margin-top: 88px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
+import { resolveLanguage } from '@/lib/i18n/language';
 
 interface BookingWidgetProps {
   city: 'almaty' | 'astana';
@@ -181,9 +182,23 @@ function bnovoCreditMarkup(widgetId: string) {
 export function BookingWidget({ city, variant = 'standalone', className }: BookingWidgetProps) {
   const { i18n } = useTranslation();
   const initializedRef = useRef(false);
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const isHero = variant === 'hero';
   const widgetId = useMemo(() => `_bn_widget_${city}_${variant}`, [city, variant]);
   const widgetLang = i18n.language?.toLowerCase().startsWith('en') ? 'en' : 'ru';
+  const lang = resolveLanguage(i18n.language);
+  const messages = {
+    loading: {
+      ru: 'Загружаем доступные даты и номера…',
+      kz: 'Қолжетімді күндер мен нөмірлер жүктелуде…',
+      en: 'Loading available dates and rooms…',
+    },
+    error: {
+      ru: 'Модуль бронирования временно недоступен. Пожалуйста, попробуйте обновить страницу.',
+      kz: 'Брондау модулі уақытша қолжетімсіз. Бетті жаңартып көріңіз.',
+      en: 'The booking module is temporarily unavailable. Please refresh the page.',
+    },
+  } as const;
 
   useEffect(() => {
     let isCancelled = false;
@@ -192,6 +207,8 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
     const container = document.getElementById(widgetId);
 
     if (!container) return;
+    setStatus('loading');
+    initializedRef.current = false;
 
     const initializeBnovo = () => {
       container.innerHTML = bnovoCreditMarkup(widgetId);
@@ -205,11 +222,13 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
 
             window.Bnovo_Widget.open(widgetId, getBnovoConfig(city, widgetLang));
             initializedRef.current = true;
+            setStatus('ready');
           });
         })
         .catch(() => {
           if (!isCancelled) {
-            container.innerHTML = '<p class="text-sm text-muted-foreground">Модуль бронирования временно недоступен.</p>';
+            container.innerHTML = '';
+            setStatus('error');
           }
         });
     };
@@ -254,10 +273,34 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
         className
       )}
     >
-      <div
-        id={widgetId}
-        className="relative flex min-h-[390px] items-start justify-center overflow-hidden rounded-[22px] bg-white/90 p-4 text-foreground ring-1 ring-border/70"
-      />
+      <div className="relative min-h-[430px] overflow-hidden rounded-[22px] bg-white text-foreground ring-1 ring-border/70">
+        <div
+          id={widgetId}
+          aria-busy={status === 'loading'}
+          className="relative z-10 flex min-h-[430px] items-start justify-center p-4"
+        />
+
+        {status === 'loading' && (
+          <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center bg-white p-8 text-center">
+            <div className="w-full max-w-[300px] animate-pulse">
+              <div className="mx-auto h-7 w-40 rounded-full bg-secondary" />
+              <div className="mt-8 grid gap-3">
+                <div className="h-14 rounded-2xl bg-secondary/80" />
+                <div className="h-14 rounded-2xl bg-secondary/80" />
+                <div className="h-14 rounded-2xl bg-secondary/80" />
+                <div className="mt-2 h-12 rounded-full bg-accent/25" />
+              </div>
+            </div>
+            <p className="mt-6 text-xs text-muted-foreground">{messages.loading[lang]}</p>
+          </div>
+        )}
+
+        {status === 'error' && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-white p-8 text-center">
+            <p className="max-w-sm text-sm leading-6 text-muted-foreground">{messages.error[lang]}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
