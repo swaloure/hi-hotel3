@@ -207,7 +207,7 @@ export function HomeContactSection({ lang, selectedCity, onSelectCity }: HomeCon
                     />
                     <span className="relative flex items-center justify-between gap-3">
                       <span>
-                        <span className="block text-xs uppercase tracking-[0.16em] opacity-60">Hi Hotel</span>
+                        <span className="block text-xs uppercase tracking-[0.16em] opacity-60">MAZA</span>
                         <span className="mt-1 block text-xl font-medium">{text[city]}</span>
                       </span>
                       <span className={`flex h-9 w-9 items-center justify-center rounded-full ${isActive ? 'bg-primary text-primary-foreground' : 'bg-white/10'}`}>
@@ -232,7 +232,7 @@ export function HomeContactSection({ lang, selectedCity, onSelectCity }: HomeCon
             <div className="p-5 sm:p-8 lg:p-10">
               <div className="flex items-start justify-between gap-5">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Hi Hotel</p>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">MAZA</p>
                   <h3 className="mt-2 text-3xl font-light sm:text-4xl">{text[selectedCity]}</h3>
                 </div>
                 <Link
@@ -379,7 +379,7 @@ export function HomeContactSection({ lang, selectedCity, onSelectCity }: HomeCon
                   <iframe
                     key={`${selectedCity}-${selectedMap}`}
                     src={mapProviders[selectedMap].src}
-                    title={`${mapProviders[selectedMap].label} — Hi Hotel ${text[selectedCity]}`}
+                    title={`${mapProviders[selectedMap].label} — MAZA ${text[selectedCity]}`}
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     className="absolute inset-0 h-full w-full border-0"

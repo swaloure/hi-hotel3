@@ -7,8 +7,8 @@ import { ContactSection } from '@/components/contact-section';
 import { Footer } from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: 'Hi Hotel Алматы — номера и бронирование',
-  description: 'Hi Hotel в Алматы: номера, удобства, контакты и онлайн-бронирование.',
+  title: 'MAZA Алматы — номера и бронирование',
+  description: 'MAZA в Алматы: номера, удобства, контакты и онлайн-бронирование.',
 };
 
 export default function AlmatyPage() {

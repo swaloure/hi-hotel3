@@ -230,9 +230,9 @@ const homeCopy = {
     en: 'A calm format without extra luxury',
   },
   aboutDescription: {
-    ru: 'Hi Hotel — это аккуратная городская гостиница. Мы делаем упор на чистоту, удобное расположение и понятный сервис.',
-    kz: 'Hi Hotel — ұқыпты қалалық қонақүй. Біз тазалыққа, ыңғайлы орналасуға және түсінікті сервиске мән береміз.',
-    en: 'Hi Hotel is a neat city hotel. We focus on cleanliness, convenient location, and clear service.',
+    ru: 'MAZA — это аккуратная городская гостиница. Мы делаем упор на чистоту, удобное расположение и понятный сервис.',
+    kz: 'MAZA — ұқыпты қалалық қонақүй. Біз тазалыққа, ыңғайлы орналасуға және түсінікті сервиске мән береміз.',
+    en: 'MAZA is a neat city hotel. We focus on cleanliness, convenient location, and clear service.',
   },
   contactsCta: {
     ru: 'Контакты',
@@ -383,7 +383,7 @@ export function CitySelector() {
                         <h3 className="text-3xl font-light md:text-4xl">{pick(city.title, lang)}</h3>
                         <Link
                           href={`/${city.id}`}
-                          aria-label={`Hi Hotel ${pick(city.title, lang)}`}
+                          aria-label={`MAZA ${pick(city.title, lang)}`}
                           className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-white/10 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 hover:bg-white hover:text-foreground"
                         >
                           <ArrowUpRight className="w-5 h-5" />

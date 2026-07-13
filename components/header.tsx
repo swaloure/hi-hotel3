@@ -152,7 +152,7 @@ export function Header({ city }: HeaderProps) {
             <Link href="/" className="flex items-center">
               <Image
                 src={desktopLogoSrc}
-                alt="Hi Hotel"
+                alt="MAZA"
                 width={60}
                 height={60}
                 unoptimized
@@ -318,7 +318,7 @@ export function Header({ city }: HeaderProps) {
                 <div className="flex items-center justify-between border-b border-border p-5 sm:p-6">
                   <Image
                     src={withBasePath('/logofinal.svg')}
-                    alt="Hi Hotel"
+                    alt="MAZA"
                     width={60}
                     height={60}
                     unoptimized

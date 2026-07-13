@@ -10,7 +10,7 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   useEffect(() => {
-    const storedLanguage = window.localStorage.getItem('hihotel-language');
+    const storedLanguage = window.localStorage.getItem('maza-language');
 
     const syncLanguage = (language: string) => {
       const normalized = language.startsWith('en')
@@ -20,7 +20,7 @@ export function Providers({ children }: ProvidersProps) {
           : 'ru';
 
       document.documentElement.lang = normalized === 'kz' ? 'kk' : normalized;
-      window.localStorage.setItem('hihotel-language', normalized);
+      window.localStorage.setItem('maza-language', normalized);
     };
 
     i18n.on('languageChanged', syncLanguage);

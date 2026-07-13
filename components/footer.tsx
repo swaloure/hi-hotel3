@@ -14,8 +14,8 @@ interface FooterProps {
   city: 'almaty' | 'astana' | 'home';
 }
 const socialLinks = [
-  { icon: Instagram, href: 'https://instagram.com/hihotel.kz', label: 'Instagram' },
-  { icon: Facebook, href: 'https://facebook.com/hihotel.kz', label: 'Facebook' },
+  { icon: Instagram, href: 'https://instagram.com/maza.kz', label: 'Instagram' },
+  { icon: Facebook, href: 'https://facebook.com/maza.kz', label: 'Facebook' },
 ];
 
 const currentYear = new Date().getFullYear();
@@ -65,10 +65,10 @@ export function Footer({ city }: FooterProps) {
         <div className="grid grid-cols-1 gap-12 px-2 py-16 md:grid-cols-2 md:px-0 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link href="/" className="inline-block" aria-label="Hi Hotel">
+            <Link href="/" className="inline-block" aria-label="MAZA">
               <Image
                 src={withBasePath('/logofinal.svg')}
-                alt="Hi Hotel"
+                alt="MAZA"
                 width={52}
                 height={60}
                 className="h-14 w-auto"
@@ -169,7 +169,7 @@ export function Footer({ city }: FooterProps) {
         <div className="border-t border-primary-foreground/10 px-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 md:px-0">
           <div className="flex items-center justify-center">
             <p className="text-sm text-primary-foreground/50">
-              © {currentYear} Hi Hotel. {t('footer.rights')}.
+              © {currentYear} MAZA. {t('footer.rights')}.
             </p>
           </div>
         </div>

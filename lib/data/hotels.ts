@@ -47,14 +47,14 @@ export const hotels: Hotel[] = [
   {
     id: 'almaty',
     city: 'almaty',
-    name: 'Hi Hotel Almaty',
+    name: 'MAZA Almaty',
     address: {
       ru: 'проспект Достык 162к6, 050051',
       kz: 'Достық даңғылы 162к6, 050051',
       en: '162k6 Dostyk Avenue, Almaty 050051',
     },
     phone: '+7 (727) 123-45-67',
-    email: 'almaty@hihotel.kz',
+    email: 'almaty@maza.kz',
     whatsapp: '+77271234567',
     coordinates: {
       lat: 43.2342975,
@@ -179,14 +179,14 @@ export const hotels: Hotel[] = [
   {
     id: 'astana',
     city: 'astana',
-    name: 'Hi Hotel Astana',
+    name: 'MAZA Astana',
     address: {
       ru: 'Мангилик Ел 29/1, Z05M7E4',
       kz: 'Мәңгілік Ел 29/1, Z05M7E4',
       en: '29/1 Mangilik El Avenue, Astana Z05M7E4',
     },
     phone: '+7 (717) 234-56-78',
-    email: 'astana@hihotel.kz',
+    email: 'astana@maza.kz',
     whatsapp: '+77172345678',
     coordinates: {
       lat: 51.1087416,

@@ -71,7 +71,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
             className="mb-10 text-center sm:mb-16"
           >
             <span className="text-sm uppercase tracking-[0.2em] text-accent font-medium">
-              Hi Hotel {t(`cities.${city}`)}
+              MAZA {t(`cities.${city}`)}
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-foreground mt-4 mb-4 text-balance">
               {t('rooms.title')}

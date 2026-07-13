@@ -7,8 +7,8 @@ import { ContactSection } from '@/components/contact-section';
 import { Footer } from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: 'Hi Hotel Астана — номера и бронирование',
-  description: 'Hi Hotel в Астане: номера, удобства, контакты и онлайн-бронирование.',
+  title: 'MAZA Астана — номера и бронирование',
+  description: 'MAZA в Астане: номера, удобства, контакты и онлайн-бронирование.',
 };
 
 export default function AstanaPage() {

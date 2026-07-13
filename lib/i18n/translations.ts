@@ -28,7 +28,7 @@ export const translations = {
       about: {
         title: 'О нашем отеле',
         subtitle: 'Комфорт и гостеприимство',
-        description: 'Hi Hotel — это сеть уютных мини-отелей, где каждая деталь продумана для вашего комфорта. Мы создаём атмосферу тепла и заботы, чтобы вы чувствовали себя как дома вдали от дома.',
+        description: 'MAZA — это сеть уютных мини-отелей, где каждая деталь продумана для вашего комфорта. Мы создаём атмосферу тепла и заботы, чтобы вы чувствовали себя как дома вдали от дома.',
         feature1: 'Центральное расположение',
         feature1Desc: 'В шаговой доступности от главных достопримечательностей',
         feature2: 'Современный дизайн',
@@ -134,7 +134,7 @@ export const translations = {
       about: {
         title: 'Қонақ үй туралы',
         subtitle: 'Жайлылық пен қонақжайлылық',
-        description: 'Hi Hotel — бұл сіздің жайлылығыңыз үшін әр бөлшегі ойластырылған шағын қонақ үйлер желісі.',
+        description: 'MAZA — бұл сіздің жайлылығыңыз үшін әр бөлшегі ойластырылған шағын қонақ үйлер желісі.',
         feature1: 'Орталық орналасу',
         feature1Desc: 'Басты көрнекі жерлерге жақын',
         feature2: 'Заманауи дизайн',
@@ -233,7 +233,7 @@ export const translations = {
       about: {
         title: 'About Our Hotel',
         subtitle: 'Comfort and Hospitality',
-        description: 'Hi Hotel is a chain of cozy boutique hotels where every detail is designed for your comfort. We create an atmosphere of warmth and care so you feel at home away from home.',
+        description: 'MAZA is a chain of cozy boutique hotels where every detail is designed for your comfort. We create an atmosphere of warmth and care so you feel at home away from home.',
         feature1: 'Central Location',
         feature1Desc: 'Walking distance to main attractions',
         feature2: 'Modern Design',

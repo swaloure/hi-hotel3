@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { LegalPage } from '@/components/legal-page';
 
 export const metadata: Metadata = {
-  title: 'Политика конфиденциальности — Hi Hotel',
+  title: 'Политика конфиденциальности — MAZA',
 };
 
 export default function PrivacyPage() {

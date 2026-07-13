@@ -1,9 +1,9 @@
 1:"$Sreact.fragment"
-2:I[47257,["/hi-hotel3/_next/static/chunks/2efdden4bn-yh.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js"],"ClientPageRoot"]
-3:I[38175,["/hi-hotel3/_next/static/chunks/2efdden4bn-yh.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js","/hi-hotel3/_next/static/chunks/1g3fy7xsvwi56.js","/hi-hotel3/_next/static/chunks/3d9vlpdin7ihe.js"],"default"]
-6:I[97367,["/hi-hotel3/_next/static/chunks/2efdden4bn-yh.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js"],"OutletBoundary"]
+2:I[47257,["/hi-hotel3/_next/static/chunks/153usphohqmu7.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js"],"ClientPageRoot"]
+3:I[38175,["/hi-hotel3/_next/static/chunks/153usphohqmu7.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js","/hi-hotel3/_next/static/chunks/1g3fy7xsvwi56.js","/hi-hotel3/_next/static/chunks/42eqdxuttvw33.js"],"default"]
+6:I[97367,["/hi-hotel3/_next/static/chunks/153usphohqmu7.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js"],"OutletBoundary"]
 7:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/hi-hotel3/_next/static/chunks/1g3fy7xsvwi56.js","async":true}],["$","script","script-1",{"src":"/hi-hotel3/_next/static/chunks/3d9vlpdin7ihe.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"XZnn_LVVNreRLWHMPl9u4"}
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/hi-hotel3/_next/static/chunks/1g3fy7xsvwi56.js","async":true}],["$","script","script-1",{"src":"/hi-hotel3/_next/static/chunks/42eqdxuttvw33.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"BRTAQg1rWt-j-Hi_1OWwc"}
 4:{}
 5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
 8:null
