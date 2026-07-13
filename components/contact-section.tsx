@@ -8,7 +8,9 @@ import {
   Phone, 
   Mail, 
   Clock,
-  MessageCircle
+  MessageCircle,
+  ExternalLink,
+  Navigation
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getHotelByCity } from '@/lib/data/hotels';
@@ -61,7 +63,7 @@ export function ContactSection({ city }: ContactSectionProps) {
     },
   ];
 
-  const mapProviders: Record<MapProvider, { label: string; src: string; href: string }> = {
+  const mapProviders: Record<MapProvider, { label: string; src?: string; href: string }> = {
     yandex: {
       label: 'Яндекс',
       src: `https://yandex.com/map-widget/v1/?ll=${lng}%2C${lat}&z=16&pt=${lng},${lat},pm2rdm&lang=ru_RU`,
@@ -69,7 +71,6 @@ export function ContactSection({ city }: ContactSectionProps) {
     },
     dgis: {
       label: '2ГИС',
-      src: `https://widgets.2gis.com/widget?type=map&lon=${lng}&lat=${lat}&zoom=16`,
       href: `https://2gis.kz/search/${lat},${lng}`,
     },
     google: {
@@ -80,9 +81,9 @@ export function ContactSection({ city }: ContactSectionProps) {
   };
 
   const mapUi = {
-    ru: { label: 'Карта', choose: 'Выберите карту' },
-    kz: { label: 'Карта', choose: 'Картаны таңдаңыз' },
-    en: { label: 'Map', choose: 'Choose a map' },
+    ru: { label: 'Карта', choose: 'Выберите карту', externalTitle: 'Открыть маршрут в 2ГИС', externalDescription: 'Точка откроется в новой вкладке 2ГИС.', open: 'Открыть 2ГИС' },
+    kz: { label: 'Карта', choose: 'Картаны таңдаңыз', externalTitle: 'Бағытты 2ГИС арқылы ашу', externalDescription: 'Таңдалған орын жаңа бетте ашылады.', open: '2ГИС ашу' },
+    en: { label: 'Map', choose: 'Choose a map', externalTitle: 'Open directions in 2GIS', externalDescription: 'The selected location will open in a new tab.', open: 'Open 2GIS' },
   };
 
   return (
@@ -226,14 +227,33 @@ export function ContactSection({ city }: ContactSectionProps) {
                 </div>
               </div>
               <div className="relative flex-1">
-                <iframe
-                  key={`${city}-${selectedMap}`}
-                  src={mapProviders[selectedMap].src}
-                  title={`${mapProviders[selectedMap].label} ${hotel.name}`}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="absolute inset-0 h-full w-full border-0"
-                />
+                {selectedMap === 'dgis' ? (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-primary px-6 text-center text-primary-foreground">
+                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10">
+                      <Navigation className="h-6 w-6 text-accent" />
+                    </span>
+                    <h3 className="mt-4 text-xl font-light">{mapUi[lang].externalTitle}</h3>
+                    <p className="mt-2 text-sm text-primary-foreground/60">{mapUi[lang].externalDescription}</p>
+                    <a
+                      href={mapProviders.dgis.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-5 inline-flex min-h-10 items-center rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground transition hover:bg-accent/90"
+                    >
+                      {mapUi[lang].open}
+                      <ExternalLink className="ml-2 h-4 w-4" />
+                    </a>
+                  </div>
+                ) : (
+                  <iframe
+                    key={`${city}-${selectedMap}`}
+                    src={mapProviders[selectedMap].src}
+                    title={`${mapProviders[selectedMap].label} ${hotel.name}`}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="absolute inset-0 h-full w-full border-0"
+                  />
+                )}
               </div>
             </div>
           </motion.div>

@@ -47,6 +47,8 @@ const copy = {
     map: 'Карта и маршрут',
     mapHint: 'Переключите сервис или откройте маршрут в приложении.',
     openMap: 'Открыть карту',
+    externalMapTitle: 'Открыть маршрут в 2ГИС',
+    externalMapDescription: '2ГИС откроется в новой вкладке с выбранной точкой на карте.',
     almaty: 'Алматы',
     astana: 'Астана',
   },
@@ -67,6 +69,8 @@ const copy = {
     map: 'Карта және маршрут',
     mapHint: 'Карта сервисін таңдаңыз немесе маршрутты қолданбада ашыңыз.',
     openMap: 'Картаны ашу',
+    externalMapTitle: 'Бағытты 2ГИС арқылы ашу',
+    externalMapDescription: 'Таңдалған орын 2ГИС картасында жаңа бетте ашылады.',
     almaty: 'Алматы',
     astana: 'Астана',
   },
@@ -87,6 +91,8 @@ const copy = {
     map: 'Map and directions',
     mapHint: 'Switch map providers or open directions in the app.',
     openMap: 'Open map',
+    externalMapTitle: 'Open directions in 2GIS',
+    externalMapDescription: '2GIS will open the selected location in a new browser tab.',
     almaty: 'Almaty',
     astana: 'Astana',
   },
@@ -105,7 +111,7 @@ export function HomeContactSection({ lang, selectedCity, onSelectCity }: HomeCon
   if (!hotel) return null;
 
   const { lat, lng } = hotel.coordinates;
-  const mapProviders: Record<MapProvider, { label: string; src: string; href: string }> = {
+  const mapProviders: Record<MapProvider, { label: string; src?: string; href: string }> = {
     yandex: {
       label: 'Яндекс',
       src: `https://yandex.com/map-widget/v1/?ll=${lng}%2C${lat}&z=16&pt=${lng},${lat},pm2rdm&lang=ru_RU`,
@@ -113,7 +119,6 @@ export function HomeContactSection({ lang, selectedCity, onSelectCity }: HomeCon
     },
     dgis: {
       label: '2ГИС',
-      src: `https://widgets.2gis.com/widget?type=map&lon=${lng}&lat=${lat}&zoom=16`,
       href: `https://2gis.kz/search/${lat},${lng}`,
     },
     google: {
@@ -344,14 +349,42 @@ export function HomeContactSection({ lang, selectedCity, onSelectCity }: HomeCon
                 </div>
               </div>
               <div className="relative flex-1 bg-secondary">
-                <iframe
-                  key={`${selectedCity}-${selectedMap}`}
-                  src={mapProviders[selectedMap].src}
-                  title={`${mapProviders[selectedMap].label} — Hi Hotel ${text[selectedCity]}`}
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="absolute inset-0 h-full w-full border-0"
-                />
+                {selectedMap === 'dgis' ? (
+                  <div className="absolute inset-0 overflow-hidden bg-primary text-primary-foreground">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center opacity-25"
+                      style={{ backgroundImage: `url(${withBasePath(cityImages[selectedCity])})` }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/80 to-primary/60" />
+                    <div className="relative flex h-full flex-col items-center justify-center px-6 text-center">
+                      <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/15 bg-white/10 backdrop-blur-sm">
+                        <Navigation className="h-7 w-7 text-accent" />
+                      </span>
+                      <h4 className="mt-5 text-2xl font-light sm:text-3xl">{text.externalMapTitle}</h4>
+                      <p className="mt-3 max-w-md text-sm leading-relaxed text-primary-foreground/65 sm:text-base">
+                        {text.externalMapDescription}
+                      </p>
+                      <a
+                        href={mapProviders.dgis.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground transition hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-lg"
+                      >
+                        {text.openMap}
+                        <ExternalLink className="ml-2 h-4 w-4" />
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <iframe
+                    key={`${selectedCity}-${selectedMap}`}
+                    src={mapProviders[selectedMap].src}
+                    title={`${mapProviders[selectedMap].label} — Hi Hotel ${text[selectedCity]}`}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="absolute inset-0 h-full w-full border-0"
+                  />
+                )}
               </div>
             </div>
           </div>

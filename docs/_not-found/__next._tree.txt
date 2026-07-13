@@ -1,2 +1,2 @@
-:HL["/hi-hotel3/_next/static/chunks/38d-i_g_vgtw9.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"PFbBLT1PP64pXf_maA65A"}
+:HL["/hi-hotel3/_next/static/chunks/3g6uf-7c46ylf.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"XZnn_LVVNreRLWHMPl9u4"}
