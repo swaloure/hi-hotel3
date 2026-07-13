@@ -92,6 +92,11 @@ function loadBnovoScript() {
     return bnovoScriptPromise;
   }
 
+  const staleScript = document.querySelector<HTMLScriptElement>(`script[src="${BNOVO_SCRIPT_SRC}"]`);
+  if (staleScript?.dataset.loaded === 'true' && !window.Bnovo_Widget) {
+    staleScript.remove();
+  }
+
   bnovoScriptPromise = new Promise<void>((resolve, reject) => {
     const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${BNOVO_SCRIPT_SRC}"]`);
 
@@ -106,9 +111,15 @@ function loadBnovoScript() {
     const script = document.createElement('script');
     script.src = BNOVO_SCRIPT_SRC;
     script.async = true;
-    script.onload = () => resolve();
+    script.onload = () => {
+      script.dataset.loaded = 'true';
+      resolve();
+    };
     script.onerror = () => reject(new Error('Bnovo booking script failed to load'));
     document.body.appendChild(script);
+  }).catch((error) => {
+    bnovoScriptPromise = null;
+    throw error;
   });
 
   return bnovoScriptPromise;
@@ -164,18 +175,15 @@ function getBnovoConfig(city: BookingWidgetProps['city'], lang: string): BnovoWi
   };
 }
 
-function bnovoCreditMarkup(widgetId: string) {
-  return `
-    <a
-      href="https://bnovo.ru/"
-      id="${widgetId}_link"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="sr-only"
-    >
-      Bnovo
-    </a>
-  `;
+function resetBnovoContainer(container: HTMLElement, widgetId: string) {
+  const credit = document.createElement('a');
+  credit.href = 'https://bnovo.ru/';
+  credit.id = `${widgetId}_link`;
+  credit.target = '_blank';
+  credit.rel = 'noopener noreferrer';
+  credit.className = 'sr-only';
+  credit.textContent = 'Bnovo';
+  container.replaceChildren(credit);
 }
 
 export function BookingWidget({ city, variant = 'standalone', className }: BookingWidgetProps) {
@@ -183,7 +191,13 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
   const initializedRef = useRef(false);
   const isHero = variant === 'hero';
   const widgetId = useMemo(() => `_bn_widget_${city}_${variant}`, [city, variant]);
-  const widgetLang = i18n.language?.toLowerCase().startsWith('en') ? 'en' : 'ru';
+  const normalizedLanguage = i18n.language?.toLowerCase() ?? 'ru';
+  const widgetLang = normalizedLanguage.startsWith('en') ? 'en' : 'ru';
+  const unavailableText = normalizedLanguage.startsWith('en')
+    ? 'The booking module is temporarily unavailable.'
+    : normalizedLanguage.startsWith('kz') || normalizedLanguage.startsWith('kk')
+      ? 'Брондау модулі уақытша қолжетімсіз.'
+      : 'Модуль бронирования временно недоступен.';
 
   useEffect(() => {
     let isCancelled = false;
@@ -194,7 +208,7 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
     if (!container) return;
 
     const initializeBnovo = () => {
-      container.innerHTML = bnovoCreditMarkup(widgetId);
+      resetBnovoContainer(container, widgetId);
 
       loadBnovoScript()
         .then(() => {
@@ -209,7 +223,10 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
         })
         .catch(() => {
           if (!isCancelled) {
-            container.innerHTML = '<p class="text-sm text-muted-foreground">Модуль бронирования временно недоступен.</p>';
+            const message = document.createElement('p');
+            message.className = 'text-sm text-muted-foreground';
+            message.textContent = unavailableText;
+            container.replaceChildren(message);
           }
         });
     };
@@ -237,10 +254,10 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
       isCancelled = true;
       observer?.disconnect();
       if (timeoutId) clearTimeout(timeoutId);
-      container.innerHTML = '';
+      container.replaceChildren();
       initializedRef.current = false;
     };
-  }, [city, isHero, widgetId, widgetLang]);
+  }, [city, isHero, unavailableText, widgetId, widgetLang]);
 
   return (
     <div

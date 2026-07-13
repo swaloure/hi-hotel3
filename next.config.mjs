@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const isProduction = process.env.NODE_ENV === 'production'
-const repository =
-  process.env.GITHUB_REPOSITORY?.split('/')[1] ??
-  process.env.PAGES_REPOSITORY ??
-  'hi-hotel3'
+const repository = process.env.PAGES_REPOSITORY ?? process.env.GITHUB_REPOSITORY?.split('/')[1] ?? ''
 const isUserOrOrgPagesRepo = repository.toLowerCase().endsWith('.github.io')
-const basePath = isProduction && repository && !isUserOrOrgPagesRepo ? `/${repository}` : ''
+const isGitHubPagesBuild = process.env.GITHUB_ACTIONS === 'true' || Boolean(process.env.PAGES_REPOSITORY)
+const basePath = isProduction && isGitHubPagesBuild && repository && !isUserOrOrgPagesRepo
+  ? `/${repository}`
+  : ''
 
 const nextConfig = {
   output: 'export',
@@ -15,11 +15,17 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },
-  typescript: {
-    ignoreBuildErrors: true,
+  turbopack: {
+    root: process.cwd(),
   },
   images: {
     unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
 }
 

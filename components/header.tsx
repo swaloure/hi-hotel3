@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { 
   Menu, 
@@ -36,9 +35,10 @@ interface HeaderProps {
 
 export function Header({ city }: HeaderProps) {
   const { t, i18n } = useTranslation();
-  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null);
   const isHome = city === 'home';
   const hotel = isHome ? undefined : getHotelByCity(city);
   const normalized = i18n.language.toLowerCase();
@@ -74,6 +74,44 @@ export function Header({ city }: HeaderProps) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const menuTrigger = mobileMenuTriggerRef.current;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsMobileMenuOpen(false);
+
+      if (event.key === 'Tab' && mobileMenuRef.current) {
+        const focusable = Array.from(
+          mobileMenuRef.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+        );
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
+    window.requestAnimationFrame(() => {
+      mobileMenuRef.current?.querySelector<HTMLElement>('button')?.focus();
+    });
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+      menuTrigger?.focus();
+    };
+  }, [isMobileMenuOpen]);
 
   const navItems = isHome
     ? [
@@ -192,7 +230,7 @@ export function Header({ city }: HeaderProps) {
                     }`}
                   >
                     <Globe className="w-4 h-4" />
-                    {languages.find(l => l.code === i18n.language)?.label || 'RU'}
+                    {languages.find((language) => language.code === lang)?.label || 'RU'}
                     <ChevronDown className="w-3 h-3" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -236,11 +274,14 @@ export function Header({ city }: HeaderProps) {
 
             {/* Mobile Menu Button */}
             <button
+              ref={mobileMenuTriggerRef}
               onClick={() => setIsMobileMenuOpen(true)}
               className={`lg:hidden flex h-11 w-11 items-center justify-center rounded-full transition-colors ${
                 isScrolled ? 'text-foreground' : 'text-white'
               }`}
               aria-label="Open menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -260,6 +301,11 @@ export function Header({ city }: HeaderProps) {
               onClick={() => setIsMobileMenuOpen(false)}
             />
             <motion.div
+              ref={mobileMenuRef}
+              id="mobile-navigation"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Navigation"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
@@ -336,6 +382,7 @@ export function Header({ city }: HeaderProps) {
                     <div className="flex gap-4">
                       {languages.map((lang) => (
                         <button
+                          type="button"
                           key={lang.code}
                           onClick={() => i18n.changeLanguage(lang.code)}
                           className={`text-sm font-medium transition-colors ${

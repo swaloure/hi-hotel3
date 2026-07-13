@@ -27,7 +27,6 @@ export interface Hotel {
   id: string;
   city: 'almaty' | 'astana';
   name: string;
-  bnovoId: string;
   address: {
     ru: string;
     kz: string;
@@ -41,7 +40,6 @@ export interface Hotel {
     lng: number;
   };
   heroImage: string;
-  galleryImages: string[];
   rooms: Room[];
 }
 
@@ -50,7 +48,6 @@ export const hotels: Hotel[] = [
     id: 'almaty',
     city: 'almaty',
     name: 'Hi Hotel Almaty',
-    bnovoId: 'BNOVO_ALMATY_ID',
     address: {
       ru: 'проспект Достык 162к6, 050051',
       kz: 'Достық даңғылы 162к6, 050051',
@@ -64,11 +61,6 @@ export const hotels: Hotel[] = [
       lng: 76.959896,
     },
     heroImage: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80',
-    galleryImages: [
-      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80',
-      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&q=80',
-      'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1200&q=80',
-    ],
     rooms: [
       {
         id: 'almaty-standard-1',
@@ -188,7 +180,6 @@ export const hotels: Hotel[] = [
     id: 'astana',
     city: 'astana',
     name: 'Hi Hotel Astana',
-    bnovoId: 'BNOVO_ASTANA_ID',
     address: {
       ru: 'Мангилик Ел 29/1, Z05M7E4',
       kz: 'Мәңгілік Ел 29/1, Z05M7E4',
@@ -202,11 +193,6 @@ export const hotels: Hotel[] = [
       lng: 71.4289125,
     },
     heroImage: '/cities/astana-embankment.jpg',
-    galleryImages: [
-      'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200&q=80',
-      'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1200&q=80',
-      'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=1200&q=80',
-    ],
     rooms: [
       {
         id: 'astana-standard-1',
@@ -301,7 +287,7 @@ export const hotels: Hotel[] = [
           en: 'Suite',
         },
         description: {
-          ru: 'Роскошный двухкомнатный люкс с панорамным видом на Нур-Султан.',
+          ru: 'Роскошный двухкомнатный люкс с панорамным видом на Астану.',
           kz: 'Нұр-Сұлтанға панорамалық көрінісі бар сәнді екі бөлмелі люкс.',
           en: 'Luxurious two-room suite with panoramic views of the capital.',
         },

@@ -144,22 +144,22 @@ export function Footer({ city }: FooterProps) {
             </h4>
             <ul className="space-y-3">
               <li>
-                <button
-                  type="button"
-                  className="flex cursor-default items-center gap-2 text-primary-foreground/70 transition-colors text-sm"
+                <Link
+                  href="/privacy"
+                  className="flex items-center gap-2 text-primary-foreground/70 transition-colors text-sm hover:text-primary-foreground"
                 >
                   <FileText className="w-4 h-4" />
                   {t('footer.privacy')}
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  className="flex cursor-default items-center gap-2 text-primary-foreground/70 transition-colors text-sm"
+                <Link
+                  href="/offer"
+                  className="flex items-center gap-2 text-primary-foreground/70 transition-colors text-sm hover:text-primary-foreground"
                 >
                   <FileText className="w-4 h-4" />
                   {t('footer.offer')}
-                </button>
+                </Link>
               </li>
             </ul>
           </div>

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Award, Clock } from 'lucide-react';
+import Image from 'next/image';
 
 interface AboutSectionProps {
   city: 'almaty' | 'astana';
@@ -91,10 +92,12 @@ export function AboutSection({ city }: AboutSectionProps) {
             className="relative"
           >
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl">
-              <img
+              <Image
                 src={images[0]}
                 alt="Hotel interior"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
               />
             </div>
             <motion.div
@@ -104,10 +107,12 @@ export function AboutSection({ city }: AboutSectionProps) {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="absolute -bottom-8 -right-8 w-2/3 aspect-[4/3] rounded-2xl overflow-hidden shadow-xl border-8 border-background hidden md:block"
             >
-              <img
+              <Image
                 src={images[1]}
                 alt="Hotel room"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 1024px) 66vw, 33vw"
+                className="object-cover"
               />
             </motion.div>
           </motion.div>

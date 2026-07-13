@@ -317,13 +317,15 @@ export function CitySelector() {
               >
                 {pick(homeCopy.aboutHotelCta, lang)}
               </Link>
-              <button
-                type="button"
-                className="inline-flex min-h-11 cursor-default items-center justify-center rounded-full border border-white/55 px-7 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+              <a
+                href="https://wa.me/77009845374"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/55 px-7 py-3 text-sm font-medium text-white transition hover:bg-white/10"
               >
                 <MessageCircle className="w-4 h-4 mr-2 text-white" />
                 {pick(homeCopy.contactCta, lang)}
-              </button>
+              </a>
             </motion.div>
           </div>
         </div>

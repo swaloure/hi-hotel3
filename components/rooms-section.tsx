@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Wifi, 
   Wind, 
@@ -50,7 +51,12 @@ export function RoomsSection({ city }: RoomsSectionProps) {
 
   if (!hotel) return null;
 
-  const lang = i18n.language as 'ru' | 'kz' | 'en';
+  const normalizedLanguage = i18n.language.toLowerCase();
+  const lang: 'ru' | 'kz' | 'en' = normalizedLanguage.startsWith('en')
+    ? 'en'
+    : normalizedLanguage.startsWith('kz') || normalizedLanguage.startsWith('kk')
+      ? 'kz'
+      : 'ru';
 
   return (
     <>
@@ -140,21 +146,14 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
       {/* Image Carousel */}
       <div className="relative aspect-[16/10] overflow-hidden">
         <div className="relative w-full h-full">
-          {room.images.map((img, idx) => (
-            <div
-              key={idx}
-              className={cn(
-                'absolute inset-0 transition-opacity duration-500',
-                idx === currentImage ? 'opacity-100' : 'opacity-0'
-              )}
-            >
-              <img
-                src={img}
-                alt={room.name[lang]}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-              />
-            </div>
-          ))}
+          <Image
+            key={room.images[currentImage]}
+            src={room.images[currentImage]}
+            alt={`${room.name[lang]} — ${currentImage + 1}`}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
         </div>
 
         {/* Image Navigation */}
@@ -162,7 +161,10 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
           {room.images.map((_, idx) => (
             <button
               key={idx}
+              type="button"
               onClick={() => setCurrentImage(idx)}
+              aria-label={`${t('rooms.details')} ${idx + 1}`}
+              aria-current={idx === currentImage ? 'true' : undefined}
               className={cn(
                 'w-2 h-2 rounded-full transition-all',
                 idx === currentImage 
@@ -175,7 +177,9 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
 
         {/* Expand Button */}
         <button
+          type="button"
           onClick={onViewGallery}
+          aria-label={`${t('rooms.details')}: ${room.name[lang]}`}
           className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/50 transition-colors"
         >
           <Expand className="w-5 h-5" />
@@ -283,9 +287,46 @@ function GalleryModal({
   onSelectIndex 
 }: GalleryModalProps) {
   const { t } = useTranslation();
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+      if (event.key === 'ArrowLeft') onPrev();
+      if (event.key === 'ArrowRight') onNext();
+
+      if (event.key === 'Tab' && dialogRef.current) {
+        const focusable = Array.from(
+          dialogRef.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
+        );
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+    };
+  }, [onClose, onNext, onPrev]);
 
   return (
     <motion.div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${t('rooms.details')}: ${room.name[lang]}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -293,10 +334,13 @@ function GalleryModal({
       className="fixed inset-0 z-50 bg-black/45 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
     >
       <div
+        ref={dialogRef}
         onClick={(e) => e.stopPropagation()}
         className="relative mx-auto flex h-[88vh] w-[94vw] max-h-[760px] max-w-[1220px] flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-2xl md:h-[72vh] md:flex-row"
       >
         <button
+          type="button"
+          autoFocus
           onClick={onClose}
           aria-label={t('common.close')}
           className="absolute right-4 top-4 z-40 p-1.5 text-black transition-colors hover:text-black/70"
@@ -312,15 +356,13 @@ function GalleryModal({
 
           <div className="relative row-start-1 h-full min-h-0 w-full overflow-hidden rounded-xl">
             <AnimatePresence mode="wait">
-              <motion.img
+              <Image
                 key={currentIndex}
                 src={room.images[currentIndex]}
                 alt={room.name[lang]}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="h-full w-full object-cover"
+                fill
+                sizes="(max-width: 768px) 94vw, 52vw"
+                className="object-cover"
               />
             </AnimatePresence>
 
@@ -328,6 +370,7 @@ function GalleryModal({
             <button
               type="button"
               onClick={onPrev}
+              aria-label={t('common.prev')}
               className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition-colors hover:bg-black/75 md:left-4 md:h-12 md:w-12"
             >
               <ChevronLeft className="h-6 w-6" />
@@ -335,6 +378,7 @@ function GalleryModal({
             <button
               type="button"
               onClick={onNext}
+              aria-label={t('common.next')}
               className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/55 text-white transition-colors hover:bg-black/75 md:right-4 md:h-12 md:w-12"
             >
               <ChevronRight className="h-6 w-6" />
@@ -347,18 +391,23 @@ function GalleryModal({
               {room.images.map((img, idx) => (
                 <button
                   key={idx}
+                  type="button"
                   onClick={() => onSelectIndex(idx)}
+                  aria-label={`${room.name[lang]} — ${idx + 1}`}
+                  aria-current={idx === currentIndex ? 'true' : undefined}
                   className={cn(
-                    'h-14 w-20 shrink-0 overflow-hidden rounded-lg transition-all',
+                    'relative h-14 w-20 shrink-0 overflow-hidden rounded-lg transition-all',
                     idx === currentIndex
                       ? 'opacity-100 ring-2 ring-accent'
                       : 'opacity-70 hover:opacity-95'
                   )}
                 >
-                  <img
+                  <Image
                     src={img}
                     alt={`${room.name[lang]} ${idx + 1}`}
-                    className="h-full w-full object-cover"
+                    fill
+                    sizes="80px"
+                    className="object-cover"
                   />
                 </button>
               ))}

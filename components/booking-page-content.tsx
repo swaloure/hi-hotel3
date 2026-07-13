@@ -18,8 +18,10 @@ const copy: Record<Lang, {
   chooseHotel: string;
   bookingAt: string;
   almaty: string;
+  almatyBooking: string;
   almatyAddress: string;
   astana: string;
+  astanaBooking: string;
   astanaAddress: string;
 }> = {
   ru: {
@@ -29,8 +31,10 @@ const copy: Record<Lang, {
     chooseHotel: 'Другой город',
     bookingAt: 'Бронирование в',
     almaty: 'Алматы',
+    almatyBooking: 'Алматы',
     almatyAddress: 'проспект Достык 162к6',
     astana: 'Астана',
+    astanaBooking: 'Астане',
     astanaAddress: 'проспект Мәңгілік Ел 29/1',
   },
   kz: {
@@ -40,8 +44,10 @@ const copy: Record<Lang, {
     chooseHotel: 'Басқа қала',
     bookingAt: 'Брондау орны',
     almaty: 'Алматы',
+    almatyBooking: 'Алматы',
     almatyAddress: 'Достық даңғылы 162к6',
     astana: 'Астана',
+    astanaBooking: 'Астана',
     astanaAddress: 'Мәңгілік Ел 29/1',
   },
   en: {
@@ -51,8 +57,10 @@ const copy: Record<Lang, {
     chooseHotel: 'Another city',
     bookingAt: 'Booking at',
     almaty: 'Almaty',
+    almatyBooking: 'Almaty',
     almatyAddress: '162k6 Dostyk Avenue',
     astana: 'Astana',
+    astanaBooking: 'Astana',
     astanaAddress: '29/1 Mangilik El Avenue',
   },
 };
@@ -68,10 +76,10 @@ export function BookingPageContent({ city }: { city: City }) {
   const { i18n } = useTranslation();
   const text = copy[resolveLang(i18n.language)];
   const cities = [
-    { id: 'almaty' as const, name: text.almaty, address: text.almatyAddress },
-    { id: 'astana' as const, name: text.astana, address: text.astanaAddress },
+    { id: 'almaty' as const, name: text.almaty, bookingName: text.almatyBooking, address: text.almatyAddress },
+    { id: 'astana' as const, name: text.astana, bookingName: text.astanaBooking, address: text.astanaAddress },
   ];
-  const selectedHotel = cities.find((hotel) => hotel.id === city)!;
+  const selectedHotel = city === 'almaty' ? cities[0] : cities[1];
 
   return (
     <main className="min-h-screen bg-background">
@@ -131,7 +139,7 @@ export function BookingPageContent({ city }: { city: City }) {
             <div className="flex items-center gap-2 px-2 pb-4 pt-1 sm:px-1">
               <MapPin className="h-4 w-4 text-accent" />
               <p className="text-sm text-muted-foreground">
-                {text.bookingAt} <span className="font-medium text-foreground">{selectedHotel.name}</span>
+                {text.bookingAt} <span className="font-medium text-foreground">{selectedHotel.bookingName}</span>
               </p>
             </div>
             <BookingWidget

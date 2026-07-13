@@ -171,7 +171,7 @@ export function ContactSection({ city }: ContactSectionProps) {
                   className="w-full bg-[#25D366] hover:bg-[#25D366]/90 text-white rounded-xl"
                 >
                   <a
-                    href={`https://wa.me/${hotel.whatsapp.replace(/[^+\d]/g, '')}`}
+                    href={`https://wa.me/${hotel.whatsapp.replace(/\D/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

@@ -1,5 +1,3 @@
-'use client';
-
 import { CitySelector } from '@/components/city-selector';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
