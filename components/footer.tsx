@@ -13,7 +13,6 @@ import { withBasePath } from '@/lib/asset-path';
 interface FooterProps {
   city: 'almaty' | 'astana' | 'home';
 }
-
 const socialLinks = [
   { icon: Instagram, href: 'https://instagram.com/hihotel.kz', label: 'Instagram' },
   { icon: Facebook, href: 'https://facebook.com/hihotel.kz', label: 'Facebook' },
@@ -62,7 +61,7 @@ export function Footer({ city }: FooterProps) {
     <footer className="bg-primary text-primary-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer */}
-        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 gap-12 px-2 py-16 md:grid-cols-2 md:px-0 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block" aria-label="Hi Hotel">
@@ -123,7 +122,7 @@ export function Footer({ city }: FooterProps) {
                   href="/almaty"
                   className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
                 >
-                  Hi Hotel {t('cities.almaty')}
+                  {t('cities.almaty')}
                 </Link>
               </li>
               <li>
@@ -131,7 +130,7 @@ export function Footer({ city }: FooterProps) {
                   href="/astana"
                   className="text-primary-foreground/70 hover:text-primary-foreground transition-colors text-sm"
                 >
-                  Hi Hotel {t('cities.astana')}
+                  {t('cities.astana')}
                 </Link>
               </li>
             </ul>
@@ -166,25 +165,11 @@ export function Footer({ city }: FooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="py-6 border-t border-primary-foreground/10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="border-t border-primary-foreground/10 px-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 md:px-0">
+          <div className="flex items-center justify-center">
             <p className="text-sm text-primary-foreground/50">
               © {currentYear} Hi Hotel. {t('footer.rights')}.
             </p>
-            <div className="flex items-center gap-6">
-              <Link
-                href="/almaty"
-                className="text-xs text-primary-foreground/50 hover:text-primary-foreground/70 transition-colors"
-              >
-                {t('cities.almaty')}
-              </Link>
-              <Link
-                href="/astana"
-                className="text-xs text-primary-foreground/50 hover:text-primary-foreground/70 transition-colors"
-              >
-                {t('cities.astana')}
-              </Link>
-            </div>
           </div>
         </div>
       </div>

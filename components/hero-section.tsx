@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { SmoothLink } from '@/components/smooth-link';
 import { ChevronDown } from 'lucide-react';
 import { getHotelByCity } from '@/lib/data/hotels';
 import { withBasePath } from '@/lib/asset-path';
@@ -89,9 +90,9 @@ export function HeroSection({ city }: HeroSectionProps) {
               size="lg"
               className="w-full rounded-full bg-accent px-8 text-base text-accent-foreground hover:bg-accent/90 sm:w-auto"
             >
-              <Link href={`/booking/${city}`}>
+              <SmoothLink href={`/booking/${city}`}>
                 {t('hero.cta')}
-              </Link>
+              </SmoothLink>
             </Button>
             <Button
               asChild

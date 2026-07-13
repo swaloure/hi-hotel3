@@ -1,6 +1,6 @@
 1:"$Sreact.fragment"
-2:I[84116,["/hi-hotel3/_next/static/chunks/1cmvbeffu-372.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/2n5z36-2ebotz.js","/hi-hotel3/_next/static/chunks/1b0wkjwpbs9w5.js","/hi-hotel3/_next/static/chunks/2h43s7whcswbr.js"],"LegalPage"]
-3:I[97367,["/hi-hotel3/_next/static/chunks/1cmvbeffu-372.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/2n5z36-2ebotz.js"],"OutletBoundary"]
+2:I[84116,["/hi-hotel3/_next/static/chunks/2efdden4bn-yh.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js","/hi-hotel3/_next/static/chunks/41opgtm492cmt.js","/hi-hotel3/_next/static/chunks/1_4e3gys65-tb.js"],"LegalPage"]
+3:I[97367,["/hi-hotel3/_next/static/chunks/2efdden4bn-yh.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js"],"OutletBoundary"]
 4:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"kind":"privacy"}],[["$","script","script-0",{"src":"/hi-hotel3/_next/static/chunks/1b0wkjwpbs9w5.js","async":true}],["$","script","script-1",{"src":"/hi-hotel3/_next/static/chunks/2h43s7whcswbr.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"5lrTDMJWMMUWhhbrhBm8W"}
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"kind":"privacy"}],[["$","script","script-0",{"src":"/hi-hotel3/_next/static/chunks/41opgtm492cmt.js","async":true}],["$","script","script-1",{"src":"/hi-hotel3/_next/static/chunks/1_4e3gys65-tb.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"UEMUL-A9aV0kYepxtxTdt"}
 5:null

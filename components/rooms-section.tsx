@@ -1,9 +1,8 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import Link from 'next/link';
 import Image from 'next/image';
 import { 
   Wifi, 
@@ -23,6 +22,7 @@ import {
   X
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SmoothLink } from '@/components/smooth-link';
 import { getHotelByCity, type Room } from '@/lib/data/hotels';
 import { cn } from '@/lib/utils';
 
@@ -140,9 +140,17 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const hiddenAmenitiesCount = Math.max(room.amenities.length - 5, 0);
   const displayedAmenities = showAllAmenities ? room.amenities : room.amenities.slice(0, 5);
+  const isKazakh = lang === 'kz';
+  const formattedPrice = room.price.toLocaleString();
 
   return (
-    <div className="bg-card rounded-2xl overflow-hidden shadow-lg border border-border/50 hover:shadow-xl transition-shadow duration-500">
+    <div
+      onClick={(event) => {
+        if ((event.target as HTMLElement).closest('a, button')) return;
+        onViewGallery();
+      }}
+      className="cursor-pointer overflow-hidden rounded-2xl border border-border/50 bg-card shadow-lg transition-shadow duration-500 hover:shadow-xl"
+    >
       {/* Image Carousel */}
       <div className="relative aspect-[16/10] overflow-hidden">
         <div className="relative w-full h-full">
@@ -162,7 +170,10 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
             <button
               key={idx}
               type="button"
-              onClick={() => setCurrentImage(idx)}
+              onClick={(event) => {
+                event.stopPropagation();
+                setCurrentImage(idx);
+              }}
               aria-label={`${t('rooms.details')} ${idx + 1}`}
               aria-current={idx === currentImage ? 'true' : undefined}
               className={cn(
@@ -178,7 +189,10 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
         {/* Expand Button */}
         <button
           type="button"
-          onClick={onViewGallery}
+          onClick={(event) => {
+            event.stopPropagation();
+            onViewGallery();
+          }}
           aria-label={`${t('rooms.details')}: ${room.name[lang]}`}
           className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/50 transition-colors"
         >
@@ -187,11 +201,23 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
 
         {/* Price Badge */}
         <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm rounded-full px-4 py-2">
-          <span className="text-sm text-muted-foreground">{t('rooms.from')}</span>
-          <span className="text-lg font-medium text-foreground ml-1">
-            {room.price.toLocaleString()} ₸
-          </span>
-          <span className="text-sm text-muted-foreground">{t('rooms.perNight')}</span>
+          {isKazakh ? (
+            <>
+              <span className="text-sm text-muted-foreground">Бір түнге</span>
+              <span className="text-base font-medium text-foreground ml-1">
+                {formattedPrice}
+              </span>
+              <span className="text-sm text-muted-foreground"> теңгеден бастап</span>
+            </>
+          ) : (
+            <>
+              <span className="text-sm text-muted-foreground">{t('rooms.from')}</span>
+              <span className="text-base font-medium text-foreground ml-1">
+                {formattedPrice} ₸
+              </span>
+              <span className="text-sm text-muted-foreground">{t('rooms.perNight')}</span>
+            </>
+          )}
         </div>
       </div>
 
@@ -237,7 +263,10 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
           {!showAllAmenities && hiddenAmenitiesCount > 0 && (
             <button
               type="button"
-              onClick={() => setShowAllAmenities(true)}
+              onClick={(event) => {
+                event.stopPropagation();
+                setShowAllAmenities(true);
+              }}
               className="inline-flex items-center text-xs text-muted-foreground bg-secondary rounded-full px-3 py-1.5 hover:bg-secondary/80 transition-colors"
             >
               +{hiddenAmenitiesCount}
@@ -248,14 +277,17 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
         {/* Actions */}
         <div className="flex gap-3">
           <Button asChild className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
-            <Link href={`/booking/${city}`}>
+            <SmoothLink href={`/booking/${city}`}>
               {t('rooms.book')}
-            </Link>
+            </SmoothLink>
           </Button>
           <Button 
             variant="outline" 
             className="rounded-xl"
-            onClick={onViewGallery}
+            onClick={(event) => {
+              event.stopPropagation();
+              onViewGallery();
+            }}
           >
             {t('rooms.details')}
           </Button>
@@ -288,6 +320,8 @@ function GalleryModal({
 }: GalleryModalProps) {
   const { t } = useTranslation();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const isKazakh = lang === 'kz';
+  const formattedPrice = room.price.toLocaleString();
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -424,13 +458,27 @@ function GalleryModal({
             </h3>
 
             <div className="mt-5 rounded-xl bg-secondary/60 p-4 border border-border/50">
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="text-sm text-muted-foreground">{t('rooms.from')}</span>
-                <span className="text-xl font-medium text-foreground">
-                  {room.price.toLocaleString()} ₸
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">{t('rooms.perNight')}</p>
+              {isKazakh ? (
+                <>
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="text-sm text-muted-foreground">Бір түнге</span>
+                    <span className="text-lg font-medium text-foreground">
+                      {formattedPrice}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">теңгеден бастап</p>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="text-sm text-muted-foreground">{t('rooms.from')}</span>
+                    <span className="text-lg font-medium text-foreground">
+                      {formattedPrice} ₸
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">{t('rooms.perNight')}</p>
+                </>
+              )}
 
               <div className="mt-4 grid gap-2 text-sm text-foreground">
                 <div className="flex items-center gap-2">
@@ -477,9 +525,9 @@ function GalleryModal({
             </div>
 
             <Button asChild className="mt-6 w-full bg-accent hover:bg-accent/90 text-accent-foreground rounded-xl">
-              <Link href={`/booking/${city}`}>
+              <SmoothLink href={`/booking/${city}`}>
                 {t('rooms.book')}
-              </Link>
+              </SmoothLink>
             </Button>
           </div>
         </div>
