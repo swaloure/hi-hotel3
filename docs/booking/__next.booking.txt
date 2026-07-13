@@ -1,4 +1,4 @@
 1:"$Sreact.fragment"
 2:I[39756,["/hi-hotel3/_next/static/chunks/2efdden4bn-yh.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js"],"default"]
 3:I[37457,["/hi-hotel3/_next/static/chunks/2efdden4bn-yh.js","/hi-hotel3/_next/static/chunks/14mrh2-p_w84d.js","/hi-hotel3/_next/static/chunks/0rd73lab9t65-.js"],"default"]
-0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"UEMUL-A9aV0kYepxtxTdt"}
+0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"PFbBLT1PP64pXf_maA65A"}

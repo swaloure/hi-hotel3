@@ -1,10 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowUpRight,
+  BedDouble,
   BriefcaseBusiness,
   Compass,
   MessageCircle,
@@ -15,6 +17,7 @@ import {
   Wifi,
 } from 'lucide-react';
 import { withBasePath } from '@/lib/asset-path';
+import { HomeContactSection } from '@/components/home-contact-section';
 
 type Lang = 'ru' | 'kz' | 'en';
 type LocalizedText = Record<Lang, string>;
@@ -261,6 +264,14 @@ const homeCopy = {
 export function CitySelector() {
   const { i18n } = useTranslation();
   const lang = resolveLang(i18n.language);
+  const [selectedContactCity, setSelectedContactCity] = useState<'almaty' | 'astana'>('almaty');
+
+  const showCityContacts = (city: 'almaty' | 'astana') => {
+    setSelectedContactCity(city);
+    window.requestAnimationFrame(() => {
+      document.getElementById('contacts')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  };
 
   return (
     <>
@@ -361,24 +372,43 @@ export function CitySelector() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: index * 0.12 }}
               >
-                <Link href={`/${city.id}`} className="group block">
-                  <article className="relative h-[360px] overflow-hidden rounded-3xl border border-border/60 shadow-xl sm:h-[460px]">
+                <article className="group relative h-[420px] overflow-hidden rounded-3xl border border-border/60 shadow-xl sm:h-[500px]">
                     <div
                       className="absolute inset-0 bg-cover bg-center transition duration-700 group-hover:scale-105"
                       style={{ backgroundImage: `url(${withBasePath(city.image)})` }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-7 md:p-9">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
+                    <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-7 md:p-8">
                       <div className="flex items-center justify-between gap-4">
                         <h3 className="text-3xl font-light md:text-4xl">{pick(city.title, lang)}</h3>
-                        <span className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-white/10 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:bg-white group-hover:text-foreground">
+                        <Link
+                          href={`/${city.id}`}
+                          aria-label={`Hi Hotel ${pick(city.title, lang)}`}
+                          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/50 bg-white/10 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 hover:bg-white hover:text-foreground"
+                        >
                           <ArrowUpRight className="w-5 h-5" />
-                        </span>
+                        </Link>
                       </div>
                       <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/85">{pick(city.subtitle, lang)}</p>
+                      <div className="mt-6 grid grid-cols-2 gap-2">
+                        <Link
+                          href={`/${city.id}#rooms`}
+                          className="inline-flex min-h-11 items-center justify-center rounded-xl bg-white px-3 py-2.5 text-sm font-semibold text-foreground transition hover:bg-accent hover:text-accent-foreground"
+                        >
+                          <BedDouble className="mr-2 h-4 w-4" />
+                          {pick(homeCopy.roomsCta, lang)}
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => showCityContacts(city.id)}
+                          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/40 bg-white/10 px-3 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
+                        >
+                          <MessageCircle className="mr-2 h-4 w-4" />
+                          {pick(homeCopy.contactsCta, lang)}
+                        </button>
+                      </div>
                     </div>
                   </article>
-                </Link>
               </motion.div>
             ))}
           </div>
@@ -407,13 +437,13 @@ export function CitySelector() {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Link
-                  href="/almaty#contacts"
+                  href="#contacts"
                   className="inline-flex items-center rounded-full border border-border bg-background px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-foreground hover:bg-foreground hover:text-background"
                 >
                   {pick(homeCopy.contactsCta, lang)}
                 </Link>
                 <Link
-                  href="/almaty#rooms"
+                  href="#cities"
                   className="inline-flex items-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition hover:bg-primary/90"
                 >
                   {pick(homeCopy.roomsCta, lang)}
@@ -491,6 +521,12 @@ export function CitySelector() {
           </div>
         </div>
       </section>
+
+      <HomeContactSection
+        lang={lang}
+        selectedCity={selectedContactCity}
+        onSelectCity={setSelectedContactCity}
+      />
     </>
   );
 }

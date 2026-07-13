@@ -49,6 +49,7 @@ export function Footer({ city }: FooterProps) {
         { href: '/#cities', label: homeLabels.cities[lang] },
         { href: '/#about', label: t('nav.about') },
         { href: '/#format', label: homeLabels.format[lang] },
+        { href: '/#contacts', label: t('nav.contacts') },
       ]
     : [
         { href: `/${city}`, label: t('nav.home') },

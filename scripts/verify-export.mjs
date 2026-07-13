@@ -33,6 +33,8 @@ for (const route of routes) {
 
 const home = pages.get('')
 assert.ok(home.includes('https://wa.me/77009845374'), 'Home page must contain the primary WhatsApp link')
+assert.ok(home.includes('id="contacts"'), 'Home page must contain the contact selector')
+assert.ok(home.includes(`${basePath}/almaty/#rooms`), 'Home page must offer Almaty rooms after city selection')
 assert.ok(home.includes(`href="${basePath}/privacy/"`), 'Home page must link to the privacy page')
 assert.ok(home.includes(`href="${basePath}/offer/"`), 'Home page must link to the public offer page')
 
