@@ -63,7 +63,7 @@ export function AboutSection({ city }: AboutSectionProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.65 }}
-            className="relative pb-16 sm:pb-20"
+            className="relative"
           >
             <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] bg-muted sm:aspect-[5/4] lg:aspect-[4/5]">
               <Image
@@ -82,7 +82,7 @@ export function AboutSection({ city }: AboutSectionProps) {
               </div>
             </div>
 
-            <div className="absolute -bottom-1 right-0 w-[78%] rounded-3xl border border-border/70 bg-background/95 p-4 shadow-[0_20px_55px_rgba(28,30,34,0.12)] backdrop-blur-xl sm:w-[70%] sm:p-5 lg:-right-8">
+            <div className="mt-4 rounded-3xl border border-border/70 bg-background p-4 shadow-[0_18px_45px_rgba(28,30,34,0.08)] sm:p-5">
               <div className="flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/12 text-accent">
                   <MapPin className="h-4 w-4" />
@@ -92,9 +92,12 @@ export function AboutSection({ city }: AboutSectionProps) {
                   <p className="text-xs text-muted-foreground">MAZA {t(`cities.${city}`)}</p>
                 </div>
               </div>
-              <div className="mt-4 grid gap-2">
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
                 {visual.attractions[lang].map((attraction) => (
-                  <div key={attraction} className="flex items-center gap-2 text-xs text-foreground/72 sm:text-sm">
+                  <div
+                    key={attraction}
+                    className="flex min-h-10 items-center gap-2 rounded-xl border border-border/70 bg-secondary/45 px-3 py-2 text-xs text-foreground/72 sm:text-sm"
+                  >
                     <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                     {attraction}
                   </div>
