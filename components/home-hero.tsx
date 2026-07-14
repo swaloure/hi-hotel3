@@ -1,22 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import useEmblaCarousel from 'embla-carousel-react';
 import { motion } from 'framer-motion';
-import {
-  ArrowLeft,
-  ArrowRight,
-  ArrowUpRight,
-  Clock3,
-  MapPin,
-  MousePointer2,
-  Wifi,
-} from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { withBasePath } from '@/lib/asset-path';
-import { cn } from '@/lib/utils';
 
 type Lang = 'ru' | 'kz' | 'en';
 type LocalizedText = Record<Lang, string>;
@@ -34,33 +23,13 @@ function pick(text: LocalizedText, lang: Lang): string {
   return text[lang];
 }
 
-const slides = [
-  {
-    image: '/cities/almaty-hero.webp',
-    label: { ru: 'Два города — один ритм', kz: 'Екі қала — бір ырғақ', en: 'Two cities — one rhythm' },
-    position: 'center center',
-  },
-  {
-    image: '/cities/1.webp',
-    label: { ru: 'Астана · Алматы', kz: 'Астана · Алматы', en: 'Astana · Almaty' },
-    position: 'center center',
-  },
-  {
-    image: '/cities/2.webp',
-    label: { ru: 'Столица и горы', kz: 'Елорда мен таулар', en: 'The capital and the mountains' },
-    position: 'center center',
-  },
-  {
-    image: '/cities/3.webp',
-    label: { ru: 'Выберите свой город', kz: 'Өз қалаңызды таңдаңыз', en: 'Choose your city' },
-    position: 'center center',
-  },
-  {
-    image: '/cities/4.webp',
-    label: { ru: 'Казахстан ближе', kz: 'Қазақстан жақынырақ', en: 'Kazakhstan, closer' },
-    position: 'center center',
-  },
-] as const;
+const heroImage = '/cities/almaty-hero.webp';
+
+const heroCaption = {
+  ru: 'Два города — один ритм',
+  kz: 'Екі қала — бір ырғақ',
+  en: 'Two cities — one rhythm',
+} as const;
 
 const copy = {
   eyebrow: {
@@ -88,130 +57,33 @@ const copy = {
     kz: 'Қонақүй туралы',
     en: 'Discover the hotel',
   },
-  scrollHint: {
-    ru: 'Листайте фотографии',
-    kz: 'Фотоларды сырғытыңыз',
-    en: 'Swipe through photos',
-  },
   carouselLabel: {
     ru: 'Фотографии Алматы и Астаны',
     kz: 'Алматы мен Астана фотолары',
     en: 'Photos of Almaty and Astana',
   },
-  previous: {
-    ru: 'Предыдущее фото',
-    kz: 'Алдыңғы фото',
-    en: 'Previous photo',
-  },
-  next: {
-    ru: 'Следующее фото',
-    kz: 'Келесі фото',
-    en: 'Next photo',
-  },
-  goToSlide: {
-    ru: 'Перейти к фото',
-    kz: 'Фотоға өту',
-    en: 'Go to photo',
-  },
 } as const;
-
-const highlights = [
-  { icon: MapPin, value: '2', label: { ru: 'города', kz: 'қала', en: 'cities' } },
-  { icon: Clock3, value: '24/7', label: { ru: 'поддержка', kz: 'қолдау', en: 'support' } },
-  { icon: Wifi, value: 'Wi-Fi', label: { ru: 'в номерах', kz: 'нөмірлерде', en: 'in every room' } },
-] as const;
 
 export function HomeHero() {
   const { i18n } = useTranslation();
   const lang = resolveLang(i18n.language);
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 34 });
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
-  const heroRef = useRef<HTMLElement>(null);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    const initialSelectionFrame = window.requestAnimationFrame(onSelect);
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
-
-    return () => {
-      window.cancelAnimationFrame(initialSelectionFrame);
-      emblaApi.off('select', onSelect);
-      emblaApi.off('reInit', onSelect);
-    };
-  }, [emblaApi, onSelect]);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const updateMotionPreference = () => setReduceMotion(mediaQuery.matches);
-
-    updateMotionPreference();
-    mediaQuery.addEventListener('change', updateMotionPreference);
-
-    return () => mediaQuery.removeEventListener('change', updateMotionPreference);
-  }, []);
-
-  useEffect(() => {
-    if (!emblaApi || isPaused || reduceMotion) return;
-
-    const autoplay = window.setTimeout(() => emblaApi.scrollNext(), 6500);
-    return () => window.clearTimeout(autoplay);
-  }, [emblaApi, isPaused, reduceMotion, selectedIndex]);
-
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
-
-  const handleBlur = (event: React.FocusEvent<HTMLElement>) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) setIsPaused(false);
-  };
 
   return (
     <section
-      ref={heroRef}
       id="home"
-      className="group/hero relative isolate flex min-h-[720px] h-[100svh] max-h-[980px] overflow-hidden bg-graphite text-white"
+      className="relative isolate flex min-h-[720px] h-[100svh] max-h-[980px] overflow-hidden bg-graphite text-white"
       aria-label={pick(copy.carouselLabel, lang)}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={handleBlur}
     >
-      <div
-        ref={emblaRef}
-        className="absolute inset-0 cursor-grab overflow-hidden touch-pan-y active:cursor-grabbing"
-        aria-roledescription="carousel"
-      >
-        <div className="flex h-full">
-          {slides.map((slide, index) => (
-            <div
-              key={slide.image}
-              className="relative h-full min-w-0 shrink-0 grow-0 basis-full overflow-hidden"
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${index + 1} / ${slides.length}`}
-            >
-              <Image
-                src={withBasePath(slide.image)}
-                alt=""
-                fill
-                  loading="eager"
-                  fetchPriority={index === 0 ? 'high' : 'auto'}
-                sizes="100vw"
-                className="select-none object-cover"
-                style={{ objectPosition: slide.position }}
-                draggable={false}
-              />
-            </div>
-          ))}
-        </div>
+      <div className="absolute inset-0 overflow-hidden">
+        <Image
+          src={withBasePath(heroImage)}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="select-none object-cover object-center"
+          draggable={false}
+        />
       </div>
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/10 lg:from-black/78 lg:via-black/38 lg:to-black/5" />
@@ -270,22 +142,6 @@ export function HomeHero() {
             </Link>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.26 }}
-            className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/15 pt-6 sm:mt-10 sm:gap-x-8"
-          >
-            {highlights.map((item) => (
-              <div key={item.value} className="flex items-center gap-2.5 text-white/75">
-                <item.icon className="h-4 w-4 text-accent" strokeWidth={1.8} />
-                <span className="text-sm">
-                  <strong className="font-semibold text-white">{item.value}</strong>{' '}
-                  {pick(item.label, lang)}
-                </span>
-              </div>
-            ))}
-          </motion.div>
         </div>
       </div>
 
@@ -295,59 +151,10 @@ export function HomeHero() {
         transition={{ duration: 0.5, delay: 0.3 }}
         className="absolute inset-x-0 bottom-0 z-20"
       >
-        <div className="mx-auto flex w-full max-w-7xl items-end justify-between gap-4 px-4 pb-5 sm:px-6 sm:pb-7 lg:px-8 lg:pb-8">
-          <div className="hidden items-center gap-3 text-xs font-medium uppercase tracking-[0.16em] text-white/60 sm:flex">
-            <MousePointer2 className="h-4 w-4" />
-            {pick(copy.scrollHint, lang)}
-          </div>
-
-          <div className="ml-auto flex w-full items-center justify-between gap-3 rounded-2xl border border-white/18 bg-black/25 p-2.5 shadow-2xl backdrop-blur-xl sm:w-auto sm:rounded-full sm:pl-5">
-            <div className="min-w-0 sm:min-w-44">
-              <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/55">
-                <span className="tabular-nums text-white">{String(selectedIndex + 1).padStart(2, '0')}</span>
-                <span className="h-px w-5 bg-white/30" />
-                <span className="tabular-nums">{String(slides.length).padStart(2, '0')}</span>
-              </div>
-              <p className="mt-0.5 truncate text-sm font-medium text-white/90">
-                {pick(slides[selectedIndex].label, lang)}
-              </p>
-            </div>
-
-            <div className="hidden items-center gap-1.5 md:flex" aria-label={pick(copy.carouselLabel, lang)}>
-              {slides.map((slide, index) => (
-                <button
-                  key={slide.image}
-                  type="button"
-                  onClick={() => emblaApi?.scrollTo(index)}
-                  className={cn(
-                    'h-1.5 rounded-full transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white',
-                    selectedIndex === index ? 'w-8 bg-accent' : 'w-1.5 bg-white/35 hover:bg-white/70',
-                  )}
-                  aria-label={`${pick(copy.goToSlide, lang)} ${index + 1}`}
-                  aria-current={selectedIndex === index ? 'true' : undefined}
-                />
-              ))}
-            </div>
-
-            <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={scrollPrev}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-white transition hover:bg-white/12 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                aria-label={pick(copy.previous, lang)}
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
-                onClick={scrollNext}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-graphite transition hover:scale-105 hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                aria-label={pick(copy.next, lang)}
-              >
-                <ArrowRight className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
+        <div className="mx-auto flex w-full max-w-7xl justify-end px-4 pb-5 sm:px-6 sm:pb-7 lg:px-8 lg:pb-8">
+          <p className="rounded-full border border-white/18 bg-black/25 px-5 py-3 text-sm font-medium text-white/90 shadow-2xl backdrop-blur-xl">
+            {pick(heroCaption, lang)}
+          </p>
         </div>
       </motion.div>
 
