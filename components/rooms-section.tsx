@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import Image from 'next/image';
 import {
   ArrowLeft,
@@ -24,7 +25,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { SmoothLink } from '@/components/smooth-link';
 import { SectionHeading } from '@/components/section-heading';
-import { getHotelByCity, type Room } from '@/lib/data/hotels';
+import { getHotelByCity } from '@/lib/data/hotels';
+import { useRoomsCatalog } from '@/hooks/use-rooms-catalog';
+import type { CatalogRoom } from '@/lib/data/rooms-catalog';
 import { resolveLanguage, type SiteLanguage } from '@/lib/i18n/language';
 import { cn } from '@/lib/utils';
 
@@ -61,19 +64,20 @@ const copy = {
 export function RoomsSection({ city }: RoomsSectionProps) {
   const { t, i18n } = useTranslation();
   const hotel = getHotelByCity(city);
-  const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
+  const [selectedRoom, setSelectedRoom] = useState<CatalogRoom | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const lang = resolveLanguage(i18n.language);
+  const { rooms, isLoading } = useRoomsCatalog(city, hotel?.rooms ?? []);
 
   const closeGallery = useCallback(() => setSelectedRoom(null), []);
   const showPreviousImage = () => {
-    setGalleryIndex((index) => selectedRoom ? (index - 1 + selectedRoom.images.length) % selectedRoom.images.length : 0);
+    setGalleryIndex((index) => selectedRoom?.images.length ? (index - 1 + selectedRoom.images.length) % selectedRoom.images.length : 0);
   };
   const showNextImage = () => {
-    setGalleryIndex((index) => selectedRoom ? (index + 1) % selectedRoom.images.length : 0);
+    setGalleryIndex((index) => selectedRoom?.images.length ? (index + 1) % selectedRoom.images.length : 0);
   };
 
-  if (!hotel) return null;
+  if (!hotel || isLoading || rooms.length === 0) return null;
 
   return (
     <>
@@ -93,8 +97,8 @@ export function RoomsSection({ city }: RoomsSectionProps) {
             />
           </motion.div>
 
-          <div className="mt-12 grid gap-5 sm:mt-14 lg:grid-cols-2 lg:gap-7">
-            {hotel.rooms.map((room, index) => (
+          <div className={cn('mt-12 grid gap-5 sm:mt-14 lg:gap-7', rooms.length > 1 ? 'lg:grid-cols-2' : 'mx-auto max-w-2xl')}>
+            {rooms.map((room, index) => (
               <motion.div
                 key={room.id}
                 initial={{ opacity: 0, y: 26 }}
@@ -136,7 +140,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
 }
 
 interface RoomCardProps {
-  room: Room;
+  room: CatalogRoom;
   city: RoomsSectionProps['city'];
   lang: SiteLanguage;
   onViewGallery: () => void;
@@ -146,8 +150,9 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
   const { t } = useTranslation();
   const [currentImage, setCurrentImage] = useState(0);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
-  const displayedAmenities = showAllAmenities ? room.amenities : room.amenities.slice(0, 4);
-  const hiddenAmenities = room.amenities.length - displayedAmenities.length;
+  const roomAmenities = room.amenities[lang];
+  const displayedAmenities = showAllAmenities ? roomAmenities : roomAmenities.slice(0, 4);
+  const hiddenAmenities = roomAmenities.length - displayedAmenities.length;
   const formattedPrice = room.price.toLocaleString('ru-RU');
 
   const previousImage = () => setCurrentImage((index) => (index - 1 + room.images.length) % room.images.length);
@@ -156,37 +161,55 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
   return (
     <article className="group overflow-hidden rounded-[26px] border border-border/80 bg-card transition duration-300 hover:-translate-y-1 hover:border-accent/35 hover:shadow-[0_24px_60px_rgba(28,30,34,0.1)]">
       <div className="relative aspect-[16/10] overflow-hidden bg-muted">
-        {room.images.map((image, index) => (
-          <Image
-            key={image}
-            src={image}
-            alt={index === currentImage ? room.name[lang] : ''}
-            fill
-            unoptimized
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            className={cn(
-              'absolute inset-0 h-full w-full object-cover transition duration-700',
-              index === currentImage ? 'scale-100 opacity-100 group-hover:scale-[1.025]' : 'scale-105 opacity-0',
-            )}
-          />
-        ))}
+        {room.images.length > 0 ? (
+          room.images.map((image, index) => (
+            <Image
+              key={image}
+              src={image}
+              alt={index === currentImage ? room.name[lang] : ''}
+              fill
+              unoptimized
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className={cn(
+                'absolute inset-0 h-full w-full object-cover transition duration-700',
+                index === currentImage ? 'scale-100 opacity-100 group-hover:scale-[1.025]' : 'scale-105 opacity-0',
+              )}
+            />
+          ))
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-secondary to-muted text-muted-foreground">
+            <BedDouble className="h-10 w-10 text-accent" />
+            <span className="mt-3 text-xs font-semibold uppercase tracking-[0.22em]">MAZA</span>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/46 via-transparent to-black/10" />
 
-        <div className="absolute left-4 top-4 rounded-full border border-white/22 bg-black/28 px-3.5 py-2 text-xs font-medium text-white backdrop-blur-md">
-          {t('rooms.from')} <strong className="ml-1 text-sm">{formattedPrice} ₸</strong>
-          <span className="ml-1 text-white/65">{t('rooms.perNight')}</span>
+        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+          {room.price > 0 && (
+            <span className="rounded-full border border-white/22 bg-black/28 px-3.5 py-2 text-xs font-medium text-white backdrop-blur-md">
+              {t('rooms.from')} <strong className="ml-1 text-sm">{formattedPrice} {room.currency}</strong>
+              <span className="ml-1 text-white/65">{t('rooms.perNight')}</span>
+            </span>
+          )}
+          {room.badge[lang] && (
+            <span className="rounded-full bg-accent px-3.5 py-2 text-xs font-semibold text-accent-foreground">
+              {room.badge[lang]}
+            </span>
+          )}
         </div>
 
-        <button
-          type="button"
-          onClick={onViewGallery}
-          className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/28 text-white backdrop-blur-md transition hover:bg-white hover:text-foreground"
-          aria-label={copy.gallery[lang]}
-        >
-          <Expand className="h-4 w-4" />
-        </button>
+        {room.images.length > 0 && (
+          <button
+            type="button"
+            onClick={onViewGallery}
+            className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/28 text-white backdrop-blur-md transition hover:bg-white hover:text-foreground"
+            aria-label={copy.gallery[lang]}
+          >
+            <Expand className="h-4 w-4" />
+          </button>
+        )}
 
-        <div className="absolute inset-x-4 bottom-4 flex items-center justify-between">
+        {room.images.length > 1 && <div className="absolute inset-x-4 bottom-4 flex items-center justify-between">
           <div className="flex gap-1.5" aria-label={copy.gallery[lang]}>
             {room.images.map((image, index) => (
               <button
@@ -220,7 +243,7 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
-        </div>
+        </div>}
       </div>
 
       <div className="p-5 sm:p-6">
@@ -239,11 +262,11 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
 
         <div className="mt-5 flex min-h-16 flex-wrap content-start gap-2">
           {displayedAmenities.map((amenity) => {
-            const Icon = amenityIcons[amenity] ?? Sparkles;
+            const Icon = getAmenityIcon(amenity);
             return (
               <span key={amenity} className="inline-flex items-center gap-1.5 rounded-full bg-secondary/75 px-3 py-1.5 text-[11px] font-medium text-foreground/68">
                 <Icon className="h-3.5 w-3.5 text-accent" />
-                {t(`amenities.${amenity}`)}
+                {getAmenityLabel(amenity, t)}
               </span>
             );
           })}
@@ -273,7 +296,7 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
 }
 
 interface GalleryModalProps {
-  room: Room;
+  room: CatalogRoom;
   city: RoomsSectionProps['city'];
   lang: SiteLanguage;
   currentIndex: number;
@@ -339,27 +362,34 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
         </button>
 
         <div className="relative h-[46vh] min-h-[300px] bg-graphite lg:h-full lg:w-[62%]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={room.images[currentIndex]}
-              initial={{ opacity: 0.4 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0.3 }}
-              transition={{ duration: 0.22 }}
-              className="absolute inset-0"
-            >
-              <Image
-                src={room.images[currentIndex]}
-                alt={room.name[lang]}
-                fill
-                unoptimized
-                sizes="(min-width: 1024px) 62vw, 100vw"
-                className="object-cover"
-              />
-            </motion.div>
-          </AnimatePresence>
+          {room.images.length > 0 ? (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={room.images[currentIndex]}
+                initial={{ opacity: 0.4 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0.3 }}
+                transition={{ duration: 0.22 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={room.images[currentIndex]}
+                  alt={room.name[lang]}
+                  fill
+                  unoptimized
+                  sizes="(min-width: 1024px) 62vw, 100vw"
+                  className="object-cover"
+                />
+              </motion.div>
+            </AnimatePresence>
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-graphite to-primary text-white/60">
+              <BedDouble className="h-14 w-14 text-accent" />
+              <span className="mt-4 text-xs font-semibold uppercase tracking-[0.24em]">MAZA</span>
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10" />
-          <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
+          {room.images.length > 1 && <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
             <div className="flex gap-2">
               {room.images.map((image, index) => (
                 <button
@@ -384,7 +414,7 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
-          </div>
+          </div>}
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-6 sm:p-8 lg:p-10">
@@ -401,21 +431,21 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
 
           <h3 className="mt-7 text-sm font-semibold text-foreground">{t('rooms.amenities')}</h3>
           <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3">
-            {room.amenities.map((amenity) => {
-              const Icon = amenityIcons[amenity] ?? Sparkles;
+            {room.amenities[lang].map((amenity) => {
+              const Icon = getAmenityIcon(amenity);
               return (
                 <div key={amenity} className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
                   <Icon className="h-4 w-4 text-accent" />
-                  {t(`amenities.${amenity}`)}
+                  {getAmenityLabel(amenity, t)}
                 </div>
               );
             })}
           </div>
 
           <div className="mt-auto pt-8">
-            <p className="mb-3 text-sm text-muted-foreground">
-              {t('rooms.from')} <strong className="ml-1 text-xl text-foreground">{room.price.toLocaleString('ru-RU')} ₸</strong> {t('rooms.perNight')}
-            </p>
+            {room.price > 0 && <p className="mb-3 text-sm text-muted-foreground">
+              {t('rooms.from')} <strong className="ml-1 text-xl text-foreground">{room.price.toLocaleString('ru-RU')} {room.currency}</strong> {t('rooms.perNight')}
+            </p>}
             <Button asChild className="h-12 w-full rounded-full bg-accent text-accent-foreground hover:bg-gold-light">
               <SmoothLink href={`/booking/${city}`}>{t('rooms.book')}</SmoothLink>
             </Button>
@@ -424,4 +454,24 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
       </motion.div>
     </motion.div>
   );
+}
+
+function getAmenityLabel(amenity: string, t: TFunction) {
+  return amenityIcons[amenity] ? t(`amenities.${amenity}`) : amenity;
+}
+
+function getAmenityIcon(amenity: string) {
+  if (amenityIcons[amenity]) return amenityIcons[amenity];
+
+  const normalized = amenity.trim().toLowerCase();
+  if (/wi-?fi|вайфай|интернет/.test(normalized)) return Wifi;
+  if (/кондиционер|air conditioning|conditioner|климат/.test(normalized)) return Wind;
+  if (/телевизор|smart tv|tv/.test(normalized)) return Tv;
+  if (/мини-?бар|minibar/.test(normalized)) return Wine;
+  if (/сейф|safe/.test(normalized)) return Lock;
+  if (/фен|hair ?dryer/.test(normalized)) return Wind;
+  if (/завтрак|breakfast/.test(normalized)) return Coffee;
+  if (/парков|parking/.test(normalized)) return Car;
+  if (/room service|обслуживание/.test(normalized)) return ConciergeBell;
+  return Sparkles;
 }

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
-import { ArrowUpRight, BedDouble, MapPin } from 'lucide-react';
+import { ArrowUpRight, MapPin } from 'lucide-react';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { SectionHeading } from '@/components/section-heading';
@@ -19,10 +19,7 @@ const copy = {
     kz: 'Бірыңғай жайлылық стандарты бар екі қонақүй. Қолайлы орынды таңдап, тұру күндеріне өтіңіз.',
     en: 'Two hotels with one standard of comfort. Choose the right location and continue to your stay dates.',
   },
-  from: { ru: 'от', kz: 'бастап', en: 'from' },
-  night: { ru: 'за ночь', kz: 'бір түнге', en: 'per night' },
   choose: { ru: 'Выбрать отель', kz: 'Қонақүйді таңдау', en: 'Choose hotel' },
-  rooms: { ru: 'категории номеров', kz: 'нөмір санаты', en: 'room categories' },
 } as const;
 
 const images = {
@@ -45,7 +42,6 @@ export default function BookingPage() {
 
           <div className="mt-12 grid gap-5 md:grid-cols-2 lg:gap-7">
             {hotels.map((hotel) => {
-              const minimumPrice = Math.min(...hotel.rooms.map((room) => room.price)).toLocaleString('ru-RU');
               return (
                 <Link
                   key={hotel.city}
@@ -77,10 +73,6 @@ export default function BookingPage() {
                       <h2 className="mt-2 font-serif text-4xl font-medium tracking-[-0.035em] sm:text-5xl">
                         {hotel.address[lang].includes('Dost') || hotel.city === 'almaty' ? (lang === 'en' ? 'Almaty' : 'Алматы') : (lang === 'en' ? 'Astana' : 'Астана')}
                       </h2>
-                      <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-white/65">
-                        <span className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-accent" />{hotel.rooms.length} {copy.rooms[lang]}</span>
-                        <span>{copy.from[lang]} <strong className="text-white">{minimumPrice} ₸</strong> {copy.night[lang]}</span>
-                      </div>
                       <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white">
                         {copy.choose[lang]}
                         <ArrowUpRight className="h-4 w-4 text-accent" />
