@@ -172,7 +172,8 @@ function parseRoomRow(
     { length: 10 },
     (_, photoIndex) => get(`photo${photoIndex + 1}`, `фото${photoIndex + 1}`, `фото_${photoIndex + 1}`),
   )
-    .filter(isPublicImageUrl);
+    .map(normalizeImageUrl)
+    .filter(Boolean);
 
   return {
     id: get('id') || `${city}-${slugify(nameRu)}-${index + 1}`,
@@ -231,13 +232,26 @@ function parseNumber(value: string) {
   return Number.isFinite(number) ? number : 0;
 }
 
-function isPublicImageUrl(value: string) {
-  if (!value) return false;
+export function normalizeImageUrl(value: string) {
+  if (!value) return '';
+
   try {
     const url = new URL(value);
-    return url.protocol === 'https:' || url.protocol === 'http:';
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') return '';
+
+    const driveFileMatch = url.hostname === 'drive.google.com'
+      ? url.pathname.match(/^\/file\/d\/([^/]+)/)
+      : null;
+    const driveFileId = driveFileMatch?.[1]
+      || (url.hostname === 'drive.google.com' ? url.searchParams.get('id') : null);
+
+    if (driveFileId) {
+      return `https://lh3.googleusercontent.com/d/${encodeURIComponent(driveFileId)}=w1600`;
+    }
+
+    return url.toString();
   } catch {
-    return false;
+    return '';
   }
 }
 

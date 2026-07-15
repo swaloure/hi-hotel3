@@ -16,7 +16,7 @@ const compiled = ts.transpileModule(source, {
   .replace("'@/lib/data/csv'", `'${csvModuleUrl}'`)
   .replace("'@/lib/data/sheets-config'", `'${configModuleUrl}'`);
 const moduleUrl = `data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`;
-const { parseSheetValues } = await import(moduleUrl);
+const { normalizeImageUrl, parseSheetValues } = await import(moduleUrl);
 
 function compileModule(moduleSource) {
   const output = ts.transpileModule(moduleSource, {
@@ -66,5 +66,16 @@ assert.equal(rooms[0].name.en, 'Standard', 'English room names must be read from
 assert.equal(rooms[0].description.kz, 'Сипаттама', 'Kazakh descriptions must be read from the sheet');
 assert.deepEqual(rooms[0].amenities.en, ['Air conditioning', 'Hair dryer', 'Safe'], 'English amenities must be read from the sheet');
 assert.equal(rooms[1].name.en, 'Супериор', 'Missing translations must fall back to Russian');
+assert.equal(
+  normalizeImageUrl('https://drive.google.com/file/d/1dWT-GPTGzUDpXbiNSh6ERiD2lmWC-bD4/view?usp=drive_link'),
+  'https://lh3.googleusercontent.com/d/1dWT-GPTGzUDpXbiNSh6ERiD2lmWC-bD4=w1600',
+  'Google Drive sharing links must be converted to direct image URLs',
+);
+assert.equal(
+  normalizeImageUrl('https://example.com/room.jpg'),
+  'https://example.com/room.jpg',
+  'Regular public image URLs must remain unchanged',
+);
+assert.equal(normalizeImageUrl('not-a-url'), '', 'Invalid image URLs must be ignored');
 
 console.log('Verified Google Sheets room catalog parser.');
