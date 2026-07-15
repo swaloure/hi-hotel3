@@ -28,7 +28,8 @@ type SheetsValuesResponse = {
 
 const spreadsheetId = process.env.NEXT_PUBLIC_ROOMS_SPREADSHEET_ID?.trim() ?? '';
 const apiKey = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY?.trim() ?? '';
-const sheetRange = process.env.NEXT_PUBLIC_ROOMS_SHEET_RANGE?.trim() || 'rooms!A1:AJ';
+const almatySheetRange = process.env.NEXT_PUBLIC_ALMATY_ROOMS_SHEET_RANGE?.trim() || "'Алматы'!A1:AF";
+const astanaSheetRange = process.env.NEXT_PUBLIC_ASTANA_ROOMS_SHEET_RANGE?.trim() || "'Астана'!A1:AF";
 
 let catalogRequest: Promise<CatalogRoom[]> | null = null;
 
@@ -60,12 +61,11 @@ export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
   if (!isRoomsSheetConfigured) return [];
 
   if (!catalogRequest) {
-    catalogRequest = fetch(buildSheetsUrl(), { cache: 'no-store' })
-      .then(async (response) => {
-        if (!response.ok) throw new Error(`Google Sheets request failed: ${response.status}`);
-        return response.json() as Promise<SheetsValuesResponse>;
-      })
-      .then((payload) => parseSheetValues(payload.values ?? []))
+    catalogRequest = Promise.all([
+      fetchSheetRange(almatySheetRange, 'almaty'),
+      fetchSheetRange(astanaSheetRange, 'astana'),
+    ])
+      .then(([almatyRooms, astanaRooms]) => [...almatyRooms, ...astanaRooms])
       .catch((error) => {
         catalogRequest = null;
         throw error;
@@ -75,8 +75,15 @@ export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
   return catalogRequest;
 }
 
-function buildSheetsUrl() {
-  const range = encodeURIComponent(sheetRange);
+async function fetchSheetRange(rangeName: string, city: City) {
+  const response = await fetch(buildSheetsUrl(rangeName), { cache: 'no-store' });
+  if (!response.ok) throw new Error(`Google Sheets request failed for ${city}: ${response.status}`);
+  const payload = await response.json() as SheetsValuesResponse;
+  return parseSheetValues(payload.values ?? [], city);
+}
+
+function buildSheetsUrl(rangeName: string) {
+  const range = encodeURIComponent(rangeName);
   const params = new URLSearchParams({
     key: apiKey,
     majorDimension: 'ROWS',
@@ -86,14 +93,14 @@ function buildSheetsUrl() {
   return `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}/values/${range}?${params}`;
 }
 
-export function parseSheetValues(values: SheetsValuesResponse['values']): CatalogRoom[] {
+export function parseSheetValues(values: SheetsValuesResponse['values'], defaultCity?: City): CatalogRoom[] {
   if (!values || values.length < 2) return [];
 
   const headers = values[0].map((value) => normalizeHeader(String(value ?? '')));
   const rows = values.slice(1);
 
   return rows
-    .map((row, index) => parseRoomRow(headers, row, index))
+    .map((row, index) => parseRoomRow(headers, row, index, defaultCity))
     .filter((room): room is CatalogRoom => room !== null)
     .sort((left, right) => left.sortOrder - right.sortOrder || left.name.ru.localeCompare(right.name.ru, 'ru'));
 }
@@ -102,11 +109,12 @@ function parseRoomRow(
   headers: string[],
   row: Array<string | number | boolean>,
   index: number,
+  defaultCity?: City,
 ): CatalogRoom | null {
   const cells = new Map(headers.map((header, cellIndex) => [header, String(row[cellIndex] ?? '').trim()]));
   const get = (...keys: string[]) => keys.map((key) => cells.get(normalizeHeader(key)) ?? '').find(Boolean) ?? '';
 
-  const city = normalizeCity(get('city', 'город'));
+  const city = defaultCity ?? normalizeCity(get('city', 'город'));
   const nameRu = get('name_ru', 'name', 'название');
   const active = get('active', 'активен');
 
