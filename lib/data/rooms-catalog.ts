@@ -28,8 +28,8 @@ type SheetsValuesResponse = {
 
 const spreadsheetId = process.env.NEXT_PUBLIC_ROOMS_SPREADSHEET_ID?.trim() ?? '';
 const apiKey = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY?.trim() ?? '';
-const almatySheetRange = process.env.NEXT_PUBLIC_ALMATY_ROOMS_SHEET_RANGE?.trim() || "'Алматы'!A1:AF";
-const astanaSheetRange = process.env.NEXT_PUBLIC_ASTANA_ROOMS_SHEET_RANGE?.trim() || "'Астана'!A1:AF";
+const almatySheetRange = process.env.NEXT_PUBLIC_ALMATY_ROOMS_SHEET_RANGE?.trim() || "'Алматы'!A1:T";
+const astanaSheetRange = process.env.NEXT_PUBLIC_ASTANA_ROOMS_SHEET_RANGE?.trim() || "'Астана'!A1:T";
 
 let catalogRequest: Promise<CatalogRoom[]> | null = null;
 
@@ -115,10 +115,9 @@ function parseRoomRow(
   const get = (...keys: string[]) => keys.map((key) => cells.get(normalizeHeader(key)) ?? '').find(Boolean) ?? '';
 
   const city = defaultCity ?? normalizeCity(get('city', 'город'));
-  const nameRu = get('name_ru', 'name', 'название');
-  const active = get('active', 'активен');
+  const nameRu = get('name_ru', 'name', 'название', 'название_номера');
 
-  if (!city || !nameRu || !isActive(active)) return null;
+  if (!city || !nameRu) return null;
 
   const name = localized(
     nameRu,
@@ -126,25 +125,28 @@ function parseRoomRow(
     get('name_en', 'название_en'),
   );
   const description = localized(
-    get('description_ru', 'description', 'описание'),
+    get('description_ru', 'description', 'описание', 'описание_номера'),
     get('description_kz', 'описание_kz'),
     get('description_en', 'описание_en'),
   );
   const bedType = localized(
-    get('bed_type_ru', 'bed_type', 'кровать'),
+    get('bed_type_ru', 'bed_type', 'кровать', 'тип_кровати'),
     get('bed_type_kz', 'кровать_kz'),
     get('bed_type_en', 'кровать_en'),
   );
   const badge = localized(
-    get('badge_ru', 'badge', 'метка'),
+    get('badge_ru', 'badge', 'метка', 'ярлык'),
     get('badge_kz', 'метка_kz'),
     get('badge_en', 'метка_en'),
   );
 
-  const amenitiesRu = splitList(get('amenities_ru', 'amenities', 'удобства'));
+  const amenitiesRu = splitList(get('amenities_ru', 'amenities', 'удобства', 'удобства_через_запятую'));
   const amenitiesKz = splitList(get('amenities_kz', 'удобства_kz'));
   const amenitiesEn = splitList(get('amenities_en', 'удобства_en'));
-  const images = Array.from({ length: 10 }, (_, photoIndex) => get(`photo${photoIndex + 1}`, `фото${photoIndex + 1}`))
+  const images = Array.from(
+    { length: 10 },
+    (_, photoIndex) => get(`photo${photoIndex + 1}`, `фото${photoIndex + 1}`, `фото_${photoIndex + 1}`),
+  )
     .filter(isPublicImageUrl);
 
   return {
@@ -159,12 +161,12 @@ function parseRoomRow(
       kz: amenitiesKz.length ? amenitiesKz : amenitiesRu,
       en: amenitiesEn.length ? amenitiesEn : amenitiesRu,
     },
-    area: parseNumber(get('area_m2', 'area', 'площадь', 'квадраты')),
-    maxGuests: Math.max(1, Math.round(parseNumber(get('max_guests', 'guests', 'гости')) || 1)),
-    price: Math.max(0, parseNumber(get('price', 'цена'))),
+    area: parseNumber(get('area_m2', 'area', 'площадь', 'квадраты', 'площадь_м²')),
+    maxGuests: Math.max(1, Math.round(parseNumber(get('max_guests', 'guests', 'гости', 'количество_гостей')) || 1)),
+    price: Math.max(0, parseNumber(get('price', 'цена', 'цена_за_ночь'))),
     currency: get('currency', 'валюта') || '₸',
     images,
-    sortOrder: parseNumber(get('sort_order', 'порядок')) || index + 1,
+    sortOrder: index + 1,
   };
 }
 
@@ -185,11 +187,6 @@ function normalizeCity(value: string): City | null {
   if (['almaty', 'алматы'].includes(normalized)) return 'almaty';
   if (['astana', 'астана'].includes(normalized)) return 'astana';
   return null;
-}
-
-function isActive(value: string) {
-  if (!value) return true;
-  return !['0', 'false', 'no', 'нет', 'off', 'inactive'].includes(value.trim().toLowerCase());
 }
 
 function splitList(value: string) {
