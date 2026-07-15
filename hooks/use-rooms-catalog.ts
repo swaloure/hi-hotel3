@@ -50,7 +50,9 @@ export function useRoomsCatalog(city: City, localRooms: Room[]): CatalogState {
   }
 
   return {
-    rooms: (remoteRooms ?? []).filter((room) => room.city === city),
+    rooms: hasError
+      ? fallbackRooms
+      : (remoteRooms ?? []).filter((room) => room.city === city),
     isLoading: remoteRooms === null,
     hasError,
     source: 'sheet',

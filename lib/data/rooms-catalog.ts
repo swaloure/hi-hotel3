@@ -1,5 +1,12 @@
 import type { Room } from '@/lib/data/hotels';
 import type { SiteLanguage } from '@/lib/i18n/language';
+import { parseCsv } from '@/lib/data/csv';
+import {
+  buildPublicCsvUrl,
+  googleSheetsApiKey,
+  sheetGids,
+  spreadsheetId,
+} from '@/lib/data/sheets-config';
 
 export type City = 'almaty' | 'astana';
 
@@ -26,14 +33,12 @@ type SheetsValuesResponse = {
   values?: Array<Array<string | number | boolean>>;
 };
 
-const spreadsheetId = process.env.NEXT_PUBLIC_ROOMS_SPREADSHEET_ID?.trim() ?? '';
-const apiKey = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY?.trim() ?? '';
 const almatySheetRange = process.env.NEXT_PUBLIC_ALMATY_ROOMS_SHEET_RANGE?.trim() || "'Алматы'!A1:AC";
 const astanaSheetRange = process.env.NEXT_PUBLIC_ASTANA_ROOMS_SHEET_RANGE?.trim() || "'Астана'!A1:AC";
 
 let catalogRequest: Promise<CatalogRoom[]> | null = null;
 
-export const isRoomsSheetConfigured = Boolean(spreadsheetId && apiKey);
+export const isRoomsSheetConfigured = Boolean(spreadsheetId && sheetGids.almaty && sheetGids.astana);
 
 export function getLocalRooms(city: City, rooms: Room[]): CatalogRoom[] {
   return rooms.map((room, index) => ({
@@ -62,8 +67,8 @@ export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
 
   if (!catalogRequest) {
     catalogRequest = Promise.all([
-      fetchSheetRange(almatySheetRange, 'almaty'),
-      fetchSheetRange(astanaSheetRange, 'astana'),
+      fetchSheetRange(almatySheetRange, sheetGids.almaty, 'almaty'),
+      fetchSheetRange(astanaSheetRange, sheetGids.astana, 'astana'),
     ])
       .then(([almatyRooms, astanaRooms]) => [...almatyRooms, ...astanaRooms])
       .catch((error) => {
@@ -75,17 +80,25 @@ export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
   return catalogRequest;
 }
 
-async function fetchSheetRange(rangeName: string, city: City) {
-  const response = await fetch(buildSheetsUrl(rangeName), { cache: 'no-store' });
+async function fetchSheetRange(rangeName: string, gid: string, city: City) {
+  const response = await fetch(
+    googleSheetsApiKey ? buildSheetsApiUrl(rangeName) : buildPublicCsvUrl(gid),
+    { cache: 'no-store' },
+  );
   if (!response.ok) throw new Error(`Google Sheets request failed for ${city}: ${response.status}`);
-  const payload = await response.json() as SheetsValuesResponse;
-  return parseSheetValues(payload.values ?? [], city);
+
+  if (googleSheetsApiKey) {
+    const payload = await response.json() as SheetsValuesResponse;
+    return parseSheetValues(payload.values ?? [], city);
+  }
+
+  return parseSheetValues(parseCsv(await response.text()), city);
 }
 
-function buildSheetsUrl(rangeName: string) {
+function buildSheetsApiUrl(rangeName: string) {
   const range = encodeURIComponent(rangeName);
   const params = new URLSearchParams({
-    key: apiKey,
+    key: googleSheetsApiKey,
     majorDimension: 'ROWS',
     valueRenderOption: 'UNFORMATTED_VALUE',
   });

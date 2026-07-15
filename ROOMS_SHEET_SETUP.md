@@ -57,17 +57,18 @@
 1. Загрузите готовый Excel-шаблон в Google Drive и откройте как Google Таблицу.
 2. Проверьте названия листов: `Алматы` и `Астана`.
 3. Откройте доступ «Все, у кого есть ссылка» → «Читатель». Права редактирования оставьте только владельцам.
-4. В Google Cloud включите **Google Sheets API** и создайте API key.
-5. Ограничьте ключ:
-   - Application restrictions → **Websites**;
-   - добавьте `https://maza.kz/*`, `https://www.maza.kz/*`, `https://swaloure.github.io/*` и `http://localhost:*/*`;
-   - API restrictions → **Google Sheets API**.
-6. Скопируйте ID таблицы из адреса между `/d/` и `/edit`.
-7. Создайте `.env.local` на основе `.env.example`:
+4. API-ключ Google не нужен: сайт читает только публичный CSV каждой вкладки.
+5. Скопируйте ID таблицы из адреса между `/d/` и `/edit`.
+6. Для каждой вкладки используется её `gid` из адресной строки. Они уже настроены для рабочей таблицы MAZA.
+7. При необходимости создайте `.env.local` на основе `.env.example`:
 
 ```env
 NEXT_PUBLIC_ROOMS_SPREADSHEET_ID=ID_ТАБЛИЦЫ
-NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY=API_KEY
+NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY=
+NEXT_PUBLIC_ALMATY_ROOMS_SHEET_GID=0
+NEXT_PUBLIC_ASTANA_ROOMS_SHEET_GID=749187074
+NEXT_PUBLIC_PRIVACY_SHEET_GID=1472099427
+NEXT_PUBLIC_OFFER_SHEET_GID=1934971466
 NEXT_PUBLIC_ALMATY_ROOMS_SHEET_RANGE="'Алматы'!A1:AC"
 NEXT_PUBLIC_ASTANA_ROOMS_SHEET_RANGE="'Астана'!A1:AC"
 NEXT_PUBLIC_PRIVACY_SHEET_RANGE="'Политика конфиденциальности'!A1"
