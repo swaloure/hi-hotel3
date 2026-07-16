@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, FileCheck2, LoaderCircle, ScrollText, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, LoaderCircle, ScrollText, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
@@ -16,7 +16,6 @@ type LegalCopy = Record<LegalPageKind, string> & {
   back: string;
   loading: string;
   error: string;
-  source: string;
 };
 
 const copy = {
@@ -29,7 +28,6 @@ const copy = {
     back: 'Вернуться на главную',
     loading: 'Загрузка документа',
     error: 'Не удалось загрузить документ. Попробуйте обновить страницу.',
-    source: 'Актуальная версия',
   },
   kz: {
     privacy: 'Құпиялылық саясаты',
@@ -40,7 +38,6 @@ const copy = {
     back: 'Басты бетке оралу',
     loading: 'Құжатты жүктеу',
     error: 'Құжатты жүктеу мүмкін болмады. Бетті жаңартып көріңіз.',
-    source: 'Өзекті нұсқа',
   },
   en: {
     privacy: 'Privacy Policy',
@@ -51,7 +48,6 @@ const copy = {
     back: 'Back to home',
     loading: 'Loading document',
     error: 'The document could not be loaded. Please refresh the page.',
-    source: 'Current version',
   },
 } satisfies Record<Lang, LegalCopy>;
 
@@ -86,16 +82,6 @@ export function LegalPage({ kind }: { kind: LegalPageKind }) {
           </div>
 
           <article className="mt-10 overflow-hidden rounded-[28px] border border-white/10 bg-background text-foreground shadow-[0_30px_90px_rgba(0,0,0,0.28)] sm:mt-12">
-            <div className="flex items-center justify-between gap-4 border-b border-border bg-secondary/55 px-5 py-4 sm:px-8">
-              <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent/15 text-accent">
-                  <FileCheck2 className="h-4 w-4" aria-hidden="true" />
-                </span>
-                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{text.source}</span>
-              </div>
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_0_5px_rgba(16,185,129,0.12)]" aria-hidden="true" />
-            </div>
-
             <div className="min-h-72 px-5 py-8 sm:px-10 sm:py-12 lg:px-14">
               {isLoading ? (
                 <div className="flex min-h-56 items-center justify-center" role="status" aria-label={text.loading} aria-live="polite">
