@@ -15,7 +15,6 @@ type LegalCopy = Record<LegalPageKind, string> & {
   message: string;
   back: string;
   loading: string;
-  loadingHint: string;
   error: string;
   source: string;
 };
@@ -28,8 +27,7 @@ const copy = {
     subtitle: 'Официальная информация MAZA в понятном и удобном формате.',
     message: 'Информация скоро появится на этой странице.',
     back: 'Вернуться на главную',
-    loading: 'Загружаем документ',
-    loadingHint: 'Получаем актуальный текст из Google Таблицы',
+    loading: 'Загрузка документа',
     error: 'Не удалось загрузить документ. Попробуйте обновить страницу.',
     source: 'Актуальная версия',
   },
@@ -40,8 +38,7 @@ const copy = {
     subtitle: 'MAZA ресми ақпараты түсінікті және ыңғайлы форматта.',
     message: 'Бұл бетте ақпарат жақын арада жарияланады.',
     back: 'Басты бетке оралу',
-    loading: 'Құжат жүктелуде',
-    loadingHint: 'Google кестесінен өзекті мәтінді алып жатырмыз',
+    loading: 'Құжатты жүктеу',
     error: 'Құжатты жүктеу мүмкін болмады. Бетті жаңартып көріңіз.',
     source: 'Өзекті нұсқа',
   },
@@ -53,7 +50,6 @@ const copy = {
     message: 'Information will be available on this page soon.',
     back: 'Back to home',
     loading: 'Loading document',
-    loadingHint: 'Retrieving the latest text from Google Sheets',
     error: 'The document could not be loaded. Please refresh the page.',
     source: 'Current version',
   },
@@ -102,17 +98,10 @@ export function LegalPage({ kind }: { kind: LegalPageKind }) {
 
             <div className="min-h-72 px-5 py-8 sm:px-10 sm:py-12 lg:px-14">
               {isLoading ? (
-                <div className="flex min-h-56 flex-col items-center justify-center text-center" role="status" aria-live="polite">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-accent/12 text-accent">
-                    <LoaderCircle className="h-7 w-7 animate-spin" aria-hidden="true" />
+                <div className="flex min-h-56 items-center justify-center" role="status" aria-label={text.loading} aria-live="polite">
+                  <span className="flex h-16 w-16 items-center justify-center rounded-full bg-accent/12 text-accent shadow-[0_0_0_10px_rgba(201,168,108,0.06)]">
+                    <LoaderCircle className="h-8 w-8 animate-spin" aria-hidden="true" />
                   </span>
-                  <p className="mt-5 text-lg font-semibold text-foreground">{text.loading}</p>
-                  <p className="mt-2 text-sm text-muted-foreground">{text.loadingHint}</p>
-                  <div className="mt-7 w-full max-w-xl space-y-3" aria-hidden="true">
-                    <span className="block h-2.5 w-full animate-pulse rounded-full bg-muted" />
-                    <span className="block h-2.5 w-[88%] animate-pulse rounded-full bg-muted" />
-                    <span className="block h-2.5 w-[72%] animate-pulse rounded-full bg-muted" />
-                  </div>
                 </div>
               ) : content ? (
                 <div className="whitespace-pre-wrap text-left text-[15px] leading-8 text-foreground/78 sm:text-base sm:leading-9">
