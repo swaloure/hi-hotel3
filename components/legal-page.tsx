@@ -11,7 +11,6 @@ import type { LegalPageKind } from '@/lib/data/legal-content';
 type Lang = 'ru' | 'kz' | 'en';
 type LegalCopy = Record<LegalPageKind, string> & {
   eyebrow: string;
-  subtitle: string;
   message: string;
   back: string;
   loading: string;
@@ -23,7 +22,6 @@ const copy = {
     privacy: 'Политика конфиденциальности',
     offer: 'Публичная оферта',
     eyebrow: 'Юридическая информация',
-    subtitle: 'Официальная информация MAZA в понятном и удобном формате.',
     message: 'Информация скоро появится на этой странице.',
     back: 'Вернуться на главную',
     loading: 'Загрузка документа',
@@ -33,7 +31,6 @@ const copy = {
     privacy: 'Құпиялылық саясаты',
     offer: 'Жария оферта',
     eyebrow: 'Құқықтық ақпарат',
-    subtitle: 'MAZA ресми ақпараты түсінікті және ыңғайлы форматта.',
     message: 'Бұл бетте ақпарат жақын арада жарияланады.',
     back: 'Басты бетке оралу',
     loading: 'Құжатты жүктеу',
@@ -43,7 +40,6 @@ const copy = {
     privacy: 'Privacy Policy',
     offer: 'Public Offer',
     eyebrow: 'Legal information',
-    subtitle: 'Official MAZA information in a clear and convenient format.',
     message: 'Information will be available on this page soon.',
     back: 'Back to home',
     loading: 'Loading document',
@@ -78,7 +74,6 @@ export function LegalPage({ kind }: { kind: LegalPageKind }) {
             </span>
             <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.24em] text-accent sm:text-xs">{text.eyebrow}</p>
             <h1 className="mt-4 font-serif text-4xl font-medium tracking-[-0.035em] sm:text-5xl lg:text-6xl">{text[kind]}</h1>
-            <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">{text.subtitle}</p>
           </div>
 
           <article className="mt-10 overflow-hidden rounded-[28px] border border-white/10 bg-background text-foreground shadow-[0_30px_90px_rgba(0,0,0,0.28)] sm:mt-12">
