@@ -38,7 +38,7 @@ assert.ok(home.includes(`${basePath}/almaty/#rooms`), 'Home page must offer Alma
 assert.ok(home.includes(`href="${basePath}/privacy/"`), 'Home page must link to the privacy page')
 assert.ok(home.includes(`href="${basePath}/offer/"`), 'Home page must link to the public offer page')
 
-assert.ok(pages.get('privacy').includes('Информация скоро появится'), 'Privacy placeholder must be rendered')
-assert.ok(pages.get('offer').includes('Информация скоро появится'), 'Public offer placeholder must be rendered')
+assert.ok(pages.get('privacy').includes('Загружаем документ'), 'Privacy loading state must be rendered')
+assert.ok(pages.get('offer').includes('Загружаем документ'), 'Public offer loading state must be rendered')
 
 console.log(`Verified ${routes.length} exported routes${basePath ? ` under ${basePath}` : ''}.`)
