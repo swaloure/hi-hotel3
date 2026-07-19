@@ -1,6 +1,6 @@
 1:"$Sreact.fragment"
-2:I[24415,["/_next/static/chunks/153usphohqmu7.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/0rd73lab9t65-.js","/_next/static/chunks/36c2yc7p26eyp.js","/_next/static/chunks/100su8cnngupb.js"],"BookingPageContent"]
+2:I[24415,["/_next/static/chunks/153usphohqmu7.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/0rd73lab9t65-.js","/_next/static/chunks/36c2yc7p26eyp.js","/_next/static/chunks/1evmvvc9ou9uq.js"],"BookingPageContent"]
 3:I[97367,["/_next/static/chunks/153usphohqmu7.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/0rd73lab9t65-.js"],"OutletBoundary"]
 4:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"city":"astana"}],[["$","script","script-0",{"src":"/_next/static/chunks/36c2yc7p26eyp.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/100su8cnngupb.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"rt2L3Ow3nVLvDE7imd7NI"}
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"city":"astana"}],[["$","script","script-0",{"src":"/_next/static/chunks/36c2yc7p26eyp.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/1evmvvc9ou9uq.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"onUR8mIgM5tVd2YtHTFHX"}
 5:null

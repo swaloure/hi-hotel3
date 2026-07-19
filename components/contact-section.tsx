@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { SectionHeading } from '@/components/section-heading';
 import { getHotelByCity } from '@/lib/data/hotels';
 import { resolveLanguage } from '@/lib/i18n/language';
+import { getWhatsAppBookingUrl } from '@/lib/whatsapp';
 import { cn } from '@/lib/utils';
 
 interface ContactSectionProps {
@@ -36,6 +37,7 @@ export function ContactSection({ city }: ContactSectionProps) {
   if (!hotel) return null;
 
   const { lat, lng } = hotel.coordinates;
+  const whatsappUrl = getWhatsAppBookingUrl(hotel, lang);
   const mapProviders: Record<MapProvider, { label: string; src: string; href: string }> = {
     yandex: {
       label: 'Яндекс',
@@ -139,7 +141,7 @@ export function ContactSection({ city }: ContactSectionProps) {
 
             <div className="mt-auto pt-6">
               <Button asChild className="h-12 w-full rounded-full bg-[#1faf5b] text-white shadow-none hover:bg-[#18964d]">
-                <a href={`https://wa.me/${hotel.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="mr-2 h-4 w-4" />
                   {t('contacts.whatsapp')}
                 </a>

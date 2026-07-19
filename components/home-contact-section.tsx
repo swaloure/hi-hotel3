@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { getHotelByCity } from '@/lib/data/hotels';
 import { withBasePath } from '@/lib/asset-path';
+import { getWhatsAppBookingUrl } from '@/lib/whatsapp';
 
 type City = 'almaty' | 'astana';
 type Lang = 'ru' | 'kz' | 'en';
@@ -111,6 +112,7 @@ export function HomeContactSection({ lang, selectedCity, onSelectCity }: HomeCon
   if (!hotel) return null;
 
   const { lat, lng } = hotel.coordinates;
+  const whatsappUrl = getWhatsAppBookingUrl(hotel, lang);
   const mapProviders: Record<MapProvider, { label: string; src?: string; href: string }> = {
     yandex: {
       label: 'Яндекс',
@@ -278,7 +280,7 @@ export function HomeContactSection({ lang, selectedCity, onSelectCity }: HomeCon
 
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 <a
-                  href={`https://wa.me/${hotel.whatsapp.replace(/\D/g, '')}`}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#20bd5a] hover:shadow-lg"

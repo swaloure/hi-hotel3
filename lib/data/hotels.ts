@@ -53,9 +53,9 @@ export const hotels: Hotel[] = [
       kz: 'Достық даңғылы 162к6, 050051',
       en: '162k6 Dostyk Avenue, Almaty 050051',
     },
-    phone: '+7 (700) 984-53-74',
+    phone: '+7 747 470 0422',
     email: 'almaty@maza.kz',
-    whatsapp: '+77009845374',
+    whatsapp: '+77474700422',
     coordinates: {
       lat: 43.2342975,
       lng: 76.959896,
@@ -129,9 +129,9 @@ export const hotels: Hotel[] = [
       kz: 'Мәңгілік Ел 29/1, Z05M7E4',
       en: '29/1 Mangilik El Avenue, Astana Z05M7E4',
     },
-    phone: '+7 (717) 234-56-78',
+    phone: '+7 707 470 0422',
     email: 'astana@maza.kz',
-    whatsapp: '+77172345678',
+    whatsapp: '+77074700422',
     coordinates: {
       lat: 51.1087416,
       lng: 71.4289125,

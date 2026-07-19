@@ -32,7 +32,14 @@ for (const route of routes) {
 }
 
 const home = pages.get('')
-assert.ok(home.includes('https://wa.me/77009845374'), 'Home page must contain the primary WhatsApp link')
+const almatyMessage = encodeURIComponent('Здравствуйте! Пишу с сайта MAZA. Хочу забронировать номер в городе Алматы.')
+const astanaMessage = encodeURIComponent('Здравствуйте! Пишу с сайта MAZA. Хочу забронировать номер в городе Астане.')
+const almatyWhatsAppUrl = `https://wa.me/77474700422?text=${almatyMessage}`
+const astanaWhatsAppUrl = `https://wa.me/77074700422?text=${astanaMessage}`
+
+assert.ok(home.includes(almatyWhatsAppUrl), 'Home page must contain the Almaty WhatsApp booking link')
+assert.ok(pages.get('almaty').includes(almatyWhatsAppUrl), 'Almaty page must contain its WhatsApp booking link')
+assert.ok(pages.get('astana').includes(astanaWhatsAppUrl), 'Astana page must contain its WhatsApp booking link')
 assert.ok(home.includes('id="contacts"'), 'Home page must contain the contact selector')
 assert.ok(home.includes(`${basePath}/almaty/#rooms`), 'Home page must offer Almaty rooms after city selection')
 assert.ok(home.includes(`href="${basePath}/privacy/"`), 'Home page must link to the privacy page')
