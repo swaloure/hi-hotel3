@@ -4,6 +4,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { resolveLanguage } from '@/lib/i18n/language';
+import {
+  BNOVO_ROOM_FILTERS,
+  BNOVO_UID,
+  enforceBnovoBookingUrl,
+  enforceBnovoSignalFilter,
+} from '@/lib/bnovo-filter';
 
 interface BookingWidgetProps {
   city: 'almaty' | 'astana';
@@ -68,19 +74,7 @@ declare global {
   }
 }
 
-const BNOVO_UID = 'a8395a9c-768d-4038-ae49-cf4072d9dcb4';
 const BNOVO_SCRIPT_SRC = 'https://widget.reservationsteps.ru/js/bnovo.js';
-
-const ROOM_FILTERS = {
-  almaty: {
-    onlyrooms: '551521,551494',
-    firstroom: '551521',
-  },
-  astana: {
-    onlyrooms: '551530',
-    firstroom: '551530',
-  },
-} as const;
 
 let bnovoScriptPromise: Promise<void> | null = null;
 
@@ -128,7 +122,7 @@ function loadBnovoScript() {
 }
 
 function getBnovoConfig(city: BookingWidgetProps['city'], lang: string): BnovoWidgetConfig {
-  const roomFilter = ROOM_FILTERS[city];
+  const roomFilter = BNOVO_ROOM_FILTERS[city];
 
   return {
     type: 'vertical',
@@ -218,6 +212,47 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
     if (!container) return;
     initializedRef.current = false;
 
+    const enforceBookingFrame = (frame: HTMLIFrameElement) => {
+      const source = frame.getAttribute('src');
+      if (!source) return;
+
+      const filteredSource = enforceBnovoBookingUrl(source, city);
+      if (filteredSource !== source) frame.setAttribute('src', filteredSource);
+    };
+
+    const enforceBookingFrames = (root: ParentNode) => {
+      if (root instanceof HTMLIFrameElement) enforceBookingFrame(root);
+      root.querySelectorAll?.<HTMLIFrameElement>('iframe[src]').forEach((frame) => enforceBookingFrame(frame));
+    };
+
+    const handleBnovoMessage = (event: MessageEvent) => {
+      const trustedOrigin = event.origin === window.location.origin
+        || event.origin === 'https://widget.reservationsteps.ru'
+        || event.origin === 'https://reservationsteps.ru';
+
+      if (trustedOrigin) enforceBnovoSignalFilter(event.data, city);
+    };
+
+    window.addEventListener('message', handleBnovoMessage, true);
+    const roomFilterObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.target instanceof HTMLIFrameElement) {
+          enforceBookingFrame(mutation.target);
+        }
+
+        mutation.addedNodes.forEach((node) => {
+          if (node instanceof HTMLElement) enforceBookingFrames(node);
+        });
+      });
+    });
+    roomFilterObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['src'],
+      childList: true,
+      subtree: true,
+    });
+    enforceBookingFrames(document);
+
     const initializeBnovo = () => {
       resetBnovoContainer(container, widgetId);
 
@@ -267,6 +302,8 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
     return () => {
       isCancelled = true;
       observer?.disconnect();
+      roomFilterObserver.disconnect();
+      window.removeEventListener('message', handleBnovoMessage, true);
       if (timeoutId) clearTimeout(timeoutId);
       container.replaceChildren();
       initializedRef.current = false;
