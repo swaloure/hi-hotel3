@@ -2,9 +2,8 @@ import type { Room } from '@/lib/data/hotels';
 import type { SiteLanguage } from '@/lib/i18n/language';
 import { parseCsv } from '@/lib/data/csv';
 import {
-  buildPublicCsvUrl,
+  buildPublicSheetCsvUrl,
   googleSheetsApiKey,
-  sheetGids,
   spreadsheetId,
 } from '@/lib/data/sheets-config';
 
@@ -38,7 +37,7 @@ const astanaSheetRange = process.env.NEXT_PUBLIC_ASTANA_ROOMS_SHEET_RANGE?.trim(
 
 let catalogRequest: Promise<CatalogRoom[]> | null = null;
 
-export const isRoomsSheetConfigured = Boolean(spreadsheetId && sheetGids.almaty && sheetGids.astana);
+export const isRoomsSheetConfigured = Boolean(spreadsheetId);
 
 export function getLocalRooms(city: City, rooms: Room[]): CatalogRoom[] {
   return rooms.map((room, index) => ({
@@ -67,8 +66,8 @@ export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
 
   if (!catalogRequest) {
     catalogRequest = Promise.all([
-      fetchSheetRange(almatySheetRange, sheetGids.almaty, 'almaty'),
-      fetchSheetRange(astanaSheetRange, sheetGids.astana, 'astana'),
+      fetchSheetRange(almatySheetRange, 'Алматы', 'almaty'),
+      fetchSheetRange(astanaSheetRange, 'Астана', 'astana'),
     ])
       .then(([almatyRooms, astanaRooms]) => [...almatyRooms, ...astanaRooms])
       .catch((error) => {
@@ -80,9 +79,9 @@ export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
   return catalogRequest;
 }
 
-async function fetchSheetRange(rangeName: string, gid: string, city: City) {
+async function fetchSheetRange(rangeName: string, sheetName: string, city: City) {
   const response = await fetch(
-    googleSheetsApiKey ? buildSheetsApiUrl(rangeName) : buildPublicCsvUrl(gid),
+    googleSheetsApiKey ? buildSheetsApiUrl(rangeName) : buildPublicSheetCsvUrl(sheetName, 'A1:AC'),
     { cache: 'no-store' },
   );
   if (!response.ok) throw new Error(`Google Sheets request failed for ${city}: ${response.status}`);
