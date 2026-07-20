@@ -54,7 +54,7 @@ export const hotels: Hotel[] = [
       en: '162k6 Dostyk Avenue, Almaty 050051',
     },
     phone: '+7 747 470 0422',
-    email: 'almaty@maza.kz',
+    email: 'hihotel@mail.ru',
     whatsapp: '+77474700422',
     coordinates: {
       lat: 43.2342975,
@@ -130,7 +130,7 @@ export const hotels: Hotel[] = [
       en: '29/1 Mangilik El Avenue, Astana Z05M7E4',
     },
     phone: '+7 707 470 0422',
-    email: 'astana@maza.kz',
+    email: 'hihotel@mail.ru',
     whatsapp: '+77074700422',
     coordinates: {
       lat: 51.1087416,
