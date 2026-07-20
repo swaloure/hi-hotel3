@@ -16,8 +16,10 @@ const routes = [
   'booking',
   'booking/almaty',
   'booking/astana',
-  'privacy',
-  'offer',
+  'almaty/privacy',
+  'almaty/offer',
+  'astana/privacy',
+  'astana/offer',
 ]
 
 const pages = new Map()
@@ -45,8 +47,18 @@ assert.ok(pages.get('almaty').includes(almatyWhatsAppUrl), 'Almaty page must con
 assert.ok(pages.get('astana').includes(astanaWhatsAppUrl), 'Astana page must contain its WhatsApp booking link')
 assert.ok(home.includes('id="contacts"'), 'Home page must contain the contact selector')
 assert.ok(home.includes(`${basePath}/almaty/#rooms`), 'Home page must offer Almaty rooms after city selection')
-assert.ok(home.includes(`href="${basePath}/privacy/"`), 'Home page must link to the privacy page')
-assert.ok(home.includes(`href="${basePath}/offer/"`), 'Home page must link to the public offer page')
+assert.ok(home.includes(`href="${basePath}/almaty/privacy/"`), 'Home page must link to the Almaty privacy page')
+assert.ok(home.includes(`href="${basePath}/astana/privacy/"`), 'Home page must link to the Astana privacy page')
+assert.ok(home.includes(`href="${basePath}/almaty/offer/"`), 'Home page must link to the Almaty offer page')
+assert.ok(home.includes(`href="${basePath}/astana/offer/"`), 'Home page must link to the Astana offer page')
+assert.ok(pages.get('almaty').includes(`href="${basePath}/almaty/privacy/"`), 'Almaty page must link to its privacy page')
+assert.ok(pages.get('almaty').includes(`href="${basePath}/almaty/offer/"`), 'Almaty page must link to its offer page')
+assert.ok(!pages.get('almaty').includes(`href="${basePath}/astana/privacy/"`), 'Almaty page must not link to Astana privacy')
+assert.ok(!pages.get('almaty').includes(`href="${basePath}/astana/offer/"`), 'Almaty page must not link to Astana offer')
+assert.ok(pages.get('astana').includes(`href="${basePath}/astana/privacy/"`), 'Astana page must link to its privacy page')
+assert.ok(pages.get('astana').includes(`href="${basePath}/astana/offer/"`), 'Astana page must link to its offer page')
+assert.ok(!pages.get('astana').includes(`href="${basePath}/almaty/privacy/"`), 'Astana page must not link to Almaty privacy')
+assert.ok(!pages.get('astana').includes(`href="${basePath}/almaty/offer/"`), 'Astana page must not link to Almaty offer')
 assert.ok(!homeHeader.includes('/#home'), 'Home header must not contain the Home navigation item')
 assert.ok(almatyHeader.includes('href="https://maza.kz/"'), 'Almaty Home navigation item must link to maza.kz')
 assert.ok(astanaHeader.includes('href="https://maza.kz/"'), 'Astana Home navigation item must link to maza.kz')
@@ -57,7 +69,8 @@ assert.ok(!pages.get('almaty').includes('https://www.instagram.com/hihotel.astan
 assert.ok(pages.get('astana').includes('https://www.instagram.com/hihotel.astana/'), 'Astana page must contain its Instagram link')
 assert.ok(!pages.get('astana').includes('https://www.instagram.com/hihotel.kz/'), 'Astana page must not contain the Almaty Instagram link')
 
-assert.ok(pages.get('privacy').includes('animate-spin'), 'Privacy loading animation must be rendered')
-assert.ok(pages.get('offer').includes('animate-spin'), 'Public offer loading animation must be rendered')
+for (const route of ['almaty/privacy', 'almaty/offer', 'astana/privacy', 'astana/offer']) {
+  assert.ok(pages.get(route).includes('animate-spin'), `${route} loading animation must be rendered`)
+}
 
 console.log(`Verified ${routes.length} exported routes${basePath ? ` under ${basePath}` : ''}.`)

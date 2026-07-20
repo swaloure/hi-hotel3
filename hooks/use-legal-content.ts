@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import {
   isLegalSheetConfigured,
   loadLegalContent,
+  type LegalCity,
   type LegalPageKind,
 } from '@/lib/data/legal-content';
 
@@ -13,7 +14,7 @@ type LegalContentState = {
   hasError: boolean;
 };
 
-export function useLegalContent(kind: LegalPageKind): LegalContentState {
+export function useLegalContent(city: LegalCity, kind: LegalPageKind): LegalContentState {
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(isLegalSheetConfigured);
   const [hasError, setHasError] = useState(false);
@@ -23,14 +24,14 @@ export function useLegalContent(kind: LegalPageKind): LegalContentState {
 
     if (!isLegalSheetConfigured) return;
 
-    loadLegalContent(kind)
+    loadLegalContent(city, kind)
       .then((value) => {
         if (cancelled) return;
         setContent(value);
         setHasError(false);
       })
       .catch((error) => {
-        console.error(`Unable to load ${kind} content from Google Sheets.`, error);
+        console.error(`Unable to load ${city} ${kind} content from Google Sheets.`, error);
         if (cancelled) return;
         setContent('');
         setHasError(true);
@@ -42,7 +43,7 @@ export function useLegalContent(kind: LegalPageKind): LegalContentState {
     return () => {
       cancelled = true;
     };
-  }, [kind]);
+  }, [city, kind]);
 
   return { content, isLoading, hasError };
 }

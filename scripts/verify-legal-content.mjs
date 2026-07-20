@@ -16,7 +16,7 @@ const compiled = ts.transpileModule(source, {
   .replace("'@/lib/data/csv'", `'${csvModuleUrl}'`)
   .replace("'@/lib/data/sheets-config'", `'${configModuleUrl}'`);
 const moduleUrl = `data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`;
-const { parseLegalCell } = await import(moduleUrl);
+const { legalSheetNames, parseLegalCell } = await import(moduleUrl);
 
 function compileModule(moduleSource) {
   const output = ts.transpileModule(moduleSource, {
@@ -31,5 +31,15 @@ function compileModule(moduleSource) {
 assert.equal(parseLegalCell([['  Первая строка\n\nВторая строка  ']]), 'Первая строка\n\nВторая строка');
 assert.equal(parseLegalCell([]), '');
 assert.equal(parseLegalCell(undefined), '');
+assert.deepEqual(legalSheetNames, {
+  almaty: {
+    privacy: 'Политика Алматы',
+    offer: 'Оферта Алматы',
+  },
+  astana: {
+    privacy: 'Политика Астана',
+    offer: 'Оферта Астана',
+  },
+});
 
 console.log('Verified Google Sheets legal content parser.');

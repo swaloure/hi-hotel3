@@ -6,11 +6,18 @@ export const googleSheetsApiKey = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY?
 export const sheetGids = {
   almaty: process.env.NEXT_PUBLIC_ALMATY_ROOMS_SHEET_GID?.trim() || '0',
   astana: process.env.NEXT_PUBLIC_ASTANA_ROOMS_SHEET_GID?.trim() || '749187074',
-  privacy: process.env.NEXT_PUBLIC_PRIVACY_SHEET_GID?.trim() || '1472099427',
-  offer: process.env.NEXT_PUBLIC_OFFER_SHEET_GID?.trim() || '1934971466',
 } as const;
 
 export function buildPublicCsvUrl(gid: string) {
   const params = new URLSearchParams({ format: 'csv', gid });
   return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(spreadsheetId)}/export?${params}`;
+}
+
+export function buildPublicSheetCsvUrl(sheetName: string, range = 'A1') {
+  const params = new URLSearchParams({
+    tqx: 'out:csv',
+    sheet: sheetName,
+    range,
+  });
+  return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(spreadsheetId)}/gviz/tq?${params}`;
 }

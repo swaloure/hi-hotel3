@@ -1,38 +1,58 @@
 import { parseCsv } from '@/lib/data/csv';
 import {
-  buildPublicCsvUrl,
+  buildPublicSheetCsvUrl,
   googleSheetsApiKey,
-  sheetGids,
   spreadsheetId,
 } from '@/lib/data/sheets-config';
 
 export type LegalPageKind = 'privacy' | 'offer';
+export type LegalCity = 'almaty' | 'astana';
 
 type SheetsValuesResponse = {
   values?: Array<Array<string | number | boolean>>;
 };
 
-const ranges: Record<LegalPageKind, string> = {
-  privacy: process.env.NEXT_PUBLIC_PRIVACY_SHEET_RANGE?.trim() || "'Политика конфиденциальности'!A1",
-  offer: process.env.NEXT_PUBLIC_OFFER_SHEET_RANGE?.trim() || "'Публичная оферта'!A1",
+export const legalSheetNames: Record<LegalCity, Record<LegalPageKind, string>> = {
+  almaty: {
+    privacy: 'Политика Алматы',
+    offer: 'Оферта Алматы',
+  },
+  astana: {
+    privacy: 'Политика Астана',
+    offer: 'Оферта Астана',
+  },
 };
 
-const requests = new Map<LegalPageKind, Promise<string>>();
+const ranges: Record<LegalCity, Record<LegalPageKind, string>> = {
+  almaty: {
+    privacy: process.env.NEXT_PUBLIC_ALMATY_PRIVACY_SHEET_RANGE?.trim() || "'Политика Алматы'!A1",
+    offer: process.env.NEXT_PUBLIC_ALMATY_OFFER_SHEET_RANGE?.trim() || "'Оферта Алматы'!A1",
+  },
+  astana: {
+    privacy: process.env.NEXT_PUBLIC_ASTANA_PRIVACY_SHEET_RANGE?.trim() || "'Политика Астана'!A1",
+    offer: process.env.NEXT_PUBLIC_ASTANA_OFFER_SHEET_RANGE?.trim() || "'Оферта Астана'!A1",
+  },
+};
 
-export const isLegalSheetConfigured = Boolean(spreadsheetId && sheetGids.privacy && sheetGids.offer);
+const requests = new Map<string, Promise<string>>();
 
-export function loadLegalContent(kind: LegalPageKind): Promise<string> {
+export const isLegalSheetConfigured = Boolean(spreadsheetId);
+
+export function loadLegalContent(city: LegalCity, kind: LegalPageKind): Promise<string> {
   if (!isLegalSheetConfigured) return Promise.resolve('');
 
-  const existingRequest = requests.get(kind);
+  const documentKey = `${city}-${kind}`;
+  const existingRequest = requests.get(documentKey);
   if (existingRequest) return existingRequest;
 
   const request = fetch(
-    googleSheetsApiKey ? buildSheetsApiUrl(ranges[kind]) : buildPublicCsvUrl(sheetGids[kind]),
+    googleSheetsApiKey
+      ? buildSheetsApiUrl(ranges[city][kind])
+      : buildPublicSheetCsvUrl(legalSheetNames[city][kind]),
     { cache: 'no-store' },
   )
     .then(async (response) => {
-      if (!response.ok) throw new Error(`Google Sheets request failed for ${kind}: ${response.status}`);
+      if (!response.ok) throw new Error(`Google Sheets request failed for ${documentKey}: ${response.status}`);
 
       if (googleSheetsApiKey) {
         const payload = await response.json() as SheetsValuesResponse;
@@ -42,11 +62,11 @@ export function loadLegalContent(kind: LegalPageKind): Promise<string> {
       return parseLegalCell(parseCsv(await response.text()));
     })
     .catch((error) => {
-      requests.delete(kind);
+      requests.delete(documentKey);
       throw error;
     });
 
-  requests.set(kind, request);
+  requests.set(documentKey, request);
   return request;
 }
 

@@ -53,6 +53,17 @@ export function Footer({ city }: FooterProps) {
       : [];
   });
   const socialLinks = [...instagramLinks, ...sharedSocialLinks];
+  const legalCities = isHome ? (['almaty', 'astana'] as const) : [city];
+  const legalLinks = [
+    ...legalCities.map((legalCity) => ({
+      href: `/${legalCity}/privacy`,
+      label: `${t('footer.privacy')} · ${t(`cities.${legalCity}`)}`,
+    })),
+    ...legalCities.map((legalCity) => ({
+      href: `/${legalCity}/offer`,
+      label: `${t('footer.offer')} · ${t(`cities.${legalCity}`)}`,
+    })),
+  ];
   const navLinks = isHome
     ? [
         { href: '/#home', label: t('nav.home') },
@@ -141,8 +152,11 @@ export function Footer({ city }: FooterProps) {
         <div className="flex flex-col gap-3 border-t border-white/10 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
           <p>© {currentYear} MAZA. {t('footer.rights')}.</p>
           <div className="flex flex-wrap gap-x-4 gap-y-2">
-            <Link href="/privacy" className="transition hover:text-white">{t('footer.privacy')}</Link>
-            <Link href="/offer" className="transition hover:text-white">{t('footer.offer')}</Link>
+            {legalLinks.map((link) => (
+              <Link key={link.href} href={link.href} className="transition hover:text-white">
+                {link.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
