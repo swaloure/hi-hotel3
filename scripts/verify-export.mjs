@@ -32,6 +32,9 @@ for (const route of routes) {
 }
 
 const home = pages.get('')
+const homeHeader = home.match(/<header[\s\S]*?<\/header>/i)?.[0] ?? ''
+const almatyHeader = pages.get('almaty').match(/<header[\s\S]*?<\/header>/i)?.[0] ?? ''
+const astanaHeader = pages.get('astana').match(/<header[\s\S]*?<\/header>/i)?.[0] ?? ''
 const almatyMessage = encodeURIComponent('Здравствуйте! Пишу с сайта MAZA. Хочу забронировать номер в городе Алматы.')
 const astanaMessage = encodeURIComponent('Здравствуйте! Пишу с сайта MAZA. Хочу забронировать номер в городе Астане.')
 const almatyWhatsAppUrl = `https://wa.me/77474700422?text=${almatyMessage}`
@@ -44,6 +47,9 @@ assert.ok(home.includes('id="contacts"'), 'Home page must contain the contact se
 assert.ok(home.includes(`${basePath}/almaty/#rooms`), 'Home page must offer Almaty rooms after city selection')
 assert.ok(home.includes(`href="${basePath}/privacy/"`), 'Home page must link to the privacy page')
 assert.ok(home.includes(`href="${basePath}/offer/"`), 'Home page must link to the public offer page')
+assert.ok(!homeHeader.includes('/#home'), 'Home header must not contain the Home navigation item')
+assert.ok(almatyHeader.includes('href="https://maza.kz/"'), 'Almaty Home navigation item must link to maza.kz')
+assert.ok(astanaHeader.includes('href="https://maza.kz/"'), 'Astana Home navigation item must link to maza.kz')
 
 assert.ok(pages.get('privacy').includes('animate-spin'), 'Privacy loading animation must be rendered')
 assert.ok(pages.get('offer').includes('animate-spin'), 'Public offer loading animation must be rendered')

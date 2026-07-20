@@ -54,14 +54,13 @@ export function Header({ city }: HeaderProps) {
 
   const navItems = isHome
     ? [
-        { href: '/#home', label: t('nav.home') },
         { href: '/#cities', label: labels.cities[lang] },
         { href: '/#about', label: t('nav.about') },
         { href: '/#format', label: labels.format[lang] },
         { href: '/#contacts', label: t('nav.contacts') },
       ]
     : [
-        { href: `/${city}`, label: t('nav.home') },
+        { href: 'https://maza.kz/', label: t('nav.home') },
         { href: `/${city}#rooms`, label: t('nav.rooms') },
         { href: `/${city}#about`, label: t('nav.about') },
         { href: `/${city}#contacts`, label: t('nav.contacts') },
