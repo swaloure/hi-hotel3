@@ -50,6 +50,12 @@ assert.ok(home.includes(`href="${basePath}/offer/"`), 'Home page must link to th
 assert.ok(!homeHeader.includes('/#home'), 'Home header must not contain the Home navigation item')
 assert.ok(almatyHeader.includes('href="https://maza.kz/"'), 'Almaty Home navigation item must link to maza.kz')
 assert.ok(astanaHeader.includes('href="https://maza.kz/"'), 'Astana Home navigation item must link to maza.kz')
+assert.ok(home.includes('https://www.instagram.com/hihotel.kz/'), 'Home page must contain the Almaty Instagram link')
+assert.ok(home.includes('https://www.instagram.com/hihotel.astana/'), 'Home page must contain the Astana Instagram link')
+assert.ok(pages.get('almaty').includes('https://www.instagram.com/hihotel.kz/'), 'Almaty page must contain its Instagram link')
+assert.ok(!pages.get('almaty').includes('https://www.instagram.com/hihotel.astana/'), 'Almaty page must not contain the Astana Instagram link')
+assert.ok(pages.get('astana').includes('https://www.instagram.com/hihotel.astana/'), 'Astana page must contain its Instagram link')
+assert.ok(!pages.get('astana').includes('https://www.instagram.com/hihotel.kz/'), 'Astana page must not contain the Almaty Instagram link')
 
 assert.ok(pages.get('privacy').includes('animate-spin'), 'Privacy loading animation must be rendered')
 assert.ok(pages.get('offer').includes('animate-spin'), 'Public offer loading animation must be rendered')

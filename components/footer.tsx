@@ -6,14 +6,14 @@ import Image from 'next/image';
 import { ArrowUpRight, Facebook, Instagram, MapPin } from 'lucide-react';
 import { SmoothLink } from '@/components/smooth-link';
 import { withBasePath } from '@/lib/asset-path';
+import { getHotelByCity } from '@/lib/data/hotels';
 import { resolveLanguage } from '@/lib/i18n/language';
 
 interface FooterProps {
   city: 'almaty' | 'astana' | 'home';
 }
 
-const socialLinks = [
-  { icon: Instagram, href: 'https://instagram.com/maza.kz', label: 'Instagram' },
+const sharedSocialLinks = [
   { icon: Facebook, href: 'https://facebook.com/maza.kz', label: 'Facebook' },
 ];
 
@@ -45,6 +45,14 @@ export function Footer({ city }: FooterProps) {
   const lang = resolveLanguage(i18n.language);
   const isHome = city === 'home';
   const bookingHref = isHome ? '/booking' : `/booking/${city}`;
+  const instagramLinks = (isHome ? (['almaty', 'astana'] as const) : [city]).flatMap((hotelCity) => {
+    const hotel = getHotelByCity(hotelCity);
+
+    return hotel
+      ? [{ icon: Instagram, href: hotel.instagram, label: `Instagram ${t(`cities.${hotelCity}`)}` }]
+      : [];
+  });
+  const socialLinks = [...instagramLinks, ...sharedSocialLinks];
   const navLinks = isHome
     ? [
         { href: '/#home', label: t('nav.home') },

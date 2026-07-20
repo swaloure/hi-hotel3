@@ -35,6 +35,7 @@ export interface Hotel {
   phone: string;
   email: string;
   whatsapp: string;
+  instagram: string;
   coordinates: {
     lat: number;
     lng: number;
@@ -56,6 +57,7 @@ export const hotels: Hotel[] = [
     phone: '+7 747 470 0422',
     email: 'hihotel@mail.ru',
     whatsapp: '+77474700422',
+    instagram: 'https://www.instagram.com/hihotel.kz/',
     coordinates: {
       lat: 43.2342975,
       lng: 76.959896,
@@ -132,6 +134,7 @@ export const hotels: Hotel[] = [
     phone: '+7 707 470 0422',
     email: 'hihotel@mail.ru',
     whatsapp: '+77074700422',
+    instagram: 'https://www.instagram.com/hihotel.astana/',
     coordinates: {
       lat: 51.1087416,
       lng: 71.4289125,
