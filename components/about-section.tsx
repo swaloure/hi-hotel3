@@ -182,60 +182,70 @@ export function AboutSection({ city }: AboutSectionProps) {
                   />
                 </motion.div>
               </AnimatePresence>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 z-10 p-3 text-white sm:p-5 lg:p-6">
-                  <div className="rounded-[22px] border border-white/16 bg-black/42 p-4 shadow-2xl backdrop-blur-md sm:p-5">
-                    <div className="flex items-center justify-between gap-4">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/65 sm:text-[11px]">
-                        {copy.location[lang]}
-                      </p>
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => showAttraction(normalizedActiveAttraction - 1)}
-                          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/18 bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                          aria-label={copy.previous[lang]}
-                        >
-                          <ChevronLeft className="h-4 w-4" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => showAttraction(normalizedActiveAttraction + 1)}
-                          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/18 bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-                          aria-label={copy.next[lang]}
-                        >
-                          <ChevronRight className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/5" />
 
-                    <div className="mt-3 flex items-center gap-3 rounded-2xl bg-white/94 p-3 text-graphite shadow-lg" aria-live="polite">
-                      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent/16 text-accent">
-                        <AttractionTransportIcon className="h-5 w-5" aria-hidden="true" />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-xs font-semibold leading-tight sm:text-base">{attraction.title[lang]}</p>
-                        <p className="mt-0.5 text-[11px] text-graphite/55 sm:text-xs">{attraction.mode[lang]}</p>
-                      </div>
-                      <span className="shrink-0 rounded-full bg-graphite px-3 py-2 text-xs font-semibold text-white sm:text-sm">
-                        {attraction.duration[lang]}
-                      </span>
-                    </div>
+              <div className="absolute left-4 top-4 z-10 sm:left-5 sm:top-5">
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/65 bg-white/88 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-graphite shadow-sm backdrop-blur-md sm:text-[11px]">
+                  <MapPin className="h-3.5 w-3.5 text-accent" aria-hidden="true" />
+                  {copy.location[lang]}
+                </span>
+              </div>
 
-                    <div className="mt-3 flex justify-center gap-2" role="group" aria-label={copy.location[lang]}>
-                      {cityAttractions.map((item, index) => (
-                        <button
-                          key={item.id}
-                          type="button"
-                          onClick={() => showAttraction(index)}
-                          className={`h-1.5 rounded-full transition-all ${index === normalizedActiveAttraction ? 'w-7 bg-accent' : 'w-1.5 bg-white/40 hover:bg-white/70'}`}
-                          aria-label={item.title[lang]}
-                          aria-current={index === normalizedActiveAttraction ? 'true' : undefined}
-                        />
-                      ))}
+              <div className="absolute right-4 top-4 z-10 flex gap-2 sm:right-5 sm:top-5">
+                <button
+                  type="button"
+                  onClick={() => showAttraction(normalizedActiveAttraction - 1)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/65 bg-white/88 text-graphite shadow-sm backdrop-blur-md transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  aria-label={copy.previous[lang]}
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => showAttraction(normalizedActiveAttraction + 1)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/65 bg-white/88 text-graphite shadow-sm backdrop-blur-md transition hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  aria-label={copy.next[lang]}
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="absolute inset-x-0 bottom-0 z-10 p-3 sm:p-5">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
+                  <div
+                    className="flex min-w-0 items-center gap-2.5 self-start rounded-2xl border border-white/70 bg-white/92 p-2.5 pr-3 text-graphite shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-md sm:max-w-[78%] sm:gap-3 sm:p-3 sm:pr-4"
+                    aria-live="polite"
+                  >
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/14 text-accent sm:h-11 sm:w-11">
+                      <AttractionTransportIcon className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-semibold leading-tight sm:text-base">{attraction.title[lang]}</p>
+                      <p className="mt-0.5 text-[11px] text-graphite/55 sm:text-xs">{attraction.mode[lang]}</p>
                     </div>
+                    <span className="shrink-0 rounded-full bg-secondary px-2.5 py-2 text-[11px] font-semibold text-graphite sm:px-3 sm:text-xs">
+                      {attraction.duration[lang]}
+                    </span>
+                  </div>
+
+                  <div
+                    className="flex shrink-0 self-center gap-1.5 rounded-full border border-white/55 bg-black/22 px-2.5 py-2 backdrop-blur-sm sm:mb-1 sm:self-auto"
+                    role="group"
+                    aria-label={copy.location[lang]}
+                  >
+                    {cityAttractions.map((item, index) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => showAttraction(index)}
+                        className={`h-1.5 rounded-full transition-all ${index === normalizedActiveAttraction ? 'w-5 bg-accent' : 'w-1.5 bg-white/65 hover:bg-white'}`}
+                        aria-label={item.title[lang]}
+                        aria-current={index === normalizedActiveAttraction ? 'true' : undefined}
+                      />
+                    ))}
                   </div>
                 </div>
+              </div>
             </div>
           </motion.div>
 
