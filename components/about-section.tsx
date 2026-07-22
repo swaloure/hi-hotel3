@@ -28,6 +28,14 @@ const copy = {
 const attractions = {
   almaty: [
     {
+      id: 'kok-tobe',
+      image: '/cities/koktobe.jpg',
+      transport: 'car',
+      title: { ru: 'Кок-Тобе', kz: 'Көк-Төбе', en: 'Kok-Tobe' },
+      mode: { ru: 'на машине', kz: 'көлікпен', en: 'by car' },
+      duration: { ru: '12 минут', kz: '12 минут', en: '12 min' },
+    },
+    {
       id: 'dostyk-plaza',
       image: '/cities/dostyk.jpg',
       transport: 'walk',
@@ -42,14 +50,6 @@ const attractions = {
       title: { ru: 'Медеу', kz: 'Медеу', en: 'Medeu' },
       mode: { ru: 'на машине', kz: 'көлікпен', en: 'by car' },
       duration: { ru: '25 минут', kz: '25 минут', en: '25 min' },
-    },
-    {
-      id: 'kok-tobe',
-      image: '/cities/koktobe.jpg',
-      transport: 'car',
-      title: { ru: 'Кок-Тобе', kz: 'Көк-Төбе', en: 'Kok-Tobe' },
-      mode: { ru: 'на машине', kz: 'көлікпен', en: 'by car' },
-      duration: { ru: '12 минут', kz: '12 минут', en: '12 min' },
     },
     {
       id: 'terrenkur',
