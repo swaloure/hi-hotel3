@@ -19,6 +19,7 @@ import { getHotelByCity } from '@/lib/data/hotels';
 import { withBasePath } from '@/lib/asset-path';
 import { resolveLanguage } from '@/lib/i18n/language';
 import { cn } from '@/lib/utils';
+import { useBodyScrollLock } from '@/hooks/use-body-scroll-lock';
 
 const languages = [
   { code: 'ru', label: 'RU', name: 'Русский' },
@@ -52,6 +53,8 @@ export function Header({ city }: HeaderProps) {
   const lang = resolveLanguage(i18n.language);
   const bookingHref = isHome ? '/booking' : `/booking/${city}`;
 
+  useBodyScrollLock(isMobileMenuOpen);
+
   const navItems = isHome
     ? [
         { href: '/#cities', label: labels.cities[lang] },
@@ -76,10 +79,8 @@ export function Header({ city }: HeaderProps) {
   useEffect(() => {
     if (!isMobileMenuOpen) return;
 
-    const previousOverflow = document.body.style.overflow;
     const triggerElement = mobileMenuTriggerRef.current;
     const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    document.body.style.overflow = 'hidden';
 
     const focusableSelector =
       'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -114,7 +115,6 @@ export function Header({ city }: HeaderProps) {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
       window.cancelAnimationFrame(focusTimer);
       window.removeEventListener('keydown', handleKeyDown);
       (previouslyFocused ?? triggerElement)?.focus();
@@ -282,7 +282,7 @@ export function Header({ city }: HeaderProps) {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 32, stiffness: 320 }}
-              className="fixed inset-y-0 right-0 z-[70] flex w-[min(22rem,92vw)] flex-col bg-background shadow-2xl lg:hidden"
+              className="fixed inset-y-0 right-0 z-[70] flex w-[min(22rem,92vw)] flex-col overscroll-none bg-background shadow-2xl lg:hidden"
               aria-label="Mobile navigation"
               aria-modal="true"
               role="dialog"
@@ -308,7 +308,7 @@ export function Header({ city }: HeaderProps) {
                 </button>
               </div>
 
-              <nav className="flex-1 overflow-y-auto px-5 py-6">
+              <nav className="flex-1 overflow-y-auto overscroll-y-contain px-5 py-6">
                 <ul className="space-y-1">
                   {navItems.map((item, index) => (
                     <li key={item.href}>

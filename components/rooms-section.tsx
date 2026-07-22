@@ -27,6 +27,7 @@ import { SmoothLink } from '@/components/smooth-link';
 import { SectionHeading } from '@/components/section-heading';
 import { getHotelByCity } from '@/lib/data/hotels';
 import { useRoomsCatalog } from '@/hooks/use-rooms-catalog';
+import { useBodyScrollLock } from '@/hooks/use-body-scroll-lock';
 import type { CatalogRoom } from '@/lib/data/rooms-catalog';
 import { resolveLanguage, type SiteLanguage } from '@/lib/i18n/language';
 import { cn } from '@/lib/utils';
@@ -311,10 +312,10 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const titleId = `room-dialog-${room.id}`;
 
+  useBodyScrollLock(true);
+
   useEffect(() => {
     const previousActiveElement = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     closeButtonRef.current?.focus();
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -325,7 +326,6 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', handleKeyDown);
       previousActiveElement?.focus();
     };
@@ -339,7 +339,7 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-black/72 p-2 backdrop-blur-md sm:p-5"
+      className="fixed inset-0 z-[80] flex items-center justify-center overscroll-none bg-black/72 p-2 backdrop-blur-md sm:p-5"
     >
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.985 }}
@@ -349,7 +349,7 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative flex max-h-[94svh] w-full max-w-6xl flex-col overflow-hidden rounded-[26px] bg-background shadow-2xl lg:h-[84vh] lg:max-h-[760px] lg:flex-row"
+        className="relative flex max-h-[94svh] w-full max-w-6xl flex-col overflow-hidden overscroll-none rounded-[26px] bg-background shadow-2xl lg:h-[84vh] lg:max-h-[760px] lg:flex-row"
       >
         <button
           ref={closeButtonRef}
@@ -417,7 +417,7 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
           </div>}
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-6 sm:p-8 lg:p-10">
+        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain p-6 sm:p-8 lg:p-10">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{copy.roomDetails[lang]}</p>
           <h2 id={titleId} className="mt-3 font-serif text-3xl font-medium tracking-[-0.035em] text-foreground sm:text-4xl">{room.name[lang]}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{room.bedType[lang]}</p>
