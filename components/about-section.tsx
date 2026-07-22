@@ -21,11 +21,6 @@ const features = [
 
 const copy = {
   location: { ru: 'Локация', kz: 'Орналасуы', en: 'Location' },
-  realCity: {
-    ru: 'В центре городской жизни, но с атмосферой спокойного отдыха.',
-    kz: 'Қала өмірінің ортасында, бірақ тыныш демалыс атмосферасымен.',
-    en: 'At the center of city life, with the atmosphere of a calm retreat.',
-  },
   previous: { ru: 'Предыдущая достопримечательность', kz: 'Алдыңғы көрікті жер', en: 'Previous attraction' },
   next: { ru: 'Следующая достопримечательность', kz: 'Келесі көрікті жер', en: 'Next attraction' },
 } as const;
@@ -91,12 +86,12 @@ const attractions = {
   ],
   astana: [
     {
-      id: 'botanical-garden',
-      image: '/cities/astana-riverside.jpg',
-      transport: 'walk',
-      title: { ru: 'Ботанический сад', kz: 'Ботаникалық бақ', en: 'Botanical Garden' },
-      mode: { ru: 'пешком от отеля', kz: 'қонақүйден жаяу', en: 'walk from the hotel' },
-      duration: { ru: '2 минуты', kz: '2 минут', en: '2 min' },
+      id: 'baiterek',
+      image: '/cities/baiterek.jpg',
+      transport: 'car',
+      title: { ru: 'Байтерек', kz: 'Бәйтерек', en: 'Baiterek' },
+      mode: { ru: 'на машине', kz: 'көлікпен', en: 'by car' },
+      duration: { ru: '11 минут', kz: '11 минут', en: '11 min' },
     },
     {
       id: 'expo',
@@ -107,12 +102,12 @@ const attractions = {
       duration: { ru: '8 минут', kz: '8 минут', en: '8 min' },
     },
     {
-      id: 'baiterek',
-      image: '/cities/baiterek.jpg',
-      transport: 'car',
-      title: { ru: 'Байтерек', kz: 'Бәйтерек', en: 'Baiterek' },
-      mode: { ru: 'на машине', kz: 'көлікпен', en: 'by car' },
-      duration: { ru: '11 минут', kz: '11 минут', en: '11 min' },
+      id: 'botanical-garden',
+      image: '/cities/astana-riverside.jpg',
+      transport: 'walk',
+      title: { ru: 'Ботанический сад', kz: 'Ботаникалық бақ', en: 'Botanical Garden' },
+      mode: { ru: 'пешком от отеля', kz: 'қонақүйден жаяу', en: 'walk from the hotel' },
+      duration: { ru: '2 минуты', kz: '2 минут', en: '2 min' },
     },
   ],
 } as const;
@@ -214,11 +209,7 @@ export function AboutSection({ city }: AboutSectionProps) {
                       </div>
                     </div>
 
-                    <p className="mt-2 max-w-md font-serif text-xl leading-tight text-balance sm:text-2xl lg:text-[28px]">
-                      {copy.realCity[lang]}
-                    </p>
-
-                    <div className="mt-4 flex items-center gap-3 rounded-2xl bg-white/94 p-3 text-graphite shadow-lg" aria-live="polite">
+                    <div className="mt-3 flex items-center gap-3 rounded-2xl bg-white/94 p-3 text-graphite shadow-lg" aria-live="polite">
                       <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-accent/16 text-accent">
                         <AttractionTransportIcon className="h-5 w-5" aria-hidden="true" />
                       </span>
