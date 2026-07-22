@@ -308,7 +308,7 @@ export function Header({ city }: HeaderProps) {
                 </button>
               </div>
 
-              <div className="border-b border-border px-5 py-4">
+              <div className="space-y-4 border-b border-border px-5 py-4">
                 <div className="flex items-center justify-between gap-4">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                     {labels.language[lang]}
@@ -329,6 +329,28 @@ export function Header({ city }: HeaderProps) {
                     ))}
                   </div>
                 </div>
+
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    {labels.chooseCity[lang]}
+                  </p>
+                  <div className="mt-2 grid grid-cols-2 gap-2">
+                    {(['almaty', 'astana'] as const).map((item) => (
+                      <Link
+                        key={item}
+                        href={`/${item}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={cn(
+                          'flex items-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-medium transition',
+                          city === item ? 'border-accent bg-accent/10' : 'border-border bg-card hover:bg-secondary',
+                        )}
+                      >
+                        <MapPin className="h-4 w-4 shrink-0 text-accent" />
+                        {t(`cities.${item}`)}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <nav className="flex-1 overflow-y-auto overscroll-y-contain px-5 py-6">
@@ -346,28 +368,6 @@ export function Header({ city }: HeaderProps) {
                     </li>
                   ))}
                 </ul>
-
-                <div className="mt-8 border-t border-border pt-6">
-                  <p className="px-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    {labels.chooseCity[lang]}
-                  </p>
-                  <div className="mt-3 grid grid-cols-2 gap-2">
-                    {(['almaty', 'astana'] as const).map((item) => (
-                      <Link
-                        key={item}
-                        href={`/${item}`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={cn(
-                          'rounded-2xl border p-4 text-sm font-medium transition',
-                          city === item ? 'border-accent bg-accent/10' : 'border-border bg-card hover:bg-secondary',
-                        )}
-                      >
-                        <MapPin className="mb-3 h-4 w-4 text-accent" />
-                        {t(`cities.${item}`)}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
 
               </nav>
 
