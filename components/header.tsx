@@ -308,6 +308,29 @@ export function Header({ city }: HeaderProps) {
                 </button>
               </div>
 
+              <div className="border-b border-border px-5 py-4">
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    {labels.language[lang]}
+                  </p>
+                  <div className="flex gap-2">
+                    {languages.map((language) => (
+                      <button
+                        key={language.code}
+                        type="button"
+                        onClick={() => i18n.changeLanguage(language.code)}
+                        className={cn(
+                          'h-10 min-w-12 rounded-full px-3 text-sm font-semibold transition',
+                          lang === language.code ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground',
+                        )}
+                      >
+                        {language.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               <nav className="flex-1 overflow-y-auto overscroll-y-contain px-5 py-6">
                 <ul className="space-y-1">
                   {navItems.map((item, index) => (
@@ -346,26 +369,6 @@ export function Header({ city }: HeaderProps) {
                   </div>
                 </div>
 
-                <div className="mt-7 border-t border-border pt-6">
-                  <p className="px-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    {labels.language[lang]}
-                  </p>
-                  <div className="mt-3 flex gap-2 px-3">
-                    {languages.map((language) => (
-                      <button
-                        key={language.code}
-                        type="button"
-                        onClick={() => i18n.changeLanguage(language.code)}
-                        className={cn(
-                          'h-10 min-w-12 rounded-full px-3 text-sm font-semibold transition',
-                          lang === language.code ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground',
-                        )}
-                      >
-                        {language.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </nav>
 
               <div className="border-t border-border p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
