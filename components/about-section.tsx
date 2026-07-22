@@ -102,6 +102,22 @@ const attractions = {
       duration: { ru: '8 минут', kz: '8 минут', en: '8 min' },
     },
     {
+      id: 'triumphal-arch',
+      image: '/cities/arka.jpeg',
+      transport: 'walk',
+      title: { ru: 'Триумфальная арка', kz: 'Триумф аркасы', en: 'Triumphal Arch' },
+      mode: { ru: 'пешком от отеля', kz: 'қонақүйден жаяу', en: 'walk from the hotel' },
+      duration: { ru: '7 минут', kz: '7 минут', en: '7 min' },
+    },
+    {
+      id: 'abu-dhabi',
+      image: '/cities/abudabi.JPG',
+      transport: 'car',
+      title: { ru: 'Абу-Даби', kz: 'Әбу-Даби', en: 'Abu Dhabi' },
+      mode: { ru: 'на машине', kz: 'көлікпен', en: 'by car' },
+      duration: { ru: '7 минут', kz: '7 минут', en: '7 min' },
+    },
+    {
       id: 'botanical-garden',
       image: '/cities/astana-riverside.jpg',
       transport: 'walk',
