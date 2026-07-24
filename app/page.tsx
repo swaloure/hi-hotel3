@@ -4,7 +4,7 @@ import { Footer } from '@/components/footer';
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background font-home">
       <Header city="home" />
       <CitySelector />
       <Footer city="home" />

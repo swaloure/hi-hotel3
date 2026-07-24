@@ -254,6 +254,7 @@ export function CitySelector() {
               title={pick(homeCopy.citiesTitle, lang)}
               description={pick(homeCopy.citiesDescription, lang)}
               align="center"
+              font="home"
             />
           </motion.div>
 
@@ -278,7 +279,7 @@ export function CitySelector() {
                     </div>
                     <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-7 md:p-8">
                       <div className="flex items-center justify-between gap-4">
-                        <h3 className="font-serif text-4xl font-medium tracking-[-0.035em] md:text-5xl">{pick(city.title, lang)}</h3>
+                        <h3 className="font-home text-4xl font-light tracking-[-0.025em] md:text-5xl">{pick(city.title, lang)}</h3>
                         <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-foreground transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:bg-accent">
                           <ArrowUpRight className="w-5 h-5" />
                         </span>
@@ -307,6 +308,7 @@ export function CitySelector() {
                 eyebrow={pick(homeCopy.aboutEyebrow, lang)}
                 title={pick(homeCopy.aboutTitle, lang)}
                 description={pick(homeCopy.aboutDescription, lang)}
+                font="home"
               />
               <Link href="#cities" className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:-translate-y-0.5 hover:bg-primary/90">
                 {pick(homeCopy.chooseCta, lang)}
@@ -351,6 +353,7 @@ export function CitySelector() {
               eyebrow={pick(homeCopy.formatEyebrow, lang)}
               title={pick(homeCopy.formatTitle, lang)}
               description={pick(homeCopy.formatDescription, lang)}
+              font="home"
             />
           </motion.div>
 

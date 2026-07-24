@@ -107,7 +107,7 @@ export function HomeHero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.58, delay: 0.08 }}
-            className="max-w-3xl font-serif text-[clamp(2.65rem,6vw,5.6rem)] font-medium leading-[0.96] tracking-[-0.045em] text-balance"
+            className="max-w-3xl font-home text-[clamp(2.6rem,5.6vw,5.15rem)] font-light leading-[1.04] tracking-[-0.03em] text-balance"
           >
             {pick(copy.title, lang)}
           </motion.h1>

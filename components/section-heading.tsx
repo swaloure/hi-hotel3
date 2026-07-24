@@ -7,6 +7,7 @@ interface SectionHeadingProps {
   align?: 'left' | 'center';
   inverse?: boolean;
   as?: 'h1' | 'h2';
+  font?: 'serif' | 'home';
   className?: string;
 }
 
@@ -17,6 +18,7 @@ export function SectionHeading({
   align = 'left',
   inverse = false,
   as: Heading = 'h2',
+  font = 'serif',
   className,
 }: SectionHeadingProps) {
   return (
@@ -39,7 +41,10 @@ export function SectionHeading({
       </div>
       <Heading
         className={cn(
-          'mt-5 font-serif text-3xl font-medium leading-[1.04] tracking-[-0.035em] text-balance sm:text-4xl lg:text-5xl',
+          'mt-5 text-3xl leading-[1.04] text-balance sm:text-4xl lg:text-5xl',
+          font === 'home'
+            ? 'font-home font-light tracking-[-0.025em]'
+            : 'font-serif font-medium tracking-[-0.035em]',
           inverse ? 'text-white' : 'text-foreground',
         )}
       >

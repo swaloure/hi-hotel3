@@ -8,6 +8,7 @@ import { SmoothLink } from '@/components/smooth-link';
 import { withBasePath } from '@/lib/asset-path';
 import { getHotelByCity } from '@/lib/data/hotels';
 import { resolveLanguage } from '@/lib/i18n/language';
+import { cn } from '@/lib/utils';
 
 interface FooterProps {
   city: 'almaty' | 'astana' | 'home';
@@ -86,7 +87,12 @@ export function Footer({ city }: FooterProps) {
           <div className="flex flex-col gap-6 rounded-[26px] border border-white/10 bg-white/[0.045] p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:p-10">
             <div className="max-w-2xl">
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">MAZA</p>
-              <h2 className="mt-3 font-serif text-3xl font-medium leading-tight tracking-[-0.03em] text-balance sm:text-4xl">
+              <h2 className={cn(
+                'mt-3 text-3xl leading-tight text-balance sm:text-4xl',
+                city === 'home'
+                  ? 'font-home font-light tracking-[-0.025em]'
+                  : 'font-serif font-medium tracking-[-0.03em]',
+              )}>
                 {copy.bookingTitle[lang]}
               </h2>
               <p className="mt-3 max-w-xl text-sm leading-6 text-white/55">{copy.bookingText[lang]}</p>
