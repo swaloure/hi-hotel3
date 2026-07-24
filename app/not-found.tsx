@@ -42,7 +42,7 @@ export default function NotFound() {
   const text = copy[resolveLanguage(i18n.language)];
 
   return (
-    <main className="relative isolate flex min-h-screen overflow-hidden bg-primary text-white">
+    <main className="relative isolate flex h-[100svh] overflow-hidden bg-primary text-white">
       <Image
         src={withBasePath('/cities/astana-embankment.jpg')}
         alt=""
@@ -55,7 +55,7 @@ export default function NotFound() {
       <div className="absolute inset-0 -z-20 bg-[linear-gradient(105deg,rgba(24,25,29,0.96)_0%,rgba(24,25,29,0.86)_48%,rgba(24,25,29,0.58)_100%)]" />
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_28%,rgba(201,168,108,0.24),transparent_34%)]" />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-col px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <div className="mx-auto flex h-full w-full max-w-7xl flex-col px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
         <Link href="/" className="inline-flex w-fit items-center gap-3" aria-label="MAZA">
           <Image
             src={withBasePath('/logowhite.svg')}
@@ -63,28 +63,28 @@ export default function NotFound() {
             width={64}
             height={64}
             unoptimized
-            className="h-14 w-14 object-contain sm:h-16 sm:w-16"
+            className="h-11 w-11 object-contain sm:h-12 sm:w-12"
           />
         </Link>
 
-        <div className="flex flex-1 items-center py-14 sm:py-20">
+        <div className="flex min-h-0 flex-1 items-center py-3 sm:py-4">
           <div className="max-w-3xl">
             <div className="flex items-center gap-4">
-              <span className="text-[clamp(5rem,16vw,10rem)] font-light leading-none tracking-[-0.08em] text-accent">404</span>
-              <span className="hidden h-24 w-px bg-white/18 sm:block" />
+              <span className="text-[clamp(4rem,11vw,7rem)] font-light leading-none tracking-[-0.08em] text-accent">404</span>
+              <span className="hidden h-16 w-px bg-white/18 sm:block" />
               <p className="max-w-40 text-xs font-semibold uppercase tracking-[0.22em] text-white/58 sm:text-sm">
                 {text.eyebrow}
               </p>
             </div>
 
-            <h1 className="mt-8 max-w-2xl font-serif text-[clamp(2.5rem,6vw,5rem)] font-light leading-[1.04] tracking-[-0.035em] text-balance">
+            <h1 className="mt-5 max-w-2xl font-serif text-[clamp(2rem,4.5vw,3.75rem)] font-light leading-[1.04] tracking-[-0.035em] text-balance">
               {text.title}
             </h1>
-            <p className="mt-6 max-w-xl text-sm leading-7 text-white/68 sm:text-base sm:leading-8">
+            <p className="mt-4 max-w-xl text-sm leading-6 text-white/68 sm:text-base sm:leading-7">
               {text.description}
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
               <Link
                 href="/"
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-accent px-7 py-3 text-sm font-semibold text-accent-foreground transition hover:-translate-y-0.5 hover:bg-gold-light"
@@ -103,9 +103,9 @@ export default function NotFound() {
               </a>
             </div>
 
-            <div className="mt-12 border-t border-white/14 pt-6">
+            <div className="mt-7 border-t border-white/14 pt-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/45">{text.chooseHotel}</p>
-              <div className="mt-4 flex flex-wrap gap-3">
+              <div className="mt-3 flex flex-wrap gap-2.5">
                 {([
                   { href: '/almaty', label: text.almaty },
                   { href: '/astana', label: text.astana },
