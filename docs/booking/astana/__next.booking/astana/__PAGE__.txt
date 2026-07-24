@@ -2,5 +2,5 @@
 2:I[24415,["/_next/static/chunks/439o6t-2i-_4f.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/2n5z36-2ebotz.js","/_next/static/chunks/1s5rjjd56b567.js","/_next/static/chunks/1z3cw6s5dj2h6.js"],"BookingPageContent"]
 3:I[97367,["/_next/static/chunks/439o6t-2i-_4f.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/2n5z36-2ebotz.js"],"OutletBoundary"]
 4:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"city":"astana"}],[["$","script","script-0",{"src":"/_next/static/chunks/1s5rjjd56b567.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/1z3cw6s5dj2h6.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"UDnngwYOHRbHn6uong3uX"}
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"city":"astana"}],[["$","script","script-0",{"src":"/_next/static/chunks/1s5rjjd56b567.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/1z3cw6s5dj2h6.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"_33ZrYxBuquRZp9w9a6ij"}
 5:null
