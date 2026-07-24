@@ -1,5 +1,6 @@
 import type { SiteLanguage } from '@/lib/i18n/language';
 import { parseCsv } from '@/lib/data/csv';
+import { fetchWithRetry } from '@/lib/data/fetch-with-retry';
 import {
   buildPublicSheetCsvUrl,
   spreadsheetId,
@@ -53,7 +54,7 @@ export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
 }
 
 async function fetchSheetRange(sheetName: string, city: City) {
-  const response = await fetch(buildPublicSheetCsvUrl(sheetName, 'A1:AC'), { cache: 'no-store' });
+  const response = await fetchWithRetry(buildPublicSheetCsvUrl(sheetName, 'A1:AC'), { cache: 'no-store' });
   if (!response.ok) throw new Error(`Google Sheets request failed for ${city}: ${response.status}`);
 
   return parseSheetValues(parseCsv(await response.text()), city);

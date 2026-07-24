@@ -1,4 +1,5 @@
 import { parseCsv } from '@/lib/data/csv';
+import { fetchWithRetry } from '@/lib/data/fetch-with-retry';
 import {
   buildPublicSheetCsvUrl,
   spreadsheetId,
@@ -33,7 +34,7 @@ export function loadLegalContent(city: LegalCity, kind: LegalPageKind): Promise<
   const existingRequest = requests.get(documentKey);
   if (existingRequest) return existingRequest;
 
-  const request = fetch(buildPublicSheetCsvUrl(legalSheetNames[city][kind]), { cache: 'no-store' })
+  const request = fetchWithRetry(buildPublicSheetCsvUrl(legalSheetNames[city][kind]), { cache: 'no-store' })
     .then(async (response) => {
       if (!response.ok) throw new Error(`Google Sheets request failed for ${documentKey}: ${response.status}`);
 

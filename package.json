@@ -13,9 +13,10 @@
     "test:catalog": "node scripts/verify-room-catalog.mjs",
     "test:csv": "node scripts/verify-csv.mjs",
     "test:legal": "node scripts/verify-legal-content.mjs",
+    "test:retry": "node scripts/verify-fetch-retry.mjs",
     "test:bnovo": "node scripts/verify-bnovo-filter.mjs",
     "test:smoke": "node scripts/verify-export.mjs",
-    "check": "npm run typecheck && npm run lint && npm run test:catalog && npm run test:csv && npm run test:legal && npm run test:bnovo && npm run build && npm run test:smoke"
+    "check": "npm run typecheck && npm run lint && npm run test:catalog && npm run test:csv && npm run test:legal && npm run test:retry && npm run test:bnovo && npm run build && npm run test:smoke"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "2.1.16",

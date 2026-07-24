@@ -20,24 +20,31 @@ export function useRoomsCatalog(city: City): CatalogState {
 
   useEffect(() => {
     let cancelled = false;
+    let retryTimer: number | undefined;
 
     if (!isRoomsSheetConfigured) return;
 
-    loadRoomsCatalog()
-      .then((rooms) => {
-        if (cancelled) return;
-        setRemoteRooms(rooms);
-        setHasError(false);
-      })
-      .catch((error) => {
-        console.error('Unable to load rooms catalog from Google Sheets.', error);
-        if (cancelled) return;
-        setRemoteRooms([]);
-        setHasError(true);
-      });
+    const loadCatalog = () => {
+      loadRoomsCatalog()
+        .then((rooms) => {
+          if (cancelled) return;
+          setRemoteRooms(rooms);
+          setHasError(false);
+        })
+        .catch((error) => {
+          console.error('Unable to load rooms catalog from Google Sheets.', error);
+          if (cancelled) return;
+          setRemoteRooms([]);
+          setHasError(true);
+          retryTimer = window.setTimeout(loadCatalog, 30_000);
+        });
+    };
+
+    loadCatalog();
 
     return () => {
       cancelled = true;
+      if (retryTimer) window.clearTimeout(retryTimer);
     };
   }, []);
 

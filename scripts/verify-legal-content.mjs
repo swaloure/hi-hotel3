@@ -5,15 +5,18 @@ import ts from 'typescript';
 const source = await readFile(new URL('../lib/data/legal-content.ts', import.meta.url), 'utf8');
 const csvSource = await readFile(new URL('../lib/data/csv.ts', import.meta.url), 'utf8');
 const configSource = await readFile(new URL('../lib/data/sheets-config.ts', import.meta.url), 'utf8');
+const retrySource = await readFile(new URL('../lib/data/fetch-with-retry.ts', import.meta.url), 'utf8');
 const csvModuleUrl = compileModule(csvSource);
 const configModuleUrl = compileModule(configSource);
+const retryModuleUrl = compileModule(retrySource);
 const compiled = ts.transpileModule(source, {
   compilerOptions: {
     module: ts.ModuleKind.ESNext,
     target: ts.ScriptTarget.ES2022,
   },
-}).outputText
+  }).outputText
   .replace("'@/lib/data/csv'", `'${csvModuleUrl}'`)
+  .replace("'@/lib/data/fetch-with-retry'", `'${retryModuleUrl}'`)
   .replace("'@/lib/data/sheets-config'", `'${configModuleUrl}'`);
 const moduleUrl = `data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`;
 const { legalSheetNames, parseLegalCell } = await import(moduleUrl);
