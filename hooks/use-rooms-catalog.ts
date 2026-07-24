@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import type { Room } from '@/lib/data/hotels';
+import { useEffect, useState } from 'react';
 import {
-  getLocalRooms,
   isRoomsSheetConfigured,
   loadRoomsCatalog,
   type CatalogRoom,
@@ -14,11 +12,9 @@ type CatalogState = {
   rooms: CatalogRoom[];
   isLoading: boolean;
   hasError: boolean;
-  source: 'sheet' | 'local';
 };
 
-export function useRoomsCatalog(city: City, localRooms: Room[]): CatalogState {
-  const fallbackRooms = useMemo(() => getLocalRooms(city, localRooms), [city, localRooms]);
+export function useRoomsCatalog(city: City): CatalogState {
   const [remoteRooms, setRemoteRooms] = useState<CatalogRoom[] | null>(null);
   const [hasError, setHasError] = useState(false);
 
@@ -46,15 +42,12 @@ export function useRoomsCatalog(city: City, localRooms: Room[]): CatalogState {
   }, []);
 
   if (!isRoomsSheetConfigured) {
-    return { rooms: fallbackRooms, isLoading: false, hasError: false, source: 'local' };
+    return { rooms: [], isLoading: false, hasError: true };
   }
 
   return {
-    rooms: hasError
-      ? fallbackRooms
-      : (remoteRooms ?? []).filter((room) => room.city === city),
+    rooms: hasError ? [] : (remoteRooms ?? []).filter((room) => room.city === city),
     isLoading: remoteRooms === null,
     hasError,
-    source: 'sheet',
   };
 }

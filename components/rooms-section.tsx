@@ -68,7 +68,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
   const [selectedRoom, setSelectedRoom] = useState<CatalogRoom | null>(null);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const lang = resolveLanguage(i18n.language);
-  const { rooms, isLoading } = useRoomsCatalog(city, hotel?.rooms ?? []);
+  const { rooms, isLoading } = useRoomsCatalog(city);
 
   const closeGallery = useCallback(() => setSelectedRoom(null), []);
   const showPreviousImage = () => {

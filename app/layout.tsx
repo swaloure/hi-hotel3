@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist_Mono, Montserrat } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import { Providers } from '@/components/providers'
 import { withBasePath } from '@/lib/asset-path'
 import './globals.css'
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
   generator: 'v0.app',
   openGraph: {
     title: 'MAZA — Уютные мини-отели в Алматы и Астане',
-    description: 'Премиальные мини-отели с комфортными номерами и безупречным сервисом',
+    description: 'Спокойные городские отели с чистыми номерами, удобным расположением и понятным сервисом.',
     type: 'website',
     locale: 'ru_KZ',
     siteName: 'MAZA',
@@ -31,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'MAZA — Уютные мини-отели',
-    description: 'Премиальные мини-отели с комфортными номерами',
+    description: 'Спокойные городские отели в Алматы и Астане без лишнего пафоса.',
   },
   icons: {
     icon: {
@@ -62,7 +61,6 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )

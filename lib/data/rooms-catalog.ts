@@ -1,4 +1,3 @@
-import type { Room } from '@/lib/data/hotels';
 import type { SiteLanguage } from '@/lib/i18n/language';
 import { parseCsv } from '@/lib/data/csv';
 import {
@@ -38,28 +37,6 @@ const astanaSheetRange = process.env.NEXT_PUBLIC_ASTANA_ROOMS_SHEET_RANGE?.trim(
 let catalogRequest: Promise<CatalogRoom[]> | null = null;
 
 export const isRoomsSheetConfigured = Boolean(spreadsheetId);
-
-export function getLocalRooms(city: City, rooms: Room[]): CatalogRoom[] {
-  return rooms.map((room, index) => ({
-    id: room.id,
-    city,
-    name: room.name,
-    description: room.description,
-    bedType: room.bedType,
-    amenities: {
-      ru: room.amenities,
-      kz: room.amenities,
-      en: room.amenities,
-    },
-    badge: { ru: '', kz: '', en: '' },
-    area: room.area,
-    maxGuests: room.maxGuests,
-    price: room.price,
-    currency: '₸',
-    images: room.images,
-    sortOrder: index + 1,
-  }));
-}
 
 export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
   if (!isRoomsSheetConfigured) return [];
