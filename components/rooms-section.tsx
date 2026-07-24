@@ -14,6 +14,7 @@ import {
   ConciergeBell,
   Expand,
   Lock,
+  LoaderCircle,
   Sparkles,
   Tv,
   Users,
@@ -78,7 +79,7 @@ export function RoomsSection({ city }: RoomsSectionProps) {
     setGalleryIndex((index) => selectedRoom?.images.length ? (index + 1) % selectedRoom.images.length : 0);
   };
 
-  if (!hotel || isLoading || rooms.length === 0) return null;
+  if (!hotel || (!isLoading && rooms.length === 0)) return null;
 
   return (
     <>
@@ -98,27 +99,31 @@ export function RoomsSection({ city }: RoomsSectionProps) {
             />
           </motion.div>
 
-          <div className={cn('mt-12 grid gap-5 sm:mt-14 lg:gap-7', rooms.length > 1 ? 'lg:grid-cols-2' : 'mx-auto max-w-2xl')}>
-            {rooms.map((room, index) => (
-              <motion.div
-                key={room.id}
-                initial={{ opacity: 0, y: 26 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.12 }}
-                transition={{ duration: 0.58, delay: (index % 2) * 0.08 }}
-              >
-                <RoomCard
-                  room={room}
-                  city={city}
-                  lang={lang}
-                  onViewGallery={() => {
-                    setSelectedRoom(room);
-                    setGalleryIndex(0);
-                  }}
-                />
-              </motion.div>
-            ))}
-          </div>
+          {isLoading ? (
+            <RoomsLoadingState lang={lang} />
+          ) : (
+            <div className={cn('mt-12 grid gap-5 sm:mt-14 lg:gap-7', rooms.length > 1 ? 'lg:grid-cols-2' : 'mx-auto max-w-2xl')}>
+              {rooms.map((room, index) => (
+                <motion.div
+                  key={room.id}
+                  initial={{ opacity: 0, y: 26 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.12 }}
+                  transition={{ duration: 0.58, delay: (index % 2) * 0.08 }}
+                >
+                  <RoomCard
+                    room={room}
+                    city={city}
+                    lang={lang}
+                    onViewGallery={() => {
+                      setSelectedRoom(room);
+                      setGalleryIndex(0);
+                    }}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -137,6 +142,48 @@ export function RoomsSection({ city }: RoomsSectionProps) {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+function RoomsLoadingState({ lang }: { lang: SiteLanguage }) {
+  const loadingLabel = {
+    ru: 'Загрузка номеров',
+    kz: 'Нөмірлер жүктелуде',
+    en: 'Loading rooms',
+  }[lang];
+
+  return (
+    <div className="relative mt-12 sm:mt-14" role="status" aria-live="polite" aria-label={loadingLabel}>
+      <div className="grid gap-5 lg:grid-cols-2 lg:gap-7" aria-hidden="true">
+        {[0, 1].map((index) => (
+          <div
+            key={index}
+            className="overflow-hidden rounded-[26px] border border-border/70 bg-card"
+          >
+            <div className="aspect-[16/10] animate-pulse bg-gradient-to-br from-secondary via-muted to-secondary" />
+            <div className="space-y-4 p-5 sm:p-6">
+              <div className="h-7 w-2/5 animate-pulse rounded-full bg-muted" />
+              <div className="h-4 w-1/4 animate-pulse rounded-full bg-muted" />
+              <div className="space-y-2 pt-1">
+                <div className="h-3.5 w-full animate-pulse rounded-full bg-muted" />
+                <div className="h-3.5 w-4/5 animate-pulse rounded-full bg-muted" />
+              </div>
+              <div className="flex gap-2 pt-1">
+                <div className="h-7 w-24 animate-pulse rounded-full bg-muted" />
+                <div className="h-7 w-20 animate-pulse rounded-full bg-muted" />
+                <div className="h-7 w-24 animate-pulse rounded-full bg-muted" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full border border-border/70 bg-background/90 text-accent shadow-lg backdrop-blur-sm">
+          <LoaderCircle className="h-6 w-6 animate-spin" />
+        </span>
+      </div>
+      <span className="sr-only">{loadingLabel}</span>
+    </div>
   );
 }
 

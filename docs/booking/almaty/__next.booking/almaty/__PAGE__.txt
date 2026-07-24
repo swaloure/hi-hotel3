@@ -2,5 +2,5 @@
 2:I[24415,["/_next/static/chunks/439o6t-2i-_4f.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/2n5z36-2ebotz.js","/_next/static/chunks/1s5rjjd56b567.js","/_next/static/chunks/243j6y19yzyam.js"],"BookingPageContent"]
 3:I[97367,["/_next/static/chunks/439o6t-2i-_4f.js","/_next/static/chunks/14mrh2-p_w84d.js","/_next/static/chunks/2n5z36-2ebotz.js"],"OutletBoundary"]
 4:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"city":"almaty"}],[["$","script","script-0",{"src":"/_next/static/chunks/1s5rjjd56b567.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/243j6y19yzyam.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"e-GGWgFWkQZaURM1tE4e_"}
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"city":"almaty"}],[["$","script","script-0",{"src":"/_next/static/chunks/1s5rjjd56b567.js","async":true}],["$","script","script-1",{"src":"/_next/static/chunks/243j6y19yzyam.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"vzwXFXy-9at4rdjb1dcvE"}
 5:null
