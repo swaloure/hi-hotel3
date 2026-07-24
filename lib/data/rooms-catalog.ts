@@ -2,7 +2,6 @@ import type { SiteLanguage } from '@/lib/i18n/language';
 import { parseCsv } from '@/lib/data/csv';
 import {
   buildPublicSheetCsvUrl,
-  googleSheetsApiKey,
   spreadsheetId,
 } from '@/lib/data/sheets-config';
 
@@ -31,9 +30,6 @@ type SheetsValuesResponse = {
   values?: Array<Array<string | number | boolean>>;
 };
 
-const almatySheetRange = process.env.NEXT_PUBLIC_ALMATY_ROOMS_SHEET_RANGE?.trim() || "'Алматы'!A1:AC";
-const astanaSheetRange = process.env.NEXT_PUBLIC_ASTANA_ROOMS_SHEET_RANGE?.trim() || "'Астана'!A1:AC";
-
 let catalogRequest: Promise<CatalogRoom[]> | null = null;
 
 export const isRoomsSheetConfigured = Boolean(spreadsheetId);
@@ -43,8 +39,8 @@ export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
 
   if (!catalogRequest) {
     catalogRequest = Promise.all([
-      fetchSheetRange(almatySheetRange, 'Алматы', 'almaty'),
-      fetchSheetRange(astanaSheetRange, 'Астана', 'astana'),
+      fetchSheetRange('Алматы', 'almaty'),
+      fetchSheetRange('Астана', 'astana'),
     ])
       .then(([almatyRooms, astanaRooms]) => [...almatyRooms, ...astanaRooms])
       .catch((error) => {
@@ -56,30 +52,11 @@ export async function loadRoomsCatalog(): Promise<CatalogRoom[]> {
   return catalogRequest;
 }
 
-async function fetchSheetRange(rangeName: string, sheetName: string, city: City) {
-  const response = await fetch(
-    googleSheetsApiKey ? buildSheetsApiUrl(rangeName) : buildPublicSheetCsvUrl(sheetName, 'A1:AC'),
-    { cache: 'no-store' },
-  );
+async function fetchSheetRange(sheetName: string, city: City) {
+  const response = await fetch(buildPublicSheetCsvUrl(sheetName, 'A1:AC'), { cache: 'no-store' });
   if (!response.ok) throw new Error(`Google Sheets request failed for ${city}: ${response.status}`);
 
-  if (googleSheetsApiKey) {
-    const payload = await response.json() as SheetsValuesResponse;
-    return parseSheetValues(payload.values ?? [], city);
-  }
-
   return parseSheetValues(parseCsv(await response.text()), city);
-}
-
-function buildSheetsApiUrl(rangeName: string) {
-  const range = encodeURIComponent(rangeName);
-  const params = new URLSearchParams({
-    key: googleSheetsApiKey,
-    majorDimension: 'ROWS',
-    valueRenderOption: 'UNFORMATTED_VALUE',
-  });
-
-  return `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}/values/${range}?${params}`;
 }
 
 export function parseSheetValues(values: SheetsValuesResponse['values'], defaultCity?: City): CatalogRoom[] {

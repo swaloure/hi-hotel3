@@ -20,6 +20,11 @@ type MapProvider = 'yandex' | 'dgis' | 'google';
 const copy = {
   map: { ru: 'Карта и маршрут', kz: 'Карта және бағыт', en: 'Map and directions' },
   openMap: { ru: 'Открыть карту', kz: 'Картаны ашу', en: 'Open map' },
+  externalMap: {
+    ru: '2ГИС откроется в новой вкладке с адресом выбранного отеля.',
+    kz: '2ГИС таңдалған қонақүй мекенжайымен жаңа бетте ашылады.',
+    en: '2GIS will open the selected hotel address in a new tab.',
+  },
   routeHint: {
     ru: 'Выберите привычный сервис и постройте маршрут до отеля.',
     kz: 'Ыңғайлы сервисті таңдап, қонақүйге бағыт құрыңыз.',
@@ -38,7 +43,7 @@ export function ContactSection({ city }: ContactSectionProps) {
 
   const { lat, lng } = hotel.coordinates;
   const whatsappUrl = getWhatsAppBookingUrl(hotel, lang);
-  const mapProviders: Record<MapProvider, { label: string; src: string; href: string }> = {
+  const mapProviders: Record<MapProvider, { label: string; src?: string; href: string }> = {
     yandex: {
       label: 'Яндекс',
       src: `https://yandex.com/map-widget/v1/?ll=${lng}%2C${lat}&z=16&pt=${lng},${lat},pm2rdm&lang=ru_RU`,
@@ -46,8 +51,7 @@ export function ContactSection({ city }: ContactSectionProps) {
     },
     dgis: {
       label: '2ГИС',
-      src: `https://widgets.2gis.com/widget?type=map&lon=${lng}&lat=${lat}&zoom=16`,
-      href: `https://2gis.kz/search/${lat},${lng}`,
+      href: `https://2gis.kz/${city}/search/${encodeURIComponent(hotel.address.ru)}`,
     },
     google: {
       label: 'Google',
@@ -189,14 +193,33 @@ export function ContactSection({ city }: ContactSectionProps) {
               </div>
             </div>
             <div className="relative h-[390px] bg-muted sm:h-[460px]">
-              <iframe
-                key={`${city}-${selectedMap}`}
-                src={mapProviders[selectedMap].src}
-                title={`${mapProviders[selectedMap].label} ${hotel.name}`}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 h-full w-full border-0 grayscale-[18%]"
-              />
+              {mapProviders[selectedMap].src ? (
+                <iframe
+                  key={`${city}-${selectedMap}`}
+                  src={mapProviders[selectedMap].src}
+                  title={`${mapProviders[selectedMap].label} ${hotel.name}`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0 h-full w-full border-0 grayscale-[18%]"
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-background via-secondary/70 to-muted p-8 text-center">
+                  <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/15 text-accent ring-1 ring-accent/20">
+                    <MapPin className="h-7 w-7" />
+                  </span>
+                  <h4 className="mt-5 text-xl font-semibold text-foreground">2ГИС</h4>
+                  <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">{copy.externalMap[lang]}</p>
+                  <a
+                    href={mapProviders[selectedMap].href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-accent px-6 text-sm font-semibold text-accent-foreground transition hover:bg-gold-light"
+                  >
+                    {copy.openMap[lang]}
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                </div>
+              )}
             </div>
           </motion.div>
         </div>

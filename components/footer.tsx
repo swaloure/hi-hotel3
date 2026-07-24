@@ -3,7 +3,7 @@
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowUpRight, Facebook, Instagram, MapPin } from 'lucide-react';
+import { ArrowUpRight, Instagram, MapPin } from 'lucide-react';
 import { SmoothLink } from '@/components/smooth-link';
 import { withBasePath } from '@/lib/asset-path';
 import { getHotelByCity } from '@/lib/data/hotels';
@@ -13,10 +13,6 @@ import { cn } from '@/lib/utils';
 interface FooterProps {
   city: 'almaty' | 'astana' | 'home';
 }
-
-const sharedSocialLinks = [
-  { icon: Facebook, href: 'https://facebook.com/maza.kz', label: 'Facebook' },
-];
 
 const copy = {
   cities: { ru: 'Города', kz: 'Қалалар', en: 'Cities' },
@@ -53,7 +49,7 @@ export function Footer({ city }: FooterProps) {
       ? [{ icon: Instagram, href: hotel.instagram, label: `Instagram ${t(`cities.${hotelCity}`)}` }]
       : [];
   });
-  const socialLinks = [...instagramLinks, ...sharedSocialLinks];
+  const socialLinks = instagramLinks;
   const legalCities = isHome ? (['almaty', 'astana'] as const) : [city];
   const legalLinks = [
     ...legalCities.map((legalCity) => ({
@@ -74,7 +70,7 @@ export function Footer({ city }: FooterProps) {
         { href: '/#contacts', label: t('nav.contacts') },
       ]
     : [
-        { href: `/${city}`, label: t('nav.home') },
+        { href: 'https://maza.kz/', label: t('nav.home') },
         { href: `/${city}#rooms`, label: t('nav.rooms') },
         { href: `/${city}#about`, label: t('nav.about') },
         { href: `/${city}#contacts`, label: t('nav.contacts') },

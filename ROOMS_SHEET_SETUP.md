@@ -66,17 +66,10 @@
 4. API-ключ Google не нужен: сайт читает только публичный CSV каждой вкладки.
 5. Скопируйте ID таблицы из адреса между `/d/` и `/edit`.
 6. `gid` вкладок искать и настраивать не нужно: сайт обращается к ним по названиям.
-7. При необходимости создайте `.env.local` на основе `.env.example`:
+7. При необходимости создайте `.env.local` на основе `.env.example`. Нужен только публичный ID таблицы:
 
 ```env
 NEXT_PUBLIC_ROOMS_SPREADSHEET_ID=ID_ТАБЛИЦЫ
-NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY=
-NEXT_PUBLIC_ALMATY_ROOMS_SHEET_RANGE="'Алматы'!A1:AC"
-NEXT_PUBLIC_ASTANA_ROOMS_SHEET_RANGE="'Астана'!A1:AC"
-NEXT_PUBLIC_ALMATY_PRIVACY_SHEET_RANGE="'Политика Алматы'!A1"
-NEXT_PUBLIC_ALMATY_OFFER_SHEET_RANGE="'Оферта Алматы'!A1"
-NEXT_PUBLIC_ASTANA_PRIVACY_SHEET_RANGE="'Политика Астана'!A1"
-NEXT_PUBLIC_ASTANA_OFFER_SHEET_RANGE="'Оферта Астана'!A1"
 ```
 
 После первого подключения сайт нужно пересобрать один раз. После этого изменения номеров, фотографий, политики и оферты будут появляться без пересборки.
