@@ -73,7 +73,7 @@ export function LegalPage({ city, kind }: { city: LegalCity; kind: LegalPageKind
               <DocumentIcon className="h-7 w-7" aria-hidden="true" />
             </span>
             <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.24em] text-accent sm:text-xs">{text.eyebrow}</p>
-            <h1 className="mt-4 font-serif text-4xl font-medium tracking-[-0.035em] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-4 font-serif text-4xl font-light tracking-[-0.025em] sm:text-5xl lg:text-6xl">
               {text[kind]} · {t(`cities.${city}`)}
             </h1>
           </div>

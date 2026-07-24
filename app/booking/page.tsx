@@ -70,7 +70,7 @@ export default function BookingPage() {
 
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/52">MAZA</p>
-                      <h2 className="mt-2 font-serif text-4xl font-medium tracking-[-0.035em] sm:text-5xl">
+                      <h2 className="mt-2 font-serif text-4xl font-light tracking-[-0.025em] sm:text-5xl">
                         {hotel.address[lang].includes('Dost') || hotel.city === 'almaty' ? (lang === 'en' ? 'Almaty' : 'Алматы') : (lang === 'en' ? 'Astana' : 'Астана')}
                       </h2>
                       <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white">

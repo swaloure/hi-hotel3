@@ -250,7 +250,7 @@ function RoomCard({ room, city, lang, onViewGallery }: RoomCardProps) {
       <div className="p-5 sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h3 className="font-serif text-2xl font-medium tracking-[-0.025em] text-foreground">{room.name[lang]}</h3>
+            <h3 className="font-serif text-2xl font-light tracking-[-0.02em] text-foreground">{room.name[lang]}</h3>
             <p className="mt-1 text-sm text-muted-foreground">{room.bedType[lang]}</p>
           </div>
           <div className="flex shrink-0 items-center gap-3 text-xs text-muted-foreground">
@@ -419,7 +419,7 @@ function GalleryModal({ room, city, lang, currentIndex, onClose, onPrev, onNext,
 
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain p-6 sm:p-8 lg:p-10">
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{copy.roomDetails[lang]}</p>
-          <h2 id={titleId} className="mt-3 font-serif text-3xl font-medium tracking-[-0.035em] text-foreground sm:text-4xl">{room.name[lang]}</h2>
+          <h2 id={titleId} className="mt-3 font-serif text-3xl font-light tracking-[-0.025em] text-foreground sm:text-4xl">{room.name[lang]}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{room.bedType[lang]}</p>
 
           <div className="mt-6 flex gap-5 border-y border-border py-4 text-sm text-muted-foreground">

@@ -91,7 +91,7 @@ export function Footer({ city }: FooterProps) {
                 'mt-3 text-3xl leading-tight text-balance sm:text-4xl',
                 city === 'home'
                   ? 'font-home font-light tracking-[-0.025em]'
-                  : 'font-serif font-medium tracking-[-0.03em]',
+                  : 'font-serif font-light tracking-[-0.025em]',
               )}>
                 {copy.bookingTitle[lang]}
               </h2>

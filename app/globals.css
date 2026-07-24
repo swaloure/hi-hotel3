@@ -55,9 +55,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback', system-ui, sans-serif;
+  --font-sans: 'Montserrat', 'Montserrat Fallback', Arial, sans-serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback', monospace;
-  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-serif: 'Montserrat', 'Montserrat Fallback', Arial, sans-serif;
   --font-home: 'Montserrat', 'Montserrat Fallback', Arial, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);

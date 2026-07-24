@@ -1,23 +1,13 @@
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono, Montserrat, Playfair_Display } from 'next/font/google'
+import { Geist_Mono, Montserrat } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { Providers } from '@/components/providers'
 import { withBasePath } from '@/lib/asset-path'
 import './globals.css'
 
-const geist = Geist({ 
-  subsets: ["latin"],
-  variable: '--font-geist'
-});
-
 const geistMono = Geist_Mono({ 
   subsets: ["latin"],
   variable: '--font-geist-mono'
-});
-
-const playfair = Playfair_Display({ 
-  subsets: ["latin", "cyrillic"],
-  variable: '--font-playfair'
 });
 
 const montserrat = Montserrat({
@@ -67,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" className={`${geist.variable} ${geistMono.variable} ${playfair.variable} ${montserrat.variable} bg-background`}>
+    <html lang="ru" className={`${geistMono.variable} ${montserrat.variable} bg-background`}>
       <body className="font-sans antialiased min-h-screen">
         <Providers>
           {children}

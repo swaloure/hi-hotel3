@@ -63,7 +63,7 @@ export function BookingPageContent({ city }: { city: City }) {
             {copy.back[lang]}
           </Link>
           <p className="mt-8 text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{copy.eyebrow[lang]}</p>
-          <h1 className="mt-3 max-w-3xl font-serif text-4xl font-medium leading-[1.02] tracking-[-0.04em] text-balance sm:text-5xl lg:text-6xl">
+          <h1 className="mt-3 max-w-3xl font-serif text-4xl font-light leading-[1.04] tracking-[-0.025em] text-balance sm:text-5xl lg:text-6xl">
             {copy.title[lang]}
           </h1>
           <p className="mt-5 max-w-2xl text-sm leading-7 text-white/68 sm:text-base">{copy.subtitle[lang]}</p>
@@ -75,7 +75,7 @@ export function BookingPageContent({ city }: { city: City }) {
           <div className="flex flex-col gap-4 border-b border-border pb-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">{copy.chooseCity[lang]}</p>
-              <h2 className="mt-2 font-serif text-3xl font-medium tracking-[-0.03em] text-foreground">
+              <h2 className="mt-2 font-serif text-3xl font-light tracking-[-0.02em] text-foreground">
                 {copy.bookingAt[lang]} {t(`cities.${city}`)}
               </h2>
             </div>

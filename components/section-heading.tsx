@@ -44,7 +44,7 @@ export function SectionHeading({
           'mt-5 text-3xl leading-[1.04] text-balance sm:text-4xl lg:text-5xl',
           font === 'home'
             ? 'font-home font-light tracking-[-0.025em]'
-            : 'font-serif font-medium tracking-[-0.035em]',
+            : 'font-serif font-light tracking-[-0.025em]',
           inverse ? 'text-white' : 'text-foreground',
         )}
       >

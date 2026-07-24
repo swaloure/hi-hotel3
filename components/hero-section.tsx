@@ -66,7 +66,7 @@ export function HeroSection({ city }: HeroSectionProps) {
             {copy.eyebrow[city][lang]}
           </div>
 
-          <h1 className="mt-6 max-w-3xl font-serif text-[clamp(3rem,7vw,6.6rem)] font-medium leading-[0.95] tracking-[-0.045em] text-balance">
+          <h1 className="mt-6 max-w-3xl font-serif text-[clamp(3rem,7vw,6.6rem)] font-light leading-[1.01] tracking-[-0.03em] text-balance">
             {copy.title[city][lang]}
           </h1>
 
