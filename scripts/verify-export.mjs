@@ -62,12 +62,12 @@ assert.ok(!pages.get('astana').includes(`href="${basePath}/almaty/offer/"`), 'As
 assert.ok(!homeHeader.includes('/#home'), 'Home header must not contain the Home navigation item')
 assert.ok(almatyHeader.includes('href="https://maza.kz/"'), 'Almaty Home navigation item must link to maza.kz')
 assert.ok(astanaHeader.includes('href="https://maza.kz/"'), 'Astana Home navigation item must link to maza.kz')
-assert.ok(home.includes('https://www.instagram.com/hihotel.kz/'), 'Home page must contain the Almaty Instagram link')
-assert.ok(home.includes('https://www.instagram.com/hihotel.astana/'), 'Home page must contain the Astana Instagram link')
-assert.ok(pages.get('almaty').includes('https://www.instagram.com/hihotel.kz/'), 'Almaty page must contain its Instagram link')
-assert.ok(!pages.get('almaty').includes('https://www.instagram.com/hihotel.astana/'), 'Almaty page must not contain the Astana Instagram link')
-assert.ok(pages.get('astana').includes('https://www.instagram.com/hihotel.astana/'), 'Astana page must contain its Instagram link')
-assert.ok(!pages.get('astana').includes('https://www.instagram.com/hihotel.kz/'), 'Astana page must not contain the Almaty Instagram link')
+assert.ok(home.includes('https://www.instagram.com/maza_almaty.kz/'), 'Home page must contain the Almaty Instagram link')
+assert.ok(home.includes('https://www.instagram.com/maza_astana.kz/'), 'Home page must contain the Astana Instagram link')
+assert.ok(pages.get('almaty').includes('https://www.instagram.com/maza_almaty.kz/'), 'Almaty page must contain its Instagram link')
+assert.ok(!pages.get('almaty').includes('https://www.instagram.com/maza_astana.kz/'), 'Almaty page must not contain the Astana Instagram link')
+assert.ok(pages.get('astana').includes('https://www.instagram.com/maza_astana.kz/'), 'Astana page must contain its Instagram link')
+assert.ok(!pages.get('astana').includes('https://www.instagram.com/maza_almaty.kz/'), 'Astana page must not contain the Almaty Instagram link')
 
 for (const route of ['almaty/privacy', 'almaty/offer', 'astana/privacy', 'astana/offer']) {
   assert.ok(pages.get(route).includes('animate-spin'), `${route} loading animation must be rendered`)

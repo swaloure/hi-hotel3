@@ -30,7 +30,7 @@ export const hotels: Hotel[] = [
     phone: '+7 747 470 0422',
     email: 'hihotel@mail.ru',
     whatsapp: '+77474700422',
-    instagram: 'https://www.instagram.com/hihotel.kz/',
+    instagram: 'https://www.instagram.com/maza_almaty.kz/',
     coordinates: {
       lat: 43.2342975,
       lng: 76.959896,
@@ -48,7 +48,7 @@ export const hotels: Hotel[] = [
     phone: '+7 707 470 0422',
     email: 'hihotel@mail.ru',
     whatsapp: '+77074700422',
-    instagram: 'https://www.instagram.com/hihotel.astana/',
+    instagram: 'https://www.instagram.com/maza_astana.kz/',
     coordinates: {
       lat: 51.1087416,
       lng: 71.4289125,
