@@ -5,6 +5,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight, Instagram, MapPin } from 'lucide-react';
 import { SmoothLink } from '@/components/smooth-link';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { withBasePath } from '@/lib/asset-path';
 import { getHotelByCity } from '@/lib/data/hotels';
 import { resolveLanguage } from '@/lib/i18n/language';
@@ -33,6 +39,11 @@ const copy = {
     kz: 'Алматы мен Астанадағы қалалық қонақүйлер: тыныш нөмірлер, ыңғайлы орындар және қамқор сервис.',
     en: 'City hotels in Almaty and Astana with calm rooms, convenient locations, and thoughtful service.',
   },
+  chooseInstagram: {
+    ru: 'Выберите город',
+    kz: 'Қаланы таңдаңыз',
+    en: 'Choose a city',
+  },
 } as const;
 
 const currentYear = new Date().getFullYear();
@@ -42,14 +53,11 @@ export function Footer({ city }: FooterProps) {
   const lang = resolveLanguage(i18n.language);
   const isHome = city === 'home';
   const bookingHref = isHome ? '/booking' : `/booking/${city}`;
-  const instagramLinks = (isHome ? (['almaty', 'astana'] as const) : [city]).flatMap((hotelCity) => {
+  const instagramHotels = (['almaty', 'astana'] as const).flatMap((hotelCity) => {
     const hotel = getHotelByCity(hotelCity);
-
-    return hotel
-      ? [{ icon: Instagram, href: hotel.instagram, label: `Instagram ${t(`cities.${hotelCity}`)}` }]
-      : [];
+    return hotel ? [{ city: hotelCity, href: hotel.instagram }] : [];
   });
-  const socialLinks = instagramLinks;
+  const cityInstagram = isHome ? undefined : instagramHotels.find((item) => item.city === city);
   const legalCities = isHome ? (['almaty', 'astana'] as const) : [city];
   const legalLinks = [
     ...legalCities.map((legalCity) => ({
@@ -110,18 +118,55 @@ export function Footer({ city }: FooterProps) {
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-7 text-white/52">{copy.description[lang]}</p>
             <div className="mt-6 flex gap-2">
-              {socialLinks.map((social) => (
+              {isHome ? (
+                <DropdownMenu modal={false}>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/12 text-white/65 transition hover:border-white/35 hover:bg-white/8 hover:text-white data-[state=open]:border-white/35 data-[state=open]:bg-white/8 data-[state=open]:text-white"
+                      aria-label="Instagram"
+                    >
+                      <Instagram className="h-4 w-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    side="top"
+                    align="start"
+                    sideOffset={10}
+                    className="min-w-56 rounded-2xl border-border/70 p-2 shadow-2xl"
+                  >
+                    <p className="px-3 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                      {copy.chooseInstagram[lang]}
+                    </p>
+                    {instagramHotels.map((item) => (
+                      <DropdownMenuItem key={item.city} asChild className="rounded-xl p-0">
+                        <a
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex min-h-12 items-center gap-3 px-3 py-2.5"
+                        >
+                          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent/12 text-accent">
+                            <Instagram className="h-4 w-4" />
+                          </span>
+                          <span className="flex-1 font-medium">MAZA {t(`cities.${item.city}`)}</span>
+                          <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+                        </a>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : cityInstagram ? (
                 <a
-                  key={social.label}
-                  href={social.href}
+                  href={cityInstagram.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/12 text-white/65 transition hover:border-white/35 hover:bg-white/8 hover:text-white"
-                  aria-label={social.label}
+                  aria-label={`Instagram ${t(`cities.${cityInstagram.city}`)}`}
                 >
-                  <social.icon className="h-4 w-4" />
+                  <Instagram className="h-4 w-4" />
                 </a>
-              ))}
+              ) : null}
             </div>
           </div>
 
