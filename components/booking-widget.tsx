@@ -121,7 +121,11 @@ function loadBnovoScript() {
   return bnovoScriptPromise;
 }
 
-function getBnovoConfig(city: BookingWidgetProps['city'], lang: string): BnovoWidgetConfig {
+function getBnovoConfig(
+  city: BookingWidgetProps['city'],
+  lang: string,
+  variant: NonNullable<BookingWidgetProps['variant']>,
+): BnovoWidgetConfig {
   const roomFilter = BNOVO_ROOM_FILTERS[city];
 
   return {
@@ -129,7 +133,7 @@ function getBnovoConfig(city: BookingWidgetProps['city'], lang: string): BnovoWi
     uid: BNOVO_UID,
     lang,
     currency: 'KZT',
-    width: '300',
+    width: variant === 'standalone' ? '600' : '300',
     width_mobile: '300',
     background: '#ffffff',
     background_mobile: '#ffffff',
@@ -263,7 +267,7 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
           window.Bnovo_Widget.init(() => {
             if (isCancelled || initializedRef.current || !window.Bnovo_Widget) return;
 
-            window.Bnovo_Widget.open(widgetId, getBnovoConfig(city, widgetLang));
+            window.Bnovo_Widget.open(widgetId, getBnovoConfig(city, widgetLang, variant));
             initializedRef.current = true;
             setStatus('ready');
           });
@@ -308,7 +312,7 @@ export function BookingWidget({ city, variant = 'standalone', className }: Booki
       container.replaceChildren();
       initializedRef.current = false;
     };
-  }, [city, isHero, widgetId, widgetLang]);
+  }, [city, isHero, variant, widgetId, widgetLang]);
 
   return (
     <div
