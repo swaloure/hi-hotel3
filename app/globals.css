@@ -177,6 +177,7 @@
 }
 
 .booking-shell [id^="_bn_widget_"] > div {
+  width: 100% !important;
   max-width: 100% !important;
 }
 
